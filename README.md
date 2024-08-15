@@ -38,7 +38,7 @@ Jednoduchá kalkulačka za použití návrhového vzoru "STRATEGY"
 ### .exe souboru
 - Kliknout zde na .exe soubor
 ### Celé řešení (kód)
-- Vpravo nahoře zelené tlačítko
-- 
+- Vpravo nahoře zelené tlačítko "CODE"
+- Download ZIP
 
 
