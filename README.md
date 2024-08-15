@@ -41,5 +41,5 @@ Jednoduchá kalkulačka za použití návrhového vzoru "STRATEGY"
 - Vpravo nahoře zelené tlačítko "CODE"
 - Download ZIP
 
-![Screenshot download](Calculator-download.png)
+![Screenshot download](Calculator-download)
 
