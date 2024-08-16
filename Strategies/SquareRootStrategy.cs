@@ -7,6 +7,9 @@
 
         public string[] Count(string[] tokens)
         {
+            try
+            {
+
             if(tokens[1].Equals("√"))
             {
                 double result = Math.Sqrt(double.Parse(tokens[2]));
@@ -17,7 +20,9 @@
                 double result = Math.Sqrt(double.Parse(tokens[1]));
                 return new string[] { result.ToString() };
             }
-            
+            }
+            catch (Exception e) { return new string[] { }; }
+
         }
     }
 }

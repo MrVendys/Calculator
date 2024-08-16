@@ -68,6 +68,7 @@ namespace Calculator
             {
                 int openIndex = FindLast("(", tokens);
                 int closeIndex = FindFirst(")", tokens, openIndex);
+                //Odchytnuti chyby: Nekompletni zavorka
                 if(error)
                 {
                     return null;
@@ -75,6 +76,9 @@ namespace Calculator
                 string[] brcTokens = new string[closeIndex - openIndex - 1];
                 Array.Copy(tokens, openIndex + 1, brcTokens, 0, (closeIndex - openIndex - 1));
                 var innerResult = Evaluate(brcTokens);
+                //Odchytnuti chyby: Nekonzistentni priklad
+                if (innerResult == null)
+                    return null;
                 tokens = tokens.Take(openIndex).Concat(new string[] { innerResult.ToString() }).Concat(tokens.Skip(closeIndex + 1)).ToArray();
 
             }
@@ -108,6 +112,9 @@ namespace Calculator
 
 
                         string[] result = currentOperation.Count(tokens.Skip(index - 1).Take(3).ToArray());
+                        //Odchytnuti chyby: Nekonzistentni priklad
+                        if (result.Length == 0)
+                            { return null; }
                         //Prepsani meziprikladu na mezivysledek
                         tokens = tokens.Take(index - 1).Concat(result).Concat(tokens.Skip(index + 2)).ToArray();
 

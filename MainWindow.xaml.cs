@@ -78,27 +78,27 @@ namespace Calculator
         //Vytvoreni instance Counting pro vypocet
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            /*string expression = InputTextbox.Text.ToString();
+            string expression = InputTextbox.Text.ToString();
             if (!expression.Equals(""))
             {
-                Counting c = new Counting()
+                Counting c = new Counting();
                 float? result = c.Count(expression);
                 if(result != null)    
                     InputTextbox.Text = c.Count(expression).ToString();
                 else{
                     string messageBoxText = "Nekompletní výraz. Zkontrolujte výraz a zadejte ho znovu.";
                     string caption = "ERROR";
-                    MessageBoxButton button = MessageBoxButton.Ok;
+                    MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Warning;
-                    MessageBoxResult result;
-                    result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Ok);
+                    MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.OK);
                     
                 }
             }
-            */
+            //TESTING
+            /*
             List<(string item1, double item2)> mathExamplesWithResults = new List<(string, double)>
-        {
-            ("√(36 / 4) + 7", 10),    
+            {
+            ("+-", 10),    
             ("(2 + 5) ^ 2 / 7", 7), 
             ("3! + √9 * 4", 18), 
             ("8 * (5 - 3) + 6",22), 
@@ -112,13 +112,13 @@ namespace Calculator
             ("5 ^ 2 - √25", 20), 
             ("(2 + 6) * 3 - 5!", -96), 
             ("4! / (2! + 2!)",6) 
-        };
+            };
             for (int i = 0; i < mathExamplesWithResults.Count(); i++)
             {
                 Counting c = new Counting();
                 Trace.WriteLine(i + " " + c.Count(mathExamplesWithResults[i].item1) + " = " + mathExamplesWithResults[i].item2);
             }
-            
+            */
         }
         //Odstraneni posledniho symbolu
         private void DeleteButton_Click(object sender, RoutedEventArgs e)

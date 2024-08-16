@@ -13,8 +13,11 @@ namespace Calculator.Strategies
 
         public string[] Count(string[] tokens)
         {
-            double result = double.Parse(tokens[0]) / double.Parse(tokens[2]);
-            return new string[] { result.ToString() };
+            try{
+                double result = double.Parse(tokens[0]) / double.Parse(tokens[2]);
+                return new string[] { result.ToString() };
+            }catch(Exception e) { return new string[] { }; }
+           
         }
     }
 }

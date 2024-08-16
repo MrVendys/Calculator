@@ -10,10 +10,15 @@ namespace Calculator.Strategies
         public string[] Count(string[] tokens)
         {
             double result = 1;
-            for (int i = 1; i <= double.Parse(tokens[0]); i++)
+            try
             {
-                result = result * i;
-            }
+                for (int i = 1; i <= double.Parse(tokens[0]); i++)
+                {
+                    result = result * i;
+                }
+
+            } catch (Exception e) { return new string[] { }; }
+
             if (tokens.Length == 3)
             {
                 return new string[] { result.ToString(), tokens[2] };
