@@ -2,7 +2,7 @@
 {
     internal class SquareRootStrategy : IOperationStrategy
     {
-        const int PRIORITY = 3;
+        const int PRIORITY = 4;
         public int Priority => PRIORITY; 
 
         public string[] Count(string[] tokens)

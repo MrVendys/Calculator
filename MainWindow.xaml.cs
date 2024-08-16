@@ -96,17 +96,27 @@ namespace Calculator
                 }
             }
             */
-            List<string> examples = new List<string>() 
-            { // Parentheses, exponent, and subtraction
-            "7! / (5! * 2!)", // Factorial with division and multiplication
-            "4 * √(9 + 7)", // Multiplication with square root and parentheses
-            "2 + 2 * 2 ^ 2"
-
-            };
-            for (int i = 0; i < examples.Count(); i++)
+            List<(string item1, double item2)> mathExamplesWithResults = new List<(string, double)>
+        {
+            ("√(36 / 4) + 7", 10),    
+            ("(2 + 5) ^ 2 / 7", 7), 
+            ("3! + √9 * 4", 18), 
+            ("8 * (5 - 3) + 6",22), 
+            ("2 ^ √16 + 1", 17),
+            ("√49 - 3 * 2", 1), 
+            ("15 / (3 + 2) ^ 2", 0.6), 
+            ("(4!) / 2 - 1", 11),
+            ("7 * (2 + √9)", 35), 
+            ("(2 + 2)! + 5 - 3", 26), 
+            ("√81 / (3 + 6)", 1), 
+            ("5 ^ 2 - √25", 20), 
+            ("(2 + 6) * 3 - 5!", -96), 
+            ("4! / (2! + 2!)",6) 
+        };
+            for (int i = 0; i < mathExamplesWithResults.Count(); i++)
             {
                 Counting c = new Counting();
-                Trace.WriteLine(i + " " + c.Count(examples[i]));
+                Trace.WriteLine(i + " " + c.Count(mathExamplesWithResults[i].item1) + " = " + mathExamplesWithResults[i].item2);
             }
             
         }

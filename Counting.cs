@@ -1,6 +1,7 @@
 ﻿using Calculator.Strategies;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,10 @@ namespace Calculator
             ("√",new SquareRootStrategy()),
             ("!", new FactorialStrategy())
             };
+        private bool error = false;
         public Counting() {
         }
-        public float Count(string example)
+        public float? Count(string example)
         {
             return Evaluate(Tokenize(example));
         }
@@ -59,17 +61,16 @@ namespace Calculator
 
         }
         //Funkce pro vypocitani celeho prikladu
-        private float Evaluate(string[] tokens)
+        private float? Evaluate(string[] tokens)
         {
             //Funkce s rekurzi na naleznuti zavorek a jejich vypocitani
             while (tokens.Contains("("))
             {
                 int openIndex = FindLast("(", tokens);
                 int closeIndex = FindFirst(")", tokens, openIndex);
-                if(closeIndex == 0 || openIndex == 0)
+                if(error)
                 {
-
-                    return 0;
+                    return null;
                 } 
                 string[] brcTokens = new string[closeIndex - openIndex - 1];
                 Array.Copy(tokens, openIndex + 1, brcTokens, 0, (closeIndex - openIndex - 1));
@@ -148,6 +149,7 @@ namespace Calculator
                     return i;
                 }
             }
+            error = true;
             return 0;
 
         }
@@ -160,6 +162,7 @@ namespace Calculator
                     return i;
                 }
             }
+            error = true;
             return 0;
         }
        

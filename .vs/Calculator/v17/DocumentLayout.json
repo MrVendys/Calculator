@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|c:\\users\\venca\\projects\\calculator\\calculator\\counting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|solutionrelative:counting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|c:\\users\\venca\\projects\\calculator\\calculator\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|c:\\users\\venca\\projects\\calculator\\calculator\\counting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|solutionrelative:counting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|c:\\users\\venca\\projects\\calculator\\calculator\\strategies\\multiplystrategy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -17,6 +17,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|c:\\users\\venca\\projects\\calculator\\calculator\\strategies\\factorialstrategy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|solutionrelative:strategies\\factorialstrategy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|c:\\users\\venca\\projects\\calculator\\calculator\\strategies\\squarerootstrategy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|solutionrelative:strategies\\squarerootstrategy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D7F3820F-37B1-4220-B1ED-E0016FD15355}|Calculator.csproj|c:\\users\\venca\\projects\\calculator\\calculator\\strategies\\plusstrategy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -38,11 +42,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
@@ -55,6 +59,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "SquareRootStrategy.cs",
+              "DocumentMoniker": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\Strategies\\SquareRootStrategy.cs",
+              "RelativeDocumentMoniker": "Strategies\\SquareRootStrategy.cs",
+              "ToolTip": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\Strategies\\SquareRootStrategy.cs",
+              "RelativeToolTip": "Strategies\\SquareRootStrategy.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-16T09:52:24.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "PlusStrategy.cs",
               "DocumentMoniker": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\Strategies\\PlusStrategy.cs",
               "RelativeDocumentMoniker": "Strategies\\PlusStrategy.cs",
@@ -73,14 +90,14 @@
               "RelativeDocumentMoniker": "Strategies\\FactorialStrategy.cs",
               "ToolTip": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\Strategies\\FactorialStrategy.cs",
               "RelativeToolTip": "Strategies\\FactorialStrategy.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAANAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-14T16:08:42.694Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "IOperationStrategy.cs",
               "DocumentMoniker": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\Strategies\\IOperationStrategy.cs",
               "RelativeDocumentMoniker": "Strategies\\IOperationStrategy.cs",
@@ -105,26 +122,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Counting.cs",
               "DocumentMoniker": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\Counting.cs",
               "RelativeDocumentMoniker": "Counting.cs",
-              "ToolTip": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\Counting.cs*",
-              "RelativeToolTip": "Counting.cs*",
-              "ViewState": "AQIAAGYAAAAAAAAAAAAWwIEAAAAjAAAA",
+              "ToolTip": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\Counting.cs",
+              "RelativeToolTip": "Counting.cs",
+              "ViewState": "AQIAAFoAAAAAAAAAAAAWwG0AAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-13T10:25:20.005Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\MainWindow.xaml.cs",
-              "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AQIAAFcAAAAAAAAAAAAIwGQAAAANAAAA",
+              "ToolTip": "C:\\Users\\Venca\\Projects\\Calculator\\Calculator\\MainWindow.xaml.cs*",
+              "RelativeToolTip": "MainWindow.xaml.cs*",
+              "ViewState": "AQIAAE8AAAAAAAAAAAAowGMAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-12T14:38:32.728Z",
               "EditorCaption": ""

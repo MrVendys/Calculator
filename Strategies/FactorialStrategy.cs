@@ -4,7 +4,7 @@ namespace Calculator.Strategies
 {
     internal class FactorialStrategy : IOperationStrategy
     {
-        const int PRIORITY = 4;
+        const int PRIORITY = 5;
         public int Priority => PRIORITY;
 
         public string[] Count(string[] tokens)
