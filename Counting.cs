@@ -66,6 +66,11 @@ namespace Calculator
             {
                 int openIndex = FindLast("(", tokens);
                 int closeIndex = FindFirst(")", tokens, openIndex);
+                if(closeIndex == 0 || openIndex == 0)
+                {
+
+                    return 0;
+                } 
                 string[] brcTokens = new string[closeIndex - openIndex - 1];
                 Array.Copy(tokens, openIndex + 1, brcTokens, 0, (closeIndex - openIndex - 1));
                 var innerResult = Evaluate(brcTokens);
@@ -76,49 +81,37 @@ namespace Calculator
             //Naleznuti operatoru v prikladu
             List<(string Operation, IOperationStrategy Strategy)> currentOperations = FindOperators(tokens);
 
+            //Serazeni operatoru podle pirority - Sestupne
+            currentOperations = currentOperations.OrderByDescending(item => item.Strategy.Priority).ToList();
 
-            List<int> topPriority = [0];
-
-            //Projeti vsech pouzitych operatoru a ulozeni nejvyssich priorit
-            foreach (var item in currentOperations)
-            {
-                if (item.Strategy.Priority > topPriority[0])
-                    topPriority.Insert(0, item.Strategy.Priority);
-            }
-
-            int index = 0;
             
             //Cyklus pro vypocet vsech cisel v poli. Pocita se zleva, podle priority operaci
+            int index = 0;
             while (tokens.Length > 1)
             {
                 //Nehledam cisla, jenom operatory. Jednoducha podminka na zjisteni, jestli je charakter cislo
                 if (!int.TryParse(tokens[index], out _))
                 {
-                    //Cyklus na projizdeni vsech operatoru
-                    foreach (var operation in currentOperations)
+                    //Kontrola momentalniho operatoru s operatorem s nejvetsi prioritou
+                    if (tokens[index] == currentOperations[0].Operation)
                     {
-                        //Charakter v poli se porovnava, jestli je to nejaky pouzity operator a jestli ma nejvyssi prioritu
-                        if (tokens[index] == operation.Operation && operation.Strategy.Priority >= topPriority[0])
-                        {
-                            //Pouziti spravne strategie, ulozeni mezivysledku zpatky do pole pro nasledne pokracovani
-                            IOperationStrategy currentOperation = operation.Strategy;
+                        //Pouziti spravne strategie, ulozeni mezivysledku zpatky do pole pro nasledne pokracovani
+                        IOperationStrategy currentOperation = currentOperations[0].Strategy;
 
-                            //Kazda operace prijima pole string[] s operatorem a znakem pred nim a za nim.
-                            //Jednotlive operatory si s tim poradi a vrati pole string[], kterym se nahradi cast zadavaciho pole "tokens[]"
-                            //Duvodem je nejjednoznacny pocet znaku pro vypocet urciteho operatoru: 
-                            //1 + 2 = 3 znaky
-                            //3! = 2 znaky.. jeden pred operatorem
-                            //√4 = 2 znaky.. jeden za operatorem
+                        //Kazda operace prijima pole string[] s operatorem a znakem pred nim a za nim.
+                        //Jednotlive operatory si s tim poradi a vrati pole string[], kterym se nahradi cast zadavaciho pole "tokens[]"
+                        //Duvodem je nejjednoznacny pocet a usporadani znaku pro vypocet urciteho operatoru: 
+                        //1 + 2 = 3 znaky
+                        //3! = 2 znaky.. jeden pred operatorem
+                        //√4 = 2 znaky.. jeden za operatorem
 
 
-                            string[] result = currentOperation.Count(tokens.Skip(index - 1).Take(3).ToArray());
-                            tokens = tokens.Take(index - 1).Concat(result).Concat(tokens.Skip(index + 2)).ToArray();
-                            
-                            topPriority.RemoveAt(0);
-                            index = -1;
-                            break;
-                            
-                        }
+                        string[] result = currentOperation.Count(tokens.Skip(index - 1).Take(3).ToArray());
+                        //Prepsani meziprikladu na mezivysledek
+                        tokens = tokens.Take(index - 1).Concat(result).Concat(tokens.Skip(index + 2)).ToArray();
+
+                        currentOperations.RemoveAt(0);
+                        index = -1;
                     }
                 }
                 index++;

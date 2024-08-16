@@ -1,4 +1,5 @@
 ﻿using Calculator.Strategies;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -77,11 +78,35 @@ namespace Calculator
         //Vytvoreni instance Counting pro vypocet
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            string expression = InputTextbox.Text.ToString();
+            /*string expression = InputTextbox.Text.ToString();
             if (!expression.Equals(""))
             {
+                Counting c = new Counting()
+                float? result = c.Count(expression);
+                if(result != null)    
+                    InputTextbox.Text = c.Count(expression).ToString();
+                else{
+                    string messageBoxText = "Nekompletní výraz. Zkontrolujte výraz a zadejte ho znovu.";
+                    string caption = "ERROR";
+                    MessageBoxButton button = MessageBoxButton.Ok;
+                    MessageBoxImage icon = MessageBoxImage.Warning;
+                    MessageBoxResult result;
+                    result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Ok);
+                    
+                }
+            }
+            */
+            List<string> examples = new List<string>() 
+            { // Parentheses, exponent, and subtraction
+            "7! / (5! * 2!)", // Factorial with division and multiplication
+            "4 * √(9 + 7)", // Multiplication with square root and parentheses
+            "2 + 2 * 2 ^ 2"
+
+            };
+            for (int i = 0; i < examples.Count(); i++)
+            {
                 Counting c = new Counting();
-                InputTextbox.Text = c.Count(expression).ToString();
+                Trace.WriteLine(i + " " + c.Count(examples[i]));
             }
             
         }
