@@ -83,10 +83,10 @@ namespace Calculator
 
             }
 
-            //Naleznuti operatoru v prikladu
+            //Naleznuti vsech operatoru v prikladu
             List<(string Operation, IOperationStrategy Strategy)> currentOperations = FindOperators(tokens);
 
-            //Serazeni operatoru podle pirority - Sestupne
+            //Serazeni operatoru podle priority - Sestupne
             currentOperations = currentOperations.OrderByDescending(item => item.Strategy.Priority).ToList();
 
             
@@ -105,12 +105,12 @@ namespace Calculator
 
                         //Kazda operace prijima pole string[] s operatorem a znakem pred nim a za nim.
                         //Jednotlive operatory si s tim poradi a vrati pole string[], kterym se nahradi cast zadavaciho pole "tokens[]"
-                        //Duvodem je nejjednoznacny pocet a usporadani znaku pro vypocet urciteho operatoru: 
+                        //Duvodem je nejednoznacny pocet a usporadani znaku pro vypocet urciteho operatoru: 
                         //1 + 2 = 3 znaky
                         //3! = 2 znaky.. jeden pred operatorem
                         //√4 = 2 znaky.. jeden za operatorem
 
-
+                        //Napr. ["1","+","2")
                         string[] result = currentOperation.Count(tokens.Skip(index - 1).Take(3).ToArray());
                         //Odchytnuti chyby: Nekonzistentni priklad
                         if (result.Length == 0)

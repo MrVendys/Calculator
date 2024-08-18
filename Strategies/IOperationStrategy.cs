@@ -12,7 +12,6 @@ namespace Calculator.Strategies
         //Priorita operatoru od 1
         //1 == nejmensi -> resi se jako posledni (+,-)
         const int PRIORITY = 0;
-        //Počet charakteru, ktery jsou zapotrebi k vypoctu
         public int Priority { get; }
         string[] Count(string[] tokens);
     }
