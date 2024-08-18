@@ -35,8 +35,6 @@ Jednoduchá kalkulačka za použití návrhového vzoru "STRATEGY"
 - Visual Studio 2019 nebo novější
 
 ## 🛠️ Instalace
-### .exe souboru
-- Kliknout zde na .exe soubor
 ### Celé řešení (kód)
 - Vpravo nahoře zelené tlačítko "CODE"
 - Download ZIP
