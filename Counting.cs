@@ -4,9 +4,8 @@ namespace Calculator
 {
     public class Counting
     {
-
         /// <summary>
-        /// Dostupné operace
+        /// Výčet použitelných operací
         /// </summary>
         private List<(string Operace, IOperationStrategy Strategie)> _operaceList = new List<(string Operace, IOperationStrategy Strategie)>
             {
@@ -18,12 +17,15 @@ namespace Calculator
             ( "√",new SquareRootStrategy() ),
             ( "!", new FactorialStrategy() )
             };
+
         /// <summary>
-        /// Kontrola chyby typu null
+        /// Kontrola chyby pro typ null
         /// </summary>
         private bool _chyba = false;
+
         public Counting() {
         }
+
         public float? Pocitej(string priklad)
         {
             return Vyhodnot(DoTokenu(priklad));
@@ -31,12 +33,12 @@ namespace Calculator
 
         /// <summary>
         /// Přepsání příkladu do pole stringů
+        /// Vyřešení problémů (mezera, prázdný string, desetiné číslo)
         /// </summary>
         /// <param name="priklad">Zadaný příklad</param>
-        /// <returns>Pole charakterů</returns>
+        /// <returns>Rozsekaný příklad do pole</returns>
         private string[] DoTokenu(string priklad)
         {
-
             List<string> tokeny = new List<string>();
             int index = 0;
             string cislo = "";
@@ -61,15 +63,16 @@ namespace Calculator
             if(cislo != "")
                 tokeny.Add(cislo);
             return tokeny.ToArray();
-
         }
+
         /// <summary>
-        /// Výpočet celého příkladu
+        /// Výpočet celého/daného kusu příkladu
         /// </summary>
-        /// <param name="tokeny">Zadaný příklad</param>
-        /// <returns>Vypočítaný příklad</returns>
+        /// <param name="tokeny">Část příkladu pro výpočet</param>
+        /// <returns>Vypočítaná část příkladu</returns>
         private float? Vyhodnot(string[] tokeny)
         {
+            //První fáze funkce = naleznutí závorek, rekurze na výpočet příkladu v ní, a nahrazení závorek mezivýsledkem v poli
             while (tokeny.Contains("("))
             {
                 int oteviraciId = NajdiPosledni("(", tokeny);
@@ -79,19 +82,20 @@ namespace Calculator
                 {
                     return null;
                 } 
+
                 string[] zavorkyTkny = new string[uzaviraciId - oteviraciId - 1];
                 Array.Copy(tokeny, oteviraciId + 1, zavorkyTkny, 0, (uzaviraciId - oteviraciId - 1));
+
+                //Rekurze pro výpočet části příkladu v závorce
                 var zavorkyVysl = Vyhodnot(zavorkyTkny);
                 if (zavorkyVysl == null)
                     return null;
-                tokeny = tokeny.Take(oteviraciId).Concat(new string[] { zavorkyVysl.ToString() }).Concat(tokeny.Skip(uzaviraciId + 1)).ToArray();
 
+                tokeny = tokeny.Take(oteviraciId).Concat(new string[] { zavorkyVysl.ToString() }).Concat(tokeny.Skip(uzaviraciId + 1)).ToArray();
             }
 
+            //Druhá fáze funkce = projetí všech symbolů v poli "tokeny" a postupný výpočet podle operací
             List<(string Operation, IOperationStrategy Strategy)> pouziteOperace = NajdiOperatory(tokeny);
-            pouziteOperace = pouziteOperace.OrderByDescending(item => item.Strategy.Priorita).ToList();
-
-            
             int index = 0;
             while (tokeny.Length > 1)
             {
@@ -100,11 +104,19 @@ namespace Calculator
                     if (tokeny[index] == pouziteOperace[0].Operation)
                     {
                         IOperationStrategy pouzitaOperace = pouziteOperace[0].Strategy;
+
+                        //Kazda operace prijima pole string[] s operatorem a znakem pred nim a za nim.
+                        //Jednotlive operatory si s tim poradi a vrati pole string[], kterym se nahradi cast zadavaciho pole "tokeny[]"
+                        //Duvodem je nejednoznacny pocet a usporadani znaku pro vypocet urciteho operatoru: 
+                        //1 + 2 = 3 znaky
+                        //3! = 2 znaky.. jeden pred operatorem
+                        //√4 = 2 znaky.. jeden za operatorem
+                        //Napr. ["1","+","2"]
                         string[] result = pouzitaOperace.Vypocitej(tokeny.Skip(index - 1).Take(3).ToArray());
                         if (result.Length == 0)
-                             return null; 
-                        tokeny = tokeny.Take(index - 1).Concat(result).Concat(tokeny.Skip(index + 2)).ToArray();
+                             return null;
 
+                        tokeny = tokeny.Take(index - 1).Concat(result).Concat(tokeny.Skip(index + 2)).ToArray();
                         pouziteOperace.RemoveAt(0);
                         index = -1;
                     }
@@ -113,15 +125,15 @@ namespace Calculator
             }
             return float.Parse(tokeny[0]);
         }
+
         /// <summary>
-        /// Nalezení použitých operátorů
+        /// Nalezení použitých operátorů v části příkladu
         /// </summary>
-        /// <param name="tokeny">Pole, ve kterém se bude hledat</param>
-        /// <returns>List<string, IOperationStrategy> použitých operátorů</returns>
+        /// <param name="tokeny">Část příkladu</param>
+        /// <returns>Touple naleznutých operací, uspořádaný sestupně podle vlastnosti Priorita</returns>
         private List<(string, IOperationStrategy)> NajdiOperatory(string[] tokeny)
         {
-            var pouziteOperace = new List<(string Operation, IOperationStrategy Strategy)>();
-
+            var pouziteOperace = new List<(string Operation, IOperationStrategy Strategie)>();
             for (int i = 0; i < tokeny.Length; i++)
             {
                 for (int j = 0; j < _operaceList.Count; j++)
@@ -135,14 +147,17 @@ namespace Calculator
                     }
                 }
             }
-            return pouziteOperace;
+
+            return pouziteOperace.OrderByDescending(item => item.Strategie.Priorita).ToList();
         }
+
         /// <summary>
-        /// Nalezení poslední instance symbolu
+        /// Nalezení první instance symbolu v poli odzadu
+        /// Pro nalezení začátku závorky
         /// </summary>
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
-        /// <returns>List<string, IOperationStrategy> použitých operátorů</returns>
+        /// <returns>Index hledaného symbolu</returns>
         private int NajdiPosledni(string symbol, string[] tokeny)
         {
             for (int i = tokeny.Length - 1; i >= 0; i--)
@@ -152,17 +167,19 @@ namespace Calculator
                     return i;
                 }
             }
+
             _chyba = true;
             return 0;
-
         }
+
         /// <summary>
-        /// Nalezení první instance symbolu
+        /// Nalezení první instance symbolu v poli zepředu
+        /// Pro nalezení konce závorky
         /// </summary>
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <param name="startovaciId">Index, na kterém se začne vyhledávat</param>
-        /// <returns>List<string, IOperationStrategy> použitých operátorů</returns>
+        /// <returns>Index hledaného symbolu</returns>
         private int NajdiPrvni(string symbol, string[] tokeny, int startovaciId)
         {
             for (int i = startovaciId; i < tokeny.Length; i++)
@@ -172,9 +189,9 @@ namespace Calculator
                     return i;
                 }
             }
+
             _chyba = true;
             return 0;
         }
-       
     }
 }

@@ -32,16 +32,15 @@ namespace Calculator
         "(",
         ")"
        };
-        /// <summary>
-        /// Konstruktor, volání inicializace
-        /// </summary>
+
         public MainWindow()
         {
             InitializeComponent();
             InitializeButtons();
         }
+
         /// <summary>
-        /// Inicializace tlacitek
+        /// Vytvoření tlačítek podle _characteryList a přidání do View na WrapPanel
         /// </summary>
         private void InitializeButtons()
         {
@@ -60,37 +59,37 @@ namespace Calculator
                     Padding = new Thickness(-5, -5, -5, -5),
                 };
                 b.Click += CustomButton_Click;
+
                 WrapPanel.Children.Add(b);
             }
-           
         }
+
         /// <summary>
         /// Klik na vytvorene tlacitko
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void CustomButton_Click(object sender, RoutedEventArgs e)
         {
             Button senderButton = (Button)sender;
             InputTextbox.Text += senderButton.Content.ToString();
         }
+
         /// <summary>
         /// Klik na tlacitko "Vypocitat ( = )"
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             string vyraz = InputTextbox.Text.ToString();
-
             if (!vyraz.Equals(""))
             {
                 Counting c = new Counting();
                 float? result = c.Pocitej(vyraz);
 
-                if(result != null)    
+                if(result != null)
+                {
                     InputTextbox.Text = c.Pocitej(vyraz).ToString();
-                else{
+                } 
+                else
+                {
                     string messageBoxText = "Nekompletní výraz. Zkontrolujte výraz a zadejte ho znovu.";
                     string caption = "ERROR";
                     MessageBoxButton button = MessageBoxButton.OK;
@@ -100,6 +99,7 @@ namespace Calculator
                 }
             }
         }
+
         /// <summary>
         /// Klik na tlacitko "Odstranit ( ← )"
         /// </summary>
@@ -112,8 +112,6 @@ namespace Calculator
                 string text = InputTextbox.Text.Remove(InputTextbox.Text.Length - 1);
                 InputTextbox.Text = text;
             }
-            
-
         }
     }
 }
