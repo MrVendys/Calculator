@@ -8,14 +8,14 @@ namespace Calculator.Strategies
 {
     internal class PowerStrategy : IOperationStrategy
     {
-        const int PRIORITY = 3;
-        public int Priority => PRIORITY; 
+        private readonly int _priorita = 3;
+        public int Priorita { get { return _priorita; } }
 
-        public string[] Count(string[] tokens)
+        public string[] Vypocitej(string[] tokeny)
         {
             try
             {
-            double result = Math.Pow(double.Parse(tokens[0]), double.Parse(tokens[2]));
+            double result = Math.Pow(double.Parse(tokeny[0]), double.Parse(tokeny[2]));
             return new string[] { result.ToString() };
 
             }

@@ -8,14 +8,14 @@ namespace Calculator.Strategies
 {
     internal class MinusStrategy : IOperationStrategy
     {
-        const int PRIORITY = 1;
-        public int Priority => PRIORITY; 
+        private readonly int _priorita = 1;
+        public int Priorita { get { return _priorita; } }
 
-        public string[] Count(string[] tokens)
+        public string[] Vypocitej(string[] tokeny)
         {
             try
             {
-            double result = double.Parse(tokens[0]) - double.Parse(tokens[2]);
+            double result = double.Parse(tokeny[0]) - double.Parse(tokeny[2]);
             return new string[] { result.ToString() };
 
             }

@@ -4,24 +4,24 @@ namespace Calculator.Strategies
 {
     internal class FactorialStrategy : IOperationStrategy
     {
-        const int PRIORITY = 5;
-        public int Priority => PRIORITY;
+        private readonly int _priorita = 5;
+        public int Priorita { get { return _priorita; } }
 
-        public string[] Count(string[] tokens)
+        public string[] Vypocitej(string[] tokeny)
         {
             double result = 1;
             try
             {
-                for (int i = 1; i <= double.Parse(tokens[0]); i++)
+                for (int i = 1; i <= double.Parse(tokeny[0]); i++)
                 {
                     result = result * i;
                 }
 
             } catch (Exception e) { return new string[] { }; }
 
-            if (tokens.Length == 3)
+            if (tokeny.Length == 3)
             {
-                return new string[] { result.ToString(), tokens[2] };
+                return new string[] { result.ToString(), tokeny[2] };
             }
             else
             {

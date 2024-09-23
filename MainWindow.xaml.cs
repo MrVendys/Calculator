@@ -1,18 +1,5 @@
-﻿using Calculator.Strategies;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 namespace Calculator
 {
     /// <summary>
@@ -20,45 +7,52 @@ namespace Calculator
     /// </summary>
     public partial class MainWindow : Window
     {
-        //List symbolu pro naplneny tlacitek
-        List<string> characters = new List<string>() {
-       "1",
-       "2",
-       "3",
-       "4",
-       "5",
-       "6",
-       "7",
-       "8",
-       "9",
-       "0",
-       ",",
-       "+",
-       "-",
-       "*",
-       "/",
-       "^",
-       "√",
-       "!",
-       "(",
-       ")"
+        /// <summary>
+        /// Charaktery pro generovani tlacitek
+        /// </summary>
+        private List<string> _charakteryList = new List<string>() {
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        ",",
+        "+",
+        "-",
+        "*",
+        "/",
+        "^",
+        "√",
+        "!",
+        "(",
+        ")"
        };
+        /// <summary>
+        /// Konstruktor, volání inicializace
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
             InitializeButtons();
         }
-        //Vytvoreni tlacitek do kalkulacky
+        /// <summary>
+        /// Inicializace tlacitek
+        /// </summary>
         private void InitializeButtons()
         {
-            foreach (var item in characters)
+            foreach (var charakter in _charakteryList)
             {
                 Button b = new Button()
                 {
                     Name = "ContentButton",
                     Height = 60,
                     Width = 60,
-                    Content = item,
+                    Content = charakter,
                     FontSize = 50,
                     VerticalContentAlignment = VerticalAlignment.Center,
                     HorizontalContentAlignment = HorizontalAlignment.Center,
@@ -70,23 +64,32 @@ namespace Calculator
             }
            
         }
-        //Prepsani hodnoty tlacitka do textboxu
+        /// <summary>
+        /// Klik na vytvorene tlacitko
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CustomButton_Click(object sender, RoutedEventArgs e)
         {
             Button senderButton = (Button)sender;
             InputTextbox.Text += senderButton.Content.ToString();
         }
-        //Vytvoreni instance tridy Counting pro vypocet
+        /// <summary>
+        /// Klik na tlacitko "Vypocitat ( = )"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            string expression = InputTextbox.Text.ToString();
-            if (!expression.Equals(""))
+            string vyraz = InputTextbox.Text.ToString();
+
+            if (!vyraz.Equals(""))
             {
                 Counting c = new Counting();
-                float? result = c.Count(expression);
-                //Odchytavani chyb a upozoneni pomoci vyskakovaciho okna
+                float? result = c.Pocitej(vyraz);
+
                 if(result != null)    
-                    InputTextbox.Text = c.Count(expression).ToString();
+                    InputTextbox.Text = c.Pocitej(vyraz).ToString();
                 else{
                     string messageBoxText = "Nekompletní výraz. Zkontrolujte výraz a zadejte ho znovu.";
                     string caption = "ERROR";
@@ -97,7 +100,11 @@ namespace Calculator
                 }
             }
         }
-        //Odstraneni posledniho symbolu
+        /// <summary>
+        /// Klik na tlacitko "Odstranit ( ← )"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (!InputTextbox.Text.Equals(""))

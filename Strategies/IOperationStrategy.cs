@@ -9,10 +9,15 @@ namespace Calculator.Strategies
 {
     internal interface IOperationStrategy
     {
-        //Priorita operatoru od 1
-        //1 == nejmensi -> resi se jako posledni (+,-)
-        const int PRIORITY = 0;
-        public int Priority { get; }
-        string[] Count(string[] tokens);
+        /// <summary>
+        /// Priority výpočtu
+        /// </summary>
+        public int Priorita { get; }
+        /// <summary>
+        /// Výpočet konkrétní části příkladu
+        /// </summary>
+        /// <param name="tokeny">Počítaný příklad</param>
+        /// <returns>Pole s vypočítanou hodnotou</returns>
+        string[] Vypocitej(string[] tokeny);
     }
 }

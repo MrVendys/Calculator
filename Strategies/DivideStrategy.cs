@@ -8,13 +8,13 @@ namespace Calculator.Strategies
 {
     internal class DivideStrategy : IOperationStrategy
     {
-        const int PRIORITY = 2;
-        public int Priority => PRIORITY;
+        private readonly int _priorita = 2;
+        public int Priorita { get { return _priorita; } }
 
-        public string[] Count(string[] tokens)
+        public string[] Vypocitej(string[] tokeny)
         {
             try{
-                double result = double.Parse(tokens[0]) / double.Parse(tokens[2]);
+                double result = double.Parse(tokeny[0]) / double.Parse(tokeny[2]);
                 return new string[] { result.ToString() };
             }catch(Exception e) { return new string[] { }; }
            
