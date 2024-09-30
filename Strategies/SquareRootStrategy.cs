@@ -2,10 +2,10 @@
 {
     internal class SquareRootStrategy : IOperationStrategy
     {
-        const int PRIORITY = 4;
-        public int Priority => PRIORITY; 
+        private readonly int _priorita = 4;
+        public int Priorita { get { return _priorita; } }
 
-        public string[] Count(string[] tokens)
+        public string[] Vypocitej(string[] tokens)
         {
             try
             {

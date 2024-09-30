@@ -13,6 +13,7 @@ namespace Calculator.Strategies
         /// Priority výpočtu
         /// </summary>
         public int Priorita { get; }
+
         /// <summary>
         /// Výpočet konkrétní části příkladu
         /// </summary>
