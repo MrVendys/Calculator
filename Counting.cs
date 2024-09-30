@@ -47,7 +47,7 @@ namespace Calculator
                 string token = priklad.Substring(index, 1);
                 if (int.TryParse(token, out _) || token == ",")
                 {
-                    cislo += tokeny;
+                    cislo += token;
                 }
                 else if (token != " ")
                 {

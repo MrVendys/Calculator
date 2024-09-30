@@ -2,8 +2,7 @@
 {
     internal class SquareRootStrategy : IOperationStrategy
     {
-        private readonly int _priorita = 4;
-        public int Priorita { get { return _priorita; } }
+        public int Priorita { get { return 4; } }
 
         public string[] Vypocitej(string[] tokens)
         {

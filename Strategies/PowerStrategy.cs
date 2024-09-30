@@ -8,8 +8,7 @@ namespace Calculator.Strategies
 {
     internal class PowerStrategy : IOperationStrategy
     {
-        private readonly int _priorita = 3;
-        public int Priorita { get { return _priorita; } }
+        public int Priorita { get { return 3; } }
 
         public string[] Vypocitej(string[] tokeny)
         {

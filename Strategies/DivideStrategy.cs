@@ -8,8 +8,7 @@ namespace Calculator.Strategies
 {
     internal class DivideStrategy : IOperationStrategy
     {
-        private readonly int _priorita = 2;
-        public int Priorita { get { return _priorita; } }
+        public int Priorita { get { return 2; } }
 
         public string[] Vypocitej(string[] tokeny)
         {

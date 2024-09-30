@@ -10,15 +10,17 @@ namespace Calculator.Strategies
     internal interface IOperationStrategy
     {
         /// <summary>
-        /// Priority výpočtu
+        /// Priorita operatoru od 1
+        /// 1 == nejmensi -> resi se jako posledni (příklad: +,-)
+        /// Použití v Counting.cs pro výpočet 
         /// </summary>
         public int Priorita { get; }
 
         /// <summary>
         /// Výpočet konkrétní části příkladu
         /// </summary>
-        /// <param name="tokeny">Počítaný příklad</param>
-        /// <returns>Pole s vypočítanou hodnotou</returns>
+        /// <param name="tokeny">Tokeny počítaného příkladu</param>
+        /// <returns>Vypočítaná hodnota v string poli</returns>
         string[] Vypocitej(string[] tokeny);
     }
 }

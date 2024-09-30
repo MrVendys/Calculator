@@ -4,8 +4,7 @@ namespace Calculator.Strategies
 {
     internal class FactorialStrategy : IOperationStrategy
     {
-        private readonly int _priorita = 5;
-        public int Priorita { get { return _priorita; } }
+        public int Priorita { get { return 5; } }
 
         public string[] Vypocitej(string[] tokeny)
         {
