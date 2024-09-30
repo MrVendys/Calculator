@@ -8,7 +8,9 @@ namespace Calculator.Strategies
 {
     internal class PowerStrategy : IOperationStrategy
     {
-        public int Priorita { get { return 3; } }
+        public int Priorita => 3;
+
+        public string ZnakOperatoru => "^";
 
         public string[] Vypocitej(string[] tokeny)
         {

@@ -16,6 +16,8 @@ namespace Calculator.Strategies
         /// </summary>
         public int Priorita { get; }
 
+        public string ZnakOperatoru { get; }
+
         /// <summary>
         /// Výpočet konkrétní části příkladu
         /// </summary>

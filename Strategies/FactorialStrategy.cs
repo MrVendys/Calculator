@@ -4,7 +4,9 @@ namespace Calculator.Strategies
 {
     internal class FactorialStrategy : IOperationStrategy
     {
-        public int Priorita { get { return 5; } }
+        public int Priorita => 5;
+
+        public string ZnakOperatoru => "!";
 
         public string[] Vypocitej(string[] tokeny)
         {

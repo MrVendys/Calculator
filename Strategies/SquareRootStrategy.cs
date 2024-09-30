@@ -2,7 +2,9 @@
 {
     internal class SquareRootStrategy : IOperationStrategy
     {
-        public int Priorita { get { return 4; } }
+        public int Priorita => 4;
+
+        public string ZnakOperatoru => "√";
 
         public string[] Vypocitej(string[] tokens)
         {
