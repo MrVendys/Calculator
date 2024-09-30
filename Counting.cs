@@ -1,4 +1,6 @@
 ﻿using Calculator.Strategies;
+using System.Linq;
+using System.Xml.XPath;
 
 namespace Calculator
 {
@@ -7,7 +9,7 @@ namespace Calculator
         /// <summary>
         /// Výčet použitelných operací
         /// </summary>
-        private List<(string Operace, IOperationStrategy Strategie)> _operaceList = new List<(string Operace, IOperationStrategy Strategie)>
+        private List<(string Operace, OperationStrategy Strategie)> _operaceList = new List<(string Operace, OperationStrategy Strategie)>
             {
             ( "+",new PlusStrategy() ),
             ( "-",new MinusStrategy() ),
@@ -98,7 +100,7 @@ namespace Calculator
 
             //Druhá fáze funkce = projetí všech symbolů v poli "tokeny" a postupný výpočet.
             //Počítá se podle operací
-            List<(string Operation, IOperationStrategy Strategy)> pouziteOperace = NajdiOperatory(tokeny);
+            List<(string Operation, OperationStrategy Strategy)> pouziteOperace = NajdiOperatory(tokeny);
             int index = 0;
             while (tokeny.Length > 1)
             {
@@ -106,20 +108,28 @@ namespace Calculator
                 {
                     if (tokeny[index] == pouziteOperace[0].Operation)
                     {
-                        IOperationStrategy pouzitaOperace = pouziteOperace[0].Strategy;
+                        OperationStrategy pouzitaOperace = pouziteOperace[0].Strategy;
 
-                        //Kazda operace prijima pole string[] s operatorem a znakem pred nim a za nim.
-                        //Jednotlive operatory si s tim poradi a vrati pole string[], kterym se nahradi cast zadavaciho pole "tokeny[]"
-                        //Duvodem je nejednoznacny pocet a usporadani znaku pro vypocet urciteho operatoru: 
-                        //1 + 2 = 3 znaky
-                        //3! = 2 znaky.. jeden pred operatorem
-                        //√4 = 2 znaky.. jeden za operatorem
-                        //Např. ["1","+","2"]
-                        string[] result = pouzitaOperace.Vypocitej(tokeny.Skip(index - 1).Take(3).ToArray());
-                        if (result.Length == 0)
-                             return null;
+                        //Uložení čísel pro výpočet
+                        //Kvůli nekonzistentnosti počtu čísel pro výpočet (pro "+" => 2 čísla, pro "!" => 1 číslo), se vždy pošlou 2 hodnoty
+                        //Akorát ta nepotřebná je 0
+                        string[] vysl = [];
+                        switch (pouzitaOperace.Pozice)
+                        {
+                            case OperationStrategy.VycetPozic.Zprava:
+                                vysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index+1]),null);
+                                break;
+                            case OperationStrategy.VycetPozic.Zleva:
+                                vysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]), null);
+                                break;
+                            case OperationStrategy.VycetPozic.ZlevaIZprava:
+                                vysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index -1]), double.Parse(tokeny[index + 1]));
+                                break;
 
-                        tokeny = tokeny.Take(index - 1).Concat(result).Concat(tokeny.Skip(index + 2)).ToArray();
+                        }
+
+                        //TODO: IF Zleva or zprava or boji na index - 1
+                        tokeny = tokeny.Take(index - 1).Concat(vysl).Concat(tokeny.Skip(index + pouzitaOperace.PocetCisel)).ToArray();
                         pouziteOperace.RemoveAt(0);
                         index = -1;
                     }

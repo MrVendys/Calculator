@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Calculator.Strategies
+﻿namespace Calculator.Strategies
 {
-    internal class PlusStrategy : IOperationStrategy
+    internal class PlusStrategy : OperationStrategy
     {
         public int Priorita => 1;
 
         public string ZnakOperatoru => "+";
 
-        public string[] Vypocitej(string[] tokeny)
+        public int PocetCisel => 2;
+
+        public Enum Pozice = OperationStrategy.VycetPozic.ZlevaIZprava;
+
+        public string[] Vypocitej(double? cislo1, double? cislo2)
         {
             try
             {
 
-            double result = double.Parse(tokeny[0]) + double.Parse(tokeny[2]);
+            double result = cislo1.Value + cislo2.Value;
             return new string[] { result.ToString() };
             }
             catch (Exception e) { return new string[] { }; }

@@ -1,26 +1,22 @@
 ﻿namespace Calculator.Strategies
 {
-    internal class SquareRootStrategy : IOperationStrategy
+    internal class SquareRootStrategy : OperationStrategy
     {
         public int Priorita => 4;
 
         public string ZnakOperatoru => "√";
 
-        public string[] Vypocitej(string[] tokens)
+        public int PocetCisel => 1;
+
+        public Enum Pozice = OperationStrategy.VycetPozic.Zprava;
+
+        public string[] Vypocitej(double? cislo1, double? cislo2)
         {
             try
             {
-
-            if(tokens[1].Equals("√"))
-            {
-                double result = Math.Sqrt(double.Parse(tokens[2]));
-                return new string[] { tokens[0], result.ToString() };
-            }
-            else
-            {
-                double result = Math.Sqrt(double.Parse(tokens[1]));
+                double result = Math.Sqrt(cislo2.Value);
                 return new string[] { result.ToString() };
-            }
+            
             }
             catch (Exception e) { return new string[] { }; }
 
