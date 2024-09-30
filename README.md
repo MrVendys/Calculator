@@ -1,13 +1,11 @@
 # Kalkulačka
 
 ## 📜 Popis projektu
-
 Projekt je vytvořen za účelem otestování znalostí pro ucházení se o praxi ve firmě
 
 Jednoduchá kalkulačka za použití návrhového vzoru "STRATEGY"
 
 ## ⚙️ Funkce
-
 - Základní operace (+,-,*,/)
 - Pokročilé operace (!,√,^)
 - Priority operací
@@ -24,15 +22,13 @@ Jednoduchá kalkulačka za použití návrhového vzoru "STRATEGY"
 - Tlačítko "←" smaže znak
 
 ## 📂 Struktura projektu
-
 - **📂Strategies**: Složka pro třídy návrhového vzoru Strategy
 - **MainWindow.xaml**: Hlavní okno aplikace
 - **MainWindow.xaml.cs**: Logika hlavního okna
 
-## 🔧 Požadavky
-
-- .NET Framework 4.7.2 nebo vyšší
-- Visual Studio 2019 nebo novější
+## 🔧 Vytvořeno v
+- .NET Framework 8.0.2
+- Visual Studio 2022
 
 ## 🛠️ Instalace
 ### Celé řešení (kód)
