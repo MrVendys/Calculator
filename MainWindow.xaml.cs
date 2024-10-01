@@ -86,7 +86,7 @@ namespace Calculator
 
                 if(result != null)
                 {
-                    InputTextbox.Text = c.Pocitej(vyraz).ToString();
+                    InputTextbox.Text = result.ToString();
                 } 
                 else
                 {

@@ -2,19 +2,21 @@
 {
     internal class SquareRootStrategy : OperationStrategy
     {
-        public int Priorita => 4;
+        public override int Priorita => 4;
 
-        public string ZnakOperatoru => "√";
+        public override string ZnakOperatoru => "√";
 
-        public int PocetCisel => 1;
+        public override int PocetCiselZleva => 0;
 
-        public Enum Pozice = OperationStrategy.VycetPozic.Zprava;
+        public override int PocetCiselZprava => 1;
 
-        public string[] Vypocitej(double? cislo1, double? cislo2)
+        public override Enum PoziceCisel => OperationStrategy.VycetPozic.Vpravo;
+
+        public override string[] Vypocitej(double cislo1, double? cislo2)
         {
             try
             {
-                double result = Math.Sqrt(cislo2.Value);
+                double result = Math.Sqrt(cislo1);
                 return new string[] { result.ToString() };
             
             }

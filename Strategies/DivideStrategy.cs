@@ -2,18 +2,16 @@
 {
     internal class DivideStrategy : OperationStrategy
     {
-        public int Priorita => 2;
+        public override int Priorita => 2;
 
-        public string ZnakOperatoru => "/";
+        public override string ZnakOperatoru => "/";
 
-        public int PocetCisel => 2;
+        public override Enum PoziceCisel => OperationStrategy.VycetPozic.VlevoIVpravo;
 
-        public Enum Pozice = OperationStrategy.VycetPozic.ZlevaIZprava;
-
-        public string[] Vypocitej(double? cislo1, double? cislo2)
+        public override string[] Vypocitej(double cislo1, double? cislo2)
         {
             try{
-                double result = cislo1.Value / cislo2.Value;
+                double result = cislo1 / cislo2.Value;
                 return new string[] { result.ToString() };
             }catch(Exception e) { return new string[] { }; }
            

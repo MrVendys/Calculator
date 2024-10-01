@@ -7,39 +7,38 @@
         /// 1 == nejmensi -> resi se jako posledni (příklad: +,-),
         /// Použití v Counting.cs pro výpočet 
         /// </summary>
-        public int Priorita => 1;
+        public virtual int Priorita => 1;
 
-        public string ZnakOperatoru { get; }
+        public virtual string ZnakOperatoru => "+";
 
-        public int PocetCisel => 2;
+        /// <summary>
+        /// Počet čísel, se kterými operátor pracuje zleva
+        /// </summary>
+        public virtual int PocetCiselZleva => 1;
+
+        /// <summary>
+        /// Počet čísel, se kterými operátor pracuje zprava
+        /// </summary>
+        public virtual int PocetCiselZprava => 1;
 
         public enum VycetPozic
         {
-            Zleva,
-            Zprava,
-            ZlevaIZprava
+            Vlevo,
+            Vpravo,
+            VlevoIVpravo
         }
 
-        public virtual Enum Pozice 
-        { 
-            get 
-            { 
-                return Pozice; 
-            } 
-            set 
-            { 
-                Pozice = VycetPozic.ZlevaIZprava; 
-            } 
-        }
-
-
+        /// <summary>
+        /// Kde se nacházejí čísla, se kterými operátor pracuje.: Před ním (Vlevo), za ním (Vpravo), nebo oboje (VlevoIVpravo)
+        /// </summary>
+        public virtual Enum PoziceCisel { get; }
 
         /// <summary>
         /// Výpočet konkrétní části příkladu
         /// </summary>
         /// <param name="tokeny">Tokeny počítaného příkladu</param>
         /// <returns>Vypočítaná hodnota v string poli</returns>
-        public virtual string[] Vypocitej(double? cislo1, double? cislo2)
+        public virtual string[] Vypocitej(double cislo1, double? cislo2)
         {
             return null;
         }

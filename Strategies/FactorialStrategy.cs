@@ -2,20 +2,22 @@
 {
     internal class FactorialStrategy : OperationStrategy
     {
-        public int Priorita => 5;
+        public override int Priorita => 5;
 
-        public string ZnakOperatoru => "!";
+        public override string ZnakOperatoru => "!";
 
-        public int PocetCisel => 1;
+        public override int PocetCiselZleva => 1;
 
-        public Enum Pozice = OperationStrategy.VycetPozic.Zleva;
+        public override int PocetCiselZprava => 0;
 
-        public string[] Vypocitej(double? cislo1, double? cislo2)
+        public override Enum PoziceCisel => OperationStrategy.VycetPozic.Vlevo;
+
+        public override string[] Vypocitej(double cislo1, double? cislo2)
         {
             double result = 1;
             try
             {
-                for (int i = 1; i <= cislo1.Value; i++)
+                for (int i = 1; i <= cislo1; i++)
                 {
                     result = result * i;
                 }
