@@ -1,22 +1,14 @@
 ﻿namespace Calculator.Strategies
 {
-    internal class PowerStrategy : OperationStrategy
+    internal class PowerStrategy : OperationStrategyBase
     {
-        public override int Priorita => 3;
+        public override byte Priorita => 3;
 
-        public override string ZnakOperatoru => "^";
+        public override char ZnakOperatoru => '^';
 
-        public override Enum PoziceCisel => OperationStrategy.VycetPozic.VlevoIVpravo;
-
-        public override string[] Vypocitej(double cislo1, double? cislo2)
+        public override double Vypocitej(double cislo1, double? cislo2)
         {
-            try
-            {
-                double result = Math.Pow(cislo1, cislo2.Value);
-            return new string[] { result.ToString() };
-
-            }
-            catch (Exception e) { return new string[] { }; }
+            return Math.Pow(cislo1, cislo2.Value);
         }
     }
 }

@@ -1,27 +1,16 @@
 ﻿namespace Calculator.Strategies
 {
-    internal class SquareRootStrategy : OperationStrategy
+    internal class SquareRootStrategy : OperationStrategyBase
     {
-        public override int Priorita => 4;
+        public override byte Priorita => 4;
 
-        public override string ZnakOperatoru => "√";
+        public override char ZnakOperatoru => '√';
 
-        public override int PocetCiselZleva => 0;
+        public override PoziceCisla Pozice => PoziceCisla.Vpravo;
 
-        public override int PocetCiselZprava => 1;
-
-        public override Enum PoziceCisel => OperationStrategy.VycetPozic.Vpravo;
-
-        public override string[] Vypocitej(double cislo1, double? cislo2)
+        public override double Vypocitej(double cislo1, double? cislo2)
         {
-            try
-            {
-                double result = Math.Sqrt(cislo1);
-                return new string[] { result.ToString() };
-            
-            }
-            catch (Exception e) { return new string[] { }; }
-
+            return Math.Sqrt(cislo1);
         }
     }
 }

@@ -82,21 +82,16 @@ namespace Calculator
             if (!vyraz.Equals(""))
             {
                 Counting c = new Counting();
-                float? result = c.Pocitej(vyraz);
-
-                if(result != null)
-                {
-                    InputTextbox.Text = result.ToString();
-                } 
-                else
-                {
-                    string messageBoxText = "Nekompletní výraz. Zkontrolujte výraz a zadejte ho znovu.";
-                    string caption = "ERROR";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Warning;
-                    MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.OK);
-                    
-                }
+                double result = c.Pocitej(vyraz);
+                InputTextbox.Text = result.ToString();
+            }
+            else
+            {
+                string messageBoxText = "Nekompletní výraz. Zkontrolujte výraz a zadejte ho znovu.";
+                string caption = "ERROR";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.OK);
             }
         }
 

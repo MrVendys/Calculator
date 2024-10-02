@@ -9,7 +9,7 @@ namespace Calculator
         /// <summary>
         /// Výčet použitelných operací
         /// </summary>
-        private List<(string Operace, OperationStrategy Strategie)> _operaceList = new List<(string Operace, OperationStrategy Strategie)>
+        private List<(string Operace, OperationStrategyBase Strategie)> _operaceList = new List<(string Operace, OperationStrategyBase Strategie)>
             {
             ( "+",new PlusStrategy() ),
             ( "-",new MinusStrategy() ),
@@ -28,13 +28,13 @@ namespace Calculator
         public Counting() {
         }
 
-        public float? Pocitej(string priklad)
+        public double Pocitej(string priklad)
         {
             return Vyhodnot(DoTokenu(priklad));
         }
 
         /// <summary>
-        /// Přepsání příkladu do pole stringů
+        /// Přepsání příkladu do pole stringů (
         /// Vyřešení problémů (mezera, prázdný string, desetiné číslo)
         /// </summary>
         /// <param name="priklad">Zadaný příklad</param>
@@ -74,7 +74,7 @@ namespace Calculator
         /// </summary>
         /// <param name="tokeny">Část příkladu pro výpočet</param>
         /// <returns>Vypočítaná část příkladu</returns>
-        private float? Vyhodnot(string[] tokeny)
+        private double Vyhodnot(string[] tokeny)
         {
             //První fáze = naleznutí závorek, rekurze na výpočet příkladu v ní, a nahrazení závorek mezivýsledkem do pole "tokeny"
             while (tokeny.Contains("("))
@@ -82,25 +82,18 @@ namespace Calculator
                 int oteviraciId = NajdiPosledni("(", tokeny);
                 int uzaviraciId = NajdiPrvni(")", tokeny, oteviraciId);
 
-                if(_chyba)
-                {
-                    return null;
-                } 
-
                 string[] zavorkyTkny = new string[uzaviraciId - oteviraciId - 1];
                 Array.Copy(tokeny, oteviraciId + 1, zavorkyTkny, 0, (uzaviraciId - oteviraciId - 1));
 
                 //Rekurze pro výpočet části příkladu v závorce
                 var zavorkyVysl = Vyhodnot(zavorkyTkny);
-                if (zavorkyVysl == null)
-                    return null;
 
                 tokeny = tokeny.Take(oteviraciId).Concat(new string[] { zavorkyVysl.ToString() }).Concat(tokeny.Skip(uzaviraciId + 1)).ToArray();
             }
 
             //Druhá fáze funkce = projetí všech symbolů v poli "tokeny" a postupný výpočet.
             //Počítá se podle operací
-            List<(string Operation, OperationStrategy Strategy)> pouziteOperace = NajdiOperatory(tokeny);
+            List<(string Operation, OperationStrategyBase Strategy)> pouziteOperace = NajdiOperatory(tokeny);
             int index = 0;
             while (tokeny.Length > 1)
             {
@@ -108,32 +101,38 @@ namespace Calculator
                 {
                     if (tokeny[index] == pouziteOperace[0].Operation)
                     {
-                        OperationStrategy pouzitaOperace = pouziteOperace[0].Strategy;
-                        string[] meziVysl = [];
+                        OperationStrategyBase pouzitaOperace = pouziteOperace[0].Strategy;
+                        double meziVysl;
                         int takeIndex = 0;
                         int skipIndex = 0;
-                        switch (pouzitaOperace.PoziceCisel)
+                        switch (pouzitaOperace.Pozice)
                         {
-                            case OperationStrategy.VycetPozic.Vpravo:
-                                // Pro operátory typu: √
-                                // Index: index operatoru
-                                // TakeIndex: Kolik tokenů se má vzít == operator + jedno číslo za ním
-                                // SkipInde: Kolik tokenů se má přeskočit == operátor + jedno číslo za ním + 1 (-> LINQ funkce bere počet, ne indexi)
-                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index+1]),null);
-                                takeIndex = index + pouzitaOperace.PocetCiselZleva;
-                                skipIndex = index + pouzitaOperace.PocetCiselZprava + 1;
+                            // Index: index operatoru
+                            // TakeIndex: Kolik tokenů se má vzít z pole (všechny před mezipříkladem)
+                            // SkipIndex: Kolik tokenů se má přeskočit v poli (všechny až za mezipříklad)
+                            
+                            // Pro operátory typu: !
+                            case PoziceCisla.Vlevo:
+                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]),null);
+                                takeIndex = index - 1;
+                                skipIndex = index + 1;
                                 break;
-                            case OperationStrategy.VycetPozic.Vlevo:
-                                // Pro operátory typu: !
-                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]), null);
-                                takeIndex = index - pouzitaOperace.PocetCiselZleva;
-                                skipIndex = index + pouzitaOperace.PocetCiselZprava + 1;
+
+                            // Pro operátory typu: √
+                            case PoziceCisla.Vpravo:
+                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index + 1]), null);
+                                takeIndex = index;
+                                skipIndex = index + 1 + 1;
                                 break;
-                            case OperationStrategy.VycetPozic.VlevoIVpravo:
-                                // Pro operátory typu: +,-,*,:
-                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index -1]), double.Parse(tokeny[index + 1]));
-                                takeIndex = index - pouzitaOperace.PocetCiselZleva;
-                                skipIndex = index + pouzitaOperace.PocetCiselZprava + 1;
+
+                            // Pro operátory typu: +,-,*,:
+                            case PoziceCisla.VlevoIVpravo:
+                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]), double.Parse(tokeny[index + 1]));
+                                takeIndex = index - 1;
+                                skipIndex = index + 1 + 1;
+                                break;
+                            default:
+                                meziVysl = 0;
                                 break;
                         }
 
@@ -141,14 +140,14 @@ namespace Calculator
                         // Začátek nechá stejný (do takeIndexu). 
                         // Vloží mezivýsledek.
                         // Vloží konec z původního pole. Přitom přeskočí prvních (skipIndex) hodnot.
-                        tokeny = tokeny.Take(takeIndex).Concat(meziVysl).Concat(tokeny.Skip(skipIndex)).ToArray();
+                        tokeny = tokeny.Take(takeIndex).Concat(new string[] { meziVysl.ToString() }).Concat(tokeny.Skip(skipIndex)).ToArray();
                         pouziteOperace.RemoveAt(0);
                         index = -1;
                     }
                 }
                 index++;
             }
-            return float.Parse(tokeny[0]);
+            return double.Parse(tokeny[0]);
         }
 
         /// <summary>
@@ -157,9 +156,9 @@ namespace Calculator
         /// <param name="tokeny">Část příkladu</param>
         /// <returns> List Touple(string: roperátor jako řetězec, IOperationStrategy: objekt operátoru) 
         /// naleznutých operací, uspořádaný sestupně podle vlastnosti Priorita</returns>
-        private List<(string, OperationStrategy)> NajdiOperatory(string[] tokeny)
+        private List<(string, OperationStrategyBase)> NajdiOperatory(string[] tokeny)
         {
-            var pouziteOperace = new List<(string Operation, OperationStrategy Strategie)>();
+            var pouziteOperace = new List<(string Operation, OperationStrategyBase Strategie)>();
             for (int i = 0; i < tokeny.Length; i++)
             {
                 for (int j = 0; j < _operaceList.Count; j++)
@@ -193,8 +192,6 @@ namespace Calculator
                     return i;
                 }
             }
-
-            _chyba = true;
             return 0;
         }
 
@@ -215,8 +212,6 @@ namespace Calculator
                     return i;
                 }
             }
-
-            _chyba = true;
             return 0;
         }
     }
