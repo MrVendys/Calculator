@@ -1,11 +1,20 @@
 ﻿using Calculator.Strategies;
 using System.Linq;
+using System.Windows.Navigation;
 using System.Xml.XPath;
 
 namespace Calculator
 {
     public class Counting
     {
+
+        /// <summary>
+        /// Dá vědět MainWindow.cs, že se někde vyskytla chyba s konkrétní chybovou hláškou
+        /// </summary>
+        /// <param name="chyba">Chybový text, který chceme vyhodit uživateli</param>
+        public delegate void ChybaHandler(string chyba);
+        public event ChybaHandler Chyba;
+
         /// <summary>
         /// Výčet použitelných operací
         /// </summary>
@@ -20,15 +29,10 @@ namespace Calculator
             ( "!", new FactorialStrategy() )
             };
 
-        /// <summary>
-        /// Kontrola chyby pro typ null
-        /// </summary>
-        private bool _chyba = false;
-
         public Counting() {
         }
 
-        public double Pocitej(string priklad)
+        public double? Pocitej(string priklad)
         {
             return Vyhodnot(DoTokenu(priklad));
         }
@@ -74,28 +78,41 @@ namespace Calculator
         /// </summary>
         /// <param name="tokeny">Část příkladu pro výpočet</param>
         /// <returns>Vypočítaná část příkladu</returns>
-        private double Vyhodnot(string[] tokeny)
+        private double? Vyhodnot(string[] tokeny)
         {
+            //TODO: Vyřešit zadání: (2).... 1 + (2)
             //První fáze = naleznutí závorek, rekurze na výpočet příkladu v ní, a nahrazení závorek mezivýsledkem do pole "tokeny"
-            while (tokeny.Contains("("))
+            while (tokeny.Contains("(") || tokeny.Contains(")"))
             {
-                int oteviraciId = NajdiPosledni("(", tokeny);
-                int uzaviraciId = NajdiPrvni(")", tokeny, oteviraciId);
+                int? oteviraciId = NajdiPosledni("(", tokeny);
+                if (!oteviraciId.HasValue)
+                    return null;
 
-                string[] zavorkyTkny = new string[uzaviraciId - oteviraciId - 1];
-                Array.Copy(tokeny, oteviraciId + 1, zavorkyTkny, 0, (uzaviraciId - oteviraciId - 1));
+                int? uzaviraciId = NajdiPrvni(")", tokeny, oteviraciId.Value);
+                if (!uzaviraciId.HasValue)
+                    return null;
+
+                string[] zavorkyTkny = new string[uzaviraciId.Value - oteviraciId.Value - 1];
+                Array.Copy(tokeny, oteviraciId.Value + 1, zavorkyTkny, 0, (uzaviraciId.Value - oteviraciId.Value - 1));
+
+                if (zavorkyTkny.Length < 1)
+                {
+                    Chyba?.Invoke("Chyba: Prázdná závorka");
+                    return null;
+                }
 
                 //Rekurze pro výpočet části příkladu v závorce
                 var zavorkyVysl = Vyhodnot(zavorkyTkny);
 
-                tokeny = tokeny.Take(oteviraciId).Concat(new string[] { zavorkyVysl.ToString() }).Concat(tokeny.Skip(uzaviraciId + 1)).ToArray();
+                tokeny = tokeny.Take(oteviraciId.Value).Concat(new string[] { zavorkyVysl.ToString() }).Concat(tokeny.Skip(uzaviraciId.Value + 1)).ToArray();
             }
 
             //Druhá fáze funkce = projetí všech symbolů v poli "tokeny" a postupný výpočet.
             //Počítá se podle operací
             List<(string Operation, OperationStrategyBase Strategy)> pouziteOperace = NajdiOperatory(tokeny);
             int index = 0;
-            while (tokeny.Length > 1)
+            string[] vyresenyTokeny;
+            while (tokeny.Length >= 1)
             {
                 if (!int.TryParse(tokeny[index], out _))
                 {
@@ -113,6 +130,20 @@ namespace Calculator
                             
                             // Pro operátory typu: !
                             case PoziceCisla.Vlevo:
+                                if (tokeny.Length >= 2)
+                                {
+                                    bool vporadku = Zkontroluj(new string[] {tokeny[index - 1]});
+                                    if (!vporadku)
+                                    {
+                                        Chyba?.Invoke($"Chybí číslo pro výpočet u operátoru: {pouzitaOperace.ZnakOperatoru}");
+                                        return null;
+                                    }
+                                }
+                                else
+                                {
+                                    Chyba?.Invoke("Moc krátký příklad pro výpočet");
+                                    return null;
+                                }
                                 meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]),null);
                                 takeIndex = index - 1;
                                 skipIndex = index + 1;
@@ -120,6 +151,20 @@ namespace Calculator
 
                             // Pro operátory typu: √
                             case PoziceCisla.Vpravo:
+                                if (tokeny.Length >= 2)
+                                {
+                                    bool vporadku = Zkontroluj(new string[] { tokeny[index + 1] });
+                                    if (!vporadku)
+                                    {
+                                        Chyba?.Invoke($"Chybí číslo pro výpočet u operátoru: {pouzitaOperace.ZnakOperatoru}");
+                                        return null;
+                                    }
+                                }
+                                else
+                                {
+                                    Chyba?.Invoke("Moc krátký příklad pro výpočet");
+                                    return null;
+                                }
                                 meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index + 1]), null);
                                 takeIndex = index;
                                 skipIndex = index + 1 + 1;
@@ -127,10 +172,26 @@ namespace Calculator
 
                             // Pro operátory typu: +,-,*,:
                             case PoziceCisla.VlevoIVpravo:
+                                if (tokeny.Length >= 3)
+                                {
+                                    bool vporadku = Zkontroluj(new string[] { tokeny[index - 1], tokeny[index + 1] });
+                                    if (!vporadku)
+                                    {
+                                        Chyba?.Invoke($"Chybí číslo pro výpočet u operátoru: {pouzitaOperace.ZnakOperatoru}");
+                                        return null;
+                                    }
+                                }
+                                else
+                                {
+                                    Chyba?.Invoke("Moc krátký příklad pro výpočet");
+                                    return null;
+                                }
+                                    
                                 meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]), double.Parse(tokeny[index + 1]));
                                 takeIndex = index - 1;
                                 skipIndex = index + 1 + 1;
                                 break;
+
                             default:
                                 meziVysl = 0;
                                 break;
@@ -140,7 +201,7 @@ namespace Calculator
                         // Začátek nechá stejný (do takeIndexu). 
                         // Vloží mezivýsledek.
                         // Vloží konec z původního pole. Přitom přeskočí prvních (skipIndex) hodnot.
-                        tokeny = tokeny.Take(takeIndex).Concat(new string[] { meziVysl.ToString() }).Concat(tokeny.Skip(skipIndex)).ToArray();
+                        vyresenyTokeny = tokeny.Take(takeIndex).Concat(new string[] { meziVysl.ToString() }).Concat(tokeny.Skip(skipIndex)).ToArray();
                         pouziteOperace.RemoveAt(0);
                         index = -1;
                     }
@@ -148,6 +209,27 @@ namespace Calculator
                 index++;
             }
             return double.Parse(tokeny[0]);
+        }
+
+        /// <summary>
+        /// Zkontroluje, zda má operátor vedle sebe číslo, se kterým by počítal
+        /// </summary>
+        /// <param name="tokeny"></param>
+        /// <param name="opIndex"></param>
+        /// <param name="pozice"></param>
+        /// <returns>True: Všechno je v pořádku. False: Našla se chyba</returns>
+        private bool Zkontroluj(string[] tokeny)
+        {
+            bool vporadku = true;
+            foreach (var token in tokeny) 
+            {
+                if (double.TryParse(token, out _))
+                    vporadku = vporadku && true;
+                else
+                    vporadku = vporadku && false;
+            }
+
+            return vporadku;
         }
 
         /// <summary>
@@ -183,7 +265,7 @@ namespace Calculator
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>
-        private int NajdiPosledni(string symbol, string[] tokeny)
+        private int? NajdiPosledni(string symbol, string[] tokeny)
         {
             for (int i = tokeny.Length - 1; i >= 0; i--)
             {
@@ -192,7 +274,10 @@ namespace Calculator
                     return i;
                 }
             }
-            return 0;
+
+            Chyba?.Invoke("Nekompletní závorka");
+            return null;
+            
         }
 
         /// <summary>
@@ -203,7 +288,7 @@ namespace Calculator
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <param name="startovaciId">Index otevřené závorky, od kterého se začne vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>
-        private int NajdiPrvni(string symbol, string[] tokeny, int startovaciId)
+        private int? NajdiPrvni(string symbol, string[] tokeny, int startovaciId)
         {
             for (int i = startovaciId; i < tokeny.Length; i++)
             {
@@ -212,7 +297,9 @@ namespace Calculator
                     return i;
                 }
             }
-            return 0;
+
+            Chyba?.Invoke("Nekompletní závorka");
+            return null;
         }
     }
 }
