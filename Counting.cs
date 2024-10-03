@@ -18,15 +18,15 @@ namespace Calculator
         /// <summary>
         /// Výčet použitelných operací
         /// </summary>
-        private List<(string Operace, OperationStrategyBase Strategie)> _operaceList = new List<(string Operace, OperationStrategyBase Strategie)>
-            {
-            ( "+",new PlusStrategy() ),
-            ( "-",new MinusStrategy() ),
-            ( "*",new MultiplyStrategy() ),
-            ( "/",new DivideStrategy() ),
-            ( "^",new PowerStrategy() ),
-            ( "√",new SquareRootStrategy() ),
-            ( "!", new FactorialStrategy() )
+        private Dictionary<string, OperationStrategyBase> _operace = new Dictionary<string, OperationStrategyBase>()
+        {
+            { "+",new PlusStrategy() },
+            { "-",new MinusStrategy() },
+            { "*",new MultiplyStrategy() },
+            { "/",new DivideStrategy() },
+            { "^",new PowerStrategy() },
+            { "√",new SquareRootStrategy() },
+            { "!", new FactorialStrategy() }
             };
 
         public Counting() {
@@ -80,7 +80,8 @@ namespace Calculator
         /// <returns>Vypočítaná část příkladu</returns>
         private double? Vyhodnot(string[] tokeny)
         {
-            //TODO: Vyřešit zadání: (2).... 1 + (2)
+            //TODO: Vyřešit chyby s závorkami: (2).... 1 + (2). Možná přesunout do vlastní funkce?
+
             //První fáze = naleznutí závorek, rekurze na výpočet příkladu v ní, a nahrazení závorek mezivýsledkem do pole "tokeny"
             while (tokeny.Contains("(") || tokeny.Contains(")"))
             {
@@ -109,16 +110,15 @@ namespace Calculator
 
             //Druhá fáze funkce = projetí všech symbolů v poli "tokeny" a postupný výpočet.
             //Počítá se podle operací
-            List<(string Operation, OperationStrategyBase Strategy)> pouziteOperace = NajdiOperatory(tokeny);
+            List<OperationStrategyBase> pouziteOperace = NajdiOperatory(tokeny);
             int index = 0;
-            string[] vyresenyTokeny;
-            while (tokeny.Length >= 1)
+            while (tokeny.Length > 1)
             {
                 if (!int.TryParse(tokeny[index], out _))
                 {
-                    if (tokeny[index] == pouziteOperace[0].Operation)
+                    if (tokeny[index] == pouziteOperace[0].ZnakOperatoru.ToString())
                     {
-                        OperationStrategyBase pouzitaOperace = pouziteOperace[0].Strategy;
+                        OperationStrategyBase pouzitaOperace = pouziteOperace[0];
                         double meziVysl;
                         int takeIndex = 0;
                         int skipIndex = 0;
@@ -128,6 +128,8 @@ namespace Calculator
                             // TakeIndex: Kolik tokenů se má vzít z pole (všechny před mezipříkladem)
                             // SkipIndex: Kolik tokenů se má přeskočit v poli (všechny až za mezipříklad)
                             
+                            //TODO: Duplicitní kod.. nějak upravit
+
                             // Pro operátory typu: !
                             case PoziceCisla.Vlevo:
                                 if (tokeny.Length >= 2)
@@ -201,7 +203,7 @@ namespace Calculator
                         // Začátek nechá stejný (do takeIndexu). 
                         // Vloží mezivýsledek.
                         // Vloží konec z původního pole. Přitom přeskočí prvních (skipIndex) hodnot.
-                        vyresenyTokeny = tokeny.Take(takeIndex).Concat(new string[] { meziVysl.ToString() }).Concat(tokeny.Skip(skipIndex)).ToArray();
+                        tokeny = tokeny.Take(takeIndex).Concat(new string[] { meziVysl.ToString() }).Concat(tokeny.Skip(skipIndex)).ToArray();
                         pouziteOperace.RemoveAt(0);
                         index = -1;
                     }
@@ -212,11 +214,9 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Zkontroluje, zda má operátor vedle sebe číslo, se kterým by počítal
+        /// Zkontroluje, zda má operátor vedle sebe číslo, se kterým může počítat
         /// </summary>
         /// <param name="tokeny"></param>
-        /// <param name="opIndex"></param>
-        /// <param name="pozice"></param>
         /// <returns>True: Všechno je v pořádku. False: Našla se chyba</returns>
         private bool Zkontroluj(string[] tokeny)
         {
@@ -236,26 +236,31 @@ namespace Calculator
         /// Nalezení použitých operátorů v části příkladu
         /// </summary>
         /// <param name="tokeny">Část příkladu</param>
-        /// <returns> List Touple(string: roperátor jako řetězec, IOperationStrategy: objekt operátoru) 
+        /// <returns> List Touple(string: roperátor jako řetězec, OperationStrategy: objekt operátoru) 
         /// naleznutých operací, uspořádaný sestupně podle vlastnosti Priorita</returns>
-        private List<(string, OperationStrategyBase)> NajdiOperatory(string[] tokeny)
+        private List<OperationStrategyBase> NajdiOperatory(string[] tokeny)
         {
-            var pouziteOperace = new List<(string Operation, OperationStrategyBase Strategie)>();
+            List<OperationStrategyBase> pouziteOperace = new List<OperationStrategyBase>();
             for (int i = 0; i < tokeny.Length; i++)
             {
-                for (int j = 0; j < _operaceList.Count; j++)
+                for (int j = 0; j < _operace.Count; j++)
                 {
                     if (!int.TryParse(tokeny[i], out _))
                     {
-                        if (tokeny[i].Equals(_operaceList[j].Operace))
+                        if (_operace.Keys.Contains(tokeny[i]))
                         {
-                            pouziteOperace.Add((_operaceList[j].Operace, _operaceList[j].Strategie));
+                            pouziteOperace.Add(_operace[tokeny[i]]);
+                            break;
                         }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
 
-            return pouziteOperace.OrderByDescending(item => item.Strategie.Priorita).ToList();
+            return pouziteOperace.OrderByDescending(item => item.Priorita).ToList();
         }
 
         /// <summary>
@@ -277,7 +282,6 @@ namespace Calculator
 
             Chyba?.Invoke("Nekompletní závorka");
             return null;
-            
         }
 
         /// <summary>

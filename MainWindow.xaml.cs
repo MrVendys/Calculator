@@ -83,12 +83,9 @@ namespace Calculator
             {
                 Counting c = new Counting();
                 c.Chyba += OnChyba;
+
                 double? result = c.Pocitej(vyraz);
-                if (!result.HasValue) 
-                {
-                    //TODO: Zobrazit event chybovou hlášku
-                }
-                else
+                if (result.HasValue) 
                 {
                     InputTextbox.Text = result.ToString();
                 }
@@ -99,10 +96,20 @@ namespace Calculator
             }
         }
 
+        /// <summary>
+        /// Funkce, která se volá na Action "Chyba",
+        /// Vyvolá funkci na zobratení chybové hlášky
+        /// </summary>
+        /// <param name="chyba">Chybová hláška, která přijde skrz Action "Chyba"</param>
         private void OnChyba(string chyba)
         {
             ZobrazHlasku(chyba);
         }
+
+        /// <summary>
+        /// Zobrazí MessageBox s chybovou hláškou, která mu přijde skrz Action "Chyba"
+        /// </summary>
+        /// <param name="chyba">Chybová hláška, která přijde skrz funkci "OnChyba"</param>
         private void ZobrazHlasku(string chyba)
         {
             string messageBoxText = chyba;
