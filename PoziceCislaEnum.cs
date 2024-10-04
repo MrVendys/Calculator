@@ -1,6 +1,6 @@
 ﻿namespace Calculator
 {
-    public enum PoziceCisla : byte
+    public enum PoziceCisla
     {
         Vlevo,
         Vpravo,

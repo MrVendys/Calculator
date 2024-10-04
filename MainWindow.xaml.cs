@@ -82,12 +82,19 @@ namespace Calculator
             if (!vyraz.Equals(""))
             {
                 Counting c = new Counting();
-                c.Chyba += OnChyba;
-
-                double? result = c.Pocitej(vyraz);
-                if (result.HasValue) 
+                string? vysledek;
+                try
                 {
-                    InputTextbox.Text = result.ToString();
+                    vysledek = c.Pocitej(vyraz);
+                }catch (InputValidationException en)
+                {
+                    ZobrazHlasku(en.Message);
+                    vysledek = null;
+                }
+
+                if (vysledek != null) 
+                {
+                    InputTextbox.Text = vysledek;
                 }
             }
             else
@@ -97,26 +104,12 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Funkce, která se volá na Action: <see cref="Counting.Chyba"/>.
-        /// Vyvolá funkci na zobratení chybové hlášky.
-        /// </summary>
-        /// <param name="chyba">Chybová hláška, která přijde skrz Action <see cref="Counting.Chyba"/></param>
-        private void OnChyba(string chyba)
-        {
-            ZobrazHlasku(chyba);
-        }
-
-        /// <summary>
         /// Zobrazí MessageBox s chybovou hláškou.
         /// </summary>
         /// <param name="chyba"></param>
         private void ZobrazHlasku(string chyba)
         {
-            string messageBoxText = chyba;
-            string caption = "ERROR";
-            MessageBoxButton button = MessageBoxButton.OK;
-            MessageBoxImage icon = MessageBoxImage.Warning;
-            MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.OK);
+            MessageBox.Show(chyba ?? "Neidentifikovatelná chyba", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
 
         /// <summary>
@@ -132,6 +125,5 @@ namespace Calculator
                 InputTextbox.Text = text;
             }
         }
-
     }
 }
