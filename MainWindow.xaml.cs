@@ -3,12 +3,12 @@ using System.Windows.Controls;
 namespace Calculator
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainWindow.xaml.
     /// </summary>
     public partial class MainWindow : Window
     {
         /// <summary>
-        /// Charaktery pro generovani tlacitek
+        /// Charaktery pro generovani tlacitek.
         /// </summary>
         private List<string> _charakteryList = new List<string>() {
         "1",
@@ -40,7 +40,7 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Vytvoření tlačítek podle _characteryList a přidání do View na WrapPanel
+        /// Vytvoření tlačítek podle _characteryList a přidání do View na WrapPanel.
         /// </summary>
         private void InitializeButtons()
         {
@@ -65,7 +65,7 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Klik na vytvorene tlacitko
+        /// Klik na vytvorene tlacitko.
         /// </summary>
         private void CustomButton_Click(object sender, RoutedEventArgs e)
         {
@@ -74,7 +74,7 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Klik na tlacitko "Vypocitat ( = )"
+        /// Klik na tlacitko "Vypocitat ( = )".
         /// </summary>
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
@@ -97,19 +97,19 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Funkce, která se volá na Action "Chyba",
-        /// Vyvolá funkci na zobratení chybové hlášky
+        /// Funkce, která se volá na Action: <see cref="Counting.Chyba"/>.
+        /// Vyvolá funkci na zobratení chybové hlášky.
         /// </summary>
-        /// <param name="chyba">Chybová hláška, která přijde skrz Action "Chyba"</param>
+        /// <param name="chyba">Chybová hláška, která přijde skrz Action <see cref="Counting.Chyba"/></param>
         private void OnChyba(string chyba)
         {
             ZobrazHlasku(chyba);
         }
 
         /// <summary>
-        /// Zobrazí MessageBox s chybovou hláškou, která mu přijde skrz Action "Chyba"
+        /// Zobrazí MessageBox s chybovou hláškou.
         /// </summary>
-        /// <param name="chyba">Chybová hláška, která přijde skrz funkci "OnChyba"</param>
+        /// <param name="chyba"></param>
         private void ZobrazHlasku(string chyba)
         {
             string messageBoxText = chyba;
@@ -120,7 +120,7 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Klik na tlacitko "Odstranit ( ← )"
+        /// Klik na tlacitko "Odstranit ( ← )".
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

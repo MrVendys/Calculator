@@ -7,16 +7,17 @@ namespace Calculator
 {
     public class Counting
     {
-
         /// <summary>
-        /// Dá vědět MainWindow.cs, že se někde vyskytla chyba s konkrétní chybovou hláškou
+        /// Dá vědět MainWindow.cs, že se někde vyskytla chyba s konkrétní chybovou hláškou.
         /// </summary>
-        /// <param name="chyba">Chybový text, který chceme vyhodit uživateli</param>
+        /// <param name="chyba">Chybový text, který chceme ukázat uživateli</param>
         public delegate void ChybaHandler(string chyba);
         public event ChybaHandler Chyba;
 
         /// <summary>
-        /// Výčet použitelných operací
+        /// Výčet použitelných operací.
+        /// Key: string, znak operátoru.
+        /// Value: OperationStrategy, instance OperationStrategy odpovídajícího znaku.
         /// </summary>
         private Dictionary<string, OperationStrategyBase> _operace = new Dictionary<string, OperationStrategyBase>()
         {
@@ -32,16 +33,21 @@ namespace Calculator
         public Counting() {
         }
 
+        /// <summary>
+        /// Volaná funkce z <see cref="MainWindow.SubmitButton_Click(object, System.Windows.RoutedEventArgs)"/>
+        /// </summary>
+        /// <param name="priklad"></param>
+        /// <returns></returns>
         public double? Pocitej(string priklad)
         {
             return Vyhodnot(DoTokenu(priklad));
         }
 
         /// <summary>
-        /// Přepsání příkladu do pole stringů (
-        /// Vyřešení problémů (mezera, prázdný string, desetiné číslo)
+        /// Přepsání příkladu do pole stringů.
+        /// Vyřešení problémů (mezera, prázdný string, desetiné číslo).
         /// </summary>
-        /// <param name="priklad">Zadaný příklad</param>
+        /// <param name="priklad"></param>
         /// <returns>Rozsekaný příklad do pole</returns>
         private string[] DoTokenu(string priklad)
         {
@@ -74,15 +80,12 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Výpočet celého/daného kusu příkladu
+        /// Vypočítání závorky a uložení mezivýsledku do pole.
         /// </summary>
-        /// <param name="tokeny">Část příkladu pro výpočet</param>
-        /// <returns>Vypočítaná část příkladu</returns>
-        private double? Vyhodnot(string[] tokeny)
+        /// <param name="tokeny"></param>
+        /// <returns>Upravené pole s vypočítanými závorky</returns>
+        private string[] NajdiZavorky(string[] tokeny)
         {
-            //TODO: Vyřešit chyby s závorkami: (2).... 1 + (2). Možná přesunout do vlastní funkce?
-
-            //První fáze = naleznutí závorek, rekurze na výpočet příkladu v ní, a nahrazení závorek mezivýsledkem do pole "tokeny"
             while (tokeny.Contains("(") || tokeny.Contains(")"))
             {
                 int? oteviraciId = NajdiPosledni("(", tokeny);
@@ -107,12 +110,24 @@ namespace Calculator
 
                 tokeny = tokeny.Take(oteviraciId.Value).Concat(new string[] { zavorkyVysl.ToString() }).Concat(tokeny.Skip(uzaviraciId.Value + 1)).ToArray();
             }
+            return tokeny;
+        }
 
-            //Druhá fáze funkce = projetí všech symbolů v poli "tokeny" a postupný výpočet.
+        /// <summary>
+        /// Výpočet celého/daného kusu příkladu.
+        /// </summary>
+        /// <param name="tokeny">Část příkladu pro výpočet</param>
+        /// <returns>Vypočítaná část příkladu</returns>
+        private double? Vyhodnot(string[] tokeny)
+        {
+            //První fáze = vypočítání závorek
+            tokeny = NajdiZavorky(tokeny); ;
+
+            //Druhá fáze funkce = Postupný výpočet všech tokenů v poli "tokeny".
             //Počítá se podle operací
             List<OperationStrategyBase> pouziteOperace = NajdiOperatory(tokeny);
             int index = 0;
-            while (tokeny.Length > 1)
+            while (tokeny.Length > 1 && pouziteOperace.Count > 0)
             {
                 if (!int.TryParse(tokeny[index], out _))
                 {
@@ -214,7 +229,7 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Zkontroluje, zda má operátor vedle sebe číslo, se kterým může počítat
+        /// Zkontroluje, zda má operátor vedle sebe číslo, se kterým může počítat.
         /// </summary>
         /// <param name="tokeny"></param>
         /// <returns>True: Všechno je v pořádku. False: Našla se chyba</returns>
@@ -233,11 +248,11 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Nalezení použitých operátorů v části příkladu
+        /// Nalezení použitých operátorů v části příkladu.
         /// </summary>
         /// <param name="tokeny">Část příkladu</param>
-        /// <returns> List Touple(string: roperátor jako řetězec, OperationStrategy: objekt operátoru) 
-        /// naleznutých operací, uspořádaný sestupně podle vlastnosti Priorita</returns>
+        /// <returns> List <OperationStrategy>: objekt naleznuté operace.
+        /// Uspořádaný sestupně podle vlastnosti Priorita</returns>
         private List<OperationStrategyBase> NajdiOperatory(string[] tokeny)
         {
             List<OperationStrategyBase> pouziteOperace = new List<OperationStrategyBase>();
@@ -264,8 +279,8 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Nalezení první instance symbolu v poli odzadu
-        /// Používá se pro nalezení začátku závorky
+        /// Nalezení první instance symbolu v poli odzadu.
+        /// Používá se pro nalezení začátku závorky.
         /// </summary>
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
@@ -285,8 +300,8 @@ namespace Calculator
         }
 
         /// <summary>
-        /// Nalezení první instance symbolu v poli zepředu
-        /// Používá se pro nalezení konce závorky
+        /// Nalezení první instance symbolu v poli zepředu.
+        /// Používá se pro nalezení konce závorky.
         /// </summary>
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
