@@ -9,19 +9,24 @@ namespace Calculator
         /// Key: string, znak operátoru.
         /// Value: OperationStrategy, instance OperationStrategy odpovídajícího znaku.
         /// </summary>
-        private Dictionary<string, OperationStrategyBase> _operace = new Dictionary<string, OperationStrategyBase>()
+        private Dictionary<string, OperationStrategyBase> _operace = new Dictionary<string, OperationStrategyBase>();
+
+        public Counting() 
+        { 
+            AddOperace(new PlusStrategy());
+            AddOperace(new MinusStrategy());
+            AddOperace(new MultiplyStrategy());
+            AddOperace(new DivideStrategy());
+            AddOperace(new PowerStrategy());
+            AddOperace(new SquareRootStrategy());
+            AddOperace(new FactorialStrategy());
+        }
+
+        private void AddOperace(OperationStrategyBase operace)
         {
-            { "+", new PlusStrategy() },
-            { "-", new MinusStrategy() },
-            { "*", new MultiplyStrategy() },
-            { "/", new DivideStrategy() },
-            { "^", new PowerStrategy() },
-            { "√", new SquareRootStrategy() },
-            { "!", new FactorialStrategy() }
-        };
-
-        public Counting() { }
-
+            _operace.Add(operace.ZnakOperatoru.ToString(), operace);
+        }
+            
         /// <summary>
         /// Volaná funkce z <see cref="MainWindow.SubmitButton_Click(object, System.Windows.RoutedEventArgs)"/>
         /// </summary>
@@ -130,7 +135,7 @@ namespace Calculator
                             // Pro operátory typu: !
                             case PoziceCisla.Vlevo:
                                 ZkontrolujCisla(tokeny.Take(index + 1).ToArray(), index, pouzitaOperace);
-                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]),null);
+                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]), null);
                                 takeIndex = index - 1;
                                 skipIndex = index + 1;
                                 break;

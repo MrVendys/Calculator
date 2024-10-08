@@ -31,7 +31,7 @@ namespace Calculator
         "!",
         "(",
         ")"
-       };
+        };
 
         public MainWindow()
         {
@@ -86,7 +86,8 @@ namespace Calculator
                 try
                 {
                     vysledek = c.Pocitej(vyraz);
-                }catch (InputValidationException en)
+                }
+                catch (InputValidationException en)
                 {
                     ZobrazHlasku(en.Message);
                     vysledek = null;
