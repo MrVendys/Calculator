@@ -240,7 +240,7 @@ namespace Calculator
             {
                 if (!int.TryParse(tokeny[i], out _))
                 {
-                    if (_operace.TryGetValue(tokeny[i], out var operace))
+                    if (_operace.TryGetValue(tokeny[i][0], out var operace))
                     {
                         pouziteOperace.Add(operace);
                     }
