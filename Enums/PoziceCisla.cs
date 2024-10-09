@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace Calculator.Enums
 {
     public enum PoziceCisla
     {

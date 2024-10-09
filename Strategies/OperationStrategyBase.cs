@@ -1,4 +1,6 @@
-﻿namespace Calculator.Strategies
+﻿using Calculator.Enums;
+
+namespace Calculator.Strategies
 {
     internal abstract class OperationStrategyBase
     {

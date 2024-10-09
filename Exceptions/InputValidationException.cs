@@ -1,4 +1,4 @@
-﻿namespace Calculator
+﻿namespace Calculator.Exceptions
 {
     /// <summary>
     /// Vyjímka pro špatně zadaný příklad.</para>
@@ -10,6 +10,6 @@
 
         public InputValidationException(string message) : base(message) { }
 
-        public InputValidationException(string message, Exception innerException): base(message, innerException) { }
+        public InputValidationException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

@@ -3,9 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Calculator"
+        xmlns:local="clr-namespace:Calculator" 
+        xmlns:ViewModels="clr-namespace:Calculator.ViewModels"
+        xmlns:Commands="clr-namespace:Calculator.Commands"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="550" Height="550" Width="350" MinWidth="350">
+    <Window.DataContext>
+        <ViewModels:MainWindowViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <Style x:Key="InputTextBox" TargetType="TextBox">
             <Setter Property="MinWidth" Value="300"/>
@@ -13,7 +18,6 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="Text" Value="1+2"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="40"/>
@@ -25,12 +29,12 @@
             <Setter Property="Margin" Value="0,0,5,0"/>
             <Setter Property="FontSize" Value="60"/>
         </Style>
-        <Style x:Key="DeleteButton" BasedOn="{StaticResource Button}" TargetType="Button">
+        <Style x:Key="SmazatButton" BasedOn="{StaticResource Button}" TargetType="Button">
             <Setter Property="Padding" Value="0,-15,0,0"/>
             <Setter Property="VerticalContentAlignment" Value="Top"/>
             <Setter Property="Content" Value="←"/>
         </Style>
-        <Style x:Key="SubmitButton" BasedOn="{StaticResource Button}" TargetType="Button">
+        <Style x:Key="OdeslatButton" BasedOn="{StaticResource Button}" TargetType="Button">
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="Content" Value="="/>
         </Style>
@@ -52,7 +56,7 @@
 
         <TextBox Name="InputTextbox" Style="{StaticResource InputTextBox}"
                  Grid.Column="0"
-                />
+                 Text="{Binding Priklad, UpdateSourceTrigger=PropertyChanged}"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
@@ -65,14 +69,16 @@
             <WrapPanel Name="WrapPanel" 
                        Grid.Column="0" 
                        Grid.RowSpan="2"/>
-            <Button Style="{StaticResource DeleteButton}" Name="DeleteButton"
+            
+            <Button Style="{StaticResource SmazatButton}" Name="SmazatButton"
                     Grid.Column="1"
                     Grid.Row="0"
-                    Click="DeleteButton_Click"/>
-            <Button Style="{StaticResource SubmitButton}" Name="SubmitButton"
+                    Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand}"/>
+
+            <Button Style="{StaticResource OdeslatButton}" Name="OdeslatButton"
                     Grid.Column="1"
                     Grid.Row="1"
-                    Click="SubmitButton_Click"/>
+                    Command="{x:Static Commands:CalculatorCommands.OdesliPrikladCommand}"/>
         </Grid>
         
     </Grid>

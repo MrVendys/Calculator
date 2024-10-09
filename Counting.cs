@@ -1,4 +1,6 @@
-﻿using Calculator.Strategies;
+﻿using Calculator.Enums;
+using Calculator.Exceptions;
+using Calculator.Strategies;
 
 namespace Calculator
 {
@@ -9,7 +11,7 @@ namespace Calculator
         /// Key: string, znak operátoru.
         /// Value: OperationStrategy, instance OperationStrategy odpovídajícího znaku.
         /// </summary>
-        private Dictionary<string, OperationStrategyBase> _operace = new Dictionary<string, OperationStrategyBase>();
+        private Dictionary<char, OperationStrategyBase> _operace = new Dictionary<char, OperationStrategyBase>();
 
         public Counting() 
         { 
@@ -24,7 +26,7 @@ namespace Calculator
 
         private void AddOperace(OperationStrategyBase operace)
         {
-            _operace.Add(operace.ZnakOperatoru.ToString(), operace);
+            _operace.Add(operace.ZnakOperatoru, operace);
         }
             
         /// <summary>
@@ -34,7 +36,7 @@ namespace Calculator
         /// <exception cref="InputValidationException">Nerozumě zadaný příklad</exception>
         /// Ukázat funkce, kde je volám?
         /// <returns></returns>
-        public string? Pocitej(string priklad)
+        public string Pocitej(string priklad)
         {
             return Vyhodnot(DoTokenu(priklad));
         }
@@ -172,7 +174,7 @@ namespace Calculator
                 }
                 index++;
             }
-            return tokeny[0];
+            return tokeny.FirstOrDefault();
         }
 
         /// <summary>
@@ -184,7 +186,7 @@ namespace Calculator
         private void ZkontrolujCisla(string[] tokeny, int index, OperationStrategyBase pouzitaOperace)
         {
             int indexCisla1;
-            int indexCisla2;
+            int? indexCisla2 = null;
             if (pouzitaOperace.Pozice == PoziceCisla.Vlevo && index - 1 >= 0)
             {
                 indexCisla1 = index - 1;
@@ -203,7 +205,7 @@ namespace Calculator
                 throw new InputValidationException("Moc krátký příklad pro výpočet.");
             }
 
-            if (!Zkontroluj(tokeny[indexCisla1]))
+            if (!Zkontroluj(tokeny[indexCisla1], indexCisla2 == null ? "0" : tokeny[indexCisla2.Value]))
             {
                 throw new InputValidationException($"Chybí číslo pro výpočet u operátoru: {pouzitaOperace.ZnakOperatoru}");
             }
@@ -214,7 +216,7 @@ namespace Calculator
         /// </summary>
         /// <param name="tokeny"></param>
         /// <returns>True: Všechno je v pořádku. False: Našla se chyba</returns>
-        private bool Zkontroluj(string cislo1, string cislo2 = "0")
+        private bool Zkontroluj(string cislo1, string cislo2)
         {
             string[] cisla = { cislo1, cislo2 };
             foreach (var cislo in cisla) 
@@ -239,9 +241,9 @@ namespace Calculator
             {
                 if (!int.TryParse(tokeny[i], out _))
                 {
-                    if (_operace.Keys.Contains(tokeny[i]))
+                    if (_operace.TryGetValue(tokeny[i][0], out OperationStrategyBase? operace))
                     {
-                        pouziteOperace.Add(_operace[tokeny[i]]);
+                        pouziteOperace.Add(operace);
                     }
                 }
             }
