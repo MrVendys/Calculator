@@ -33,7 +33,7 @@ namespace Calculator
         /// Volaná funkce z <see cref="MainWindow.SubmitButton_Click(object, System.Windows.RoutedEventArgs)"/>
         /// </summary>
         /// <param name="priklad"></param>
-        /// <exception cref="InputValidationException">Nerozumě zadaný příklad</exception>
+        /// <exception cref="InputValidationException">Neplatně zadaný příklad</exception>
         /// Ukázat funkce, kde je volám?
         /// <returns></returns>
         public string Pocitej(string priklad)
@@ -159,8 +159,7 @@ namespace Calculator
                                 break;
 
                             default:
-                                meziVysl = 0;
-                                break;
+                                throw new InputValidationException("Tato operace není ještě implementována");
                         }
 
                         // Přepsání pole "tokeny" novými hodnotami. Přepsání mezipříkladu na mezivýsledek. 
@@ -241,7 +240,7 @@ namespace Calculator
             {
                 if (!int.TryParse(tokeny[i], out _))
                 {
-                    if (_operace.TryGetValue(tokeny[i][0], out OperationStrategyBase? operace))
+                    if (_operace.TryGetValue(tokeny[i], out var operace))
                     {
                         pouziteOperace.Add(operace);
                     }
@@ -285,7 +284,7 @@ namespace Calculator
             {
                 if (tokeny[i] == symbol)
                 {
-                    if (startovaciId - i < 1)
+                    if (i-startovaciId <= 1)
                     {
                         throw new InputValidationException("Prázdná závorka");
                     }
