@@ -86,15 +86,10 @@ namespace Calculator
                 try
                 {
                     vysledek = c.Pocitej(vyraz);
+                    InputTextbox.Text = vysledek;
                 }catch (InputValidationException en)
                 {
                     ZobrazHlasku(en.Message);
-                    vysledek = null;
-                }
-
-                if (vysledek != null) 
-                {
-                    InputTextbox.Text = vysledek;
                 }
             }
             else

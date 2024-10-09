@@ -9,26 +9,30 @@ namespace Calculator
         /// Key: string, znak operátoru.
         /// Value: OperationStrategy, instance OperationStrategy odpovídajícího znaku.
         /// </summary>
-        private Dictionary<string, OperationStrategyBase> _operace = new Dictionary<string, OperationStrategyBase>()
-        {
-            { "+", new PlusStrategy() },
-            { "-", new MinusStrategy() },
-            { "*", new MultiplyStrategy() },
-            { "/", new DivideStrategy() },
-            { "^", new PowerStrategy() },
-            { "√", new SquareRootStrategy() },
-            { "!", new FactorialStrategy() }
-        };
+        private Dictionary<string, OperationStrategyBase> _operace = new Dictionary<string, OperationStrategyBase>();
 
-        public Counting() { }
+        public Counting() 
+        {
+            AddOperace(new PlusStrategy());
+            AddOperace(new MinusStrategy());
+            AddOperace(new MultiplyStrategy());
+            AddOperace(new DivideStrategy());
+            AddOperace(new PowerStrategy());
+            AddOperace(new SquareRootStrategy());
+            AddOperace(new FactorialStrategy());
+        }
+        private void AddOperace(OperationStrategyBase operace)
+        {
+            _operace.Add(operace.ZnakOperatoru.ToString(), operace);
+        }
 
         /// <summary>
         /// Volaná funkce z <see cref="MainWindow.SubmitButton_Click(object, System.Windows.RoutedEventArgs)"/>
         /// </summary>
         /// <param name="priklad"></param>
-        /// <exception cref="InputValidationException">Nerozumě zadaný příklad</exception>
+        /// <exception cref="InputValidationException">Neplatně zadaný příklad</exception>
         /// Ukázat funkce, kde je volám?
-        /// <returns></returns>
+        /// <returns>Vypočítaná hodnota</returns>
         public string? Pocitej(string priklad)
         {
             return Vyhodnot(DoTokenu(priklad));
@@ -152,8 +156,7 @@ namespace Calculator
                                 break;
 
                             default:
-                                meziVysl = 0;
-                                break;
+                                throw new InputValidationException("Tato operace není ještě implementována");
                         }
 
                         // Přepsání pole "tokeny" novými hodnotami. Přepsání mezipříkladu na mezivýsledek. 
@@ -167,7 +170,7 @@ namespace Calculator
                 }
                 index++;
             }
-            return tokeny[0];
+            return tokeny.FirstOrDefault();
         }
 
         /// <summary>
@@ -234,9 +237,9 @@ namespace Calculator
             {
                 if (!int.TryParse(tokeny[i], out _))
                 {
-                    if (_operace.Keys.Contains(tokeny[i]))
+                    if (_operace.TryGetValue(tokeny[i], out var operace))
                     {
-                        pouziteOperace.Add(_operace[tokeny[i]]);
+                        pouziteOperace.Add(operace);
                     }
                 }
             }
@@ -278,7 +281,7 @@ namespace Calculator
             {
                 if (tokeny[i] == symbol)
                 {
-                    if (startovaciId - i < 1)
+                    if (i-startovaciId <= 1)
                     {
                         throw new InputValidationException("Prázdná závorka");
                     }
