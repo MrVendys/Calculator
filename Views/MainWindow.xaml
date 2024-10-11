@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calculator" 
         xmlns:ViewModels="clr-namespace:Calculator.ViewModels"
-        xmlns:Commands="clr-namespace:Calculator.Commands"
+        xmlns:Commands="clr-namespace:Calculator"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="550" Height="550" Width="350" MinWidth="350">
     <Window.DataContext>
@@ -32,11 +32,9 @@
         <Style x:Key="SmazatButton" BasedOn="{StaticResource Button}" TargetType="Button">
             <Setter Property="Padding" Value="0,-15,0,0"/>
             <Setter Property="VerticalContentAlignment" Value="Top"/>
-            <Setter Property="Content" Value="←"/>
         </Style>
         <Style x:Key="OdeslatButton" BasedOn="{StaticResource Button}" TargetType="Button">
             <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="Content" Value="="/>
         </Style>
 
         <Style TargetType="WrapPanel">
@@ -71,14 +69,16 @@
                        Grid.RowSpan="2"/>
             
             <Button Style="{StaticResource SmazatButton}" Name="SmazatButton"
+                    Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand }"
                     Grid.Column="1"
                     Grid.Row="0"
-                    Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand}"/>
+                    Content="←"/>
 
             <Button Style="{StaticResource OdeslatButton}" Name="OdeslatButton"
+                    Command="{x:Static Commands:CalculatorCommands.OdesliPrikladCommand}"
                     Grid.Column="1"
                     Grid.Row="1"
-                    Command="{x:Static Commands:CalculatorCommands.OdesliPrikladCommand}"/>
+                    Content="="/>
         </Grid>
         
     </Grid>

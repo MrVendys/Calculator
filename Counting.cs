@@ -1,5 +1,4 @@
-﻿using Calculator.Enums;
-using Calculator.Exceptions;
+﻿using Calculator.Exceptions;
 using Calculator.Strategies;
 
 namespace Calculator
@@ -14,7 +13,7 @@ namespace Calculator
         private Dictionary<char, OperationStrategyBase> _operace = new Dictionary<char, OperationStrategyBase>();
 
         public Counting() 
-        { 
+        {
             AddOperace(new PlusStrategy());
             AddOperace(new MinusStrategy());
             AddOperace(new MultiplyStrategy());
@@ -173,7 +172,7 @@ namespace Calculator
                 }
                 index++;
             }
-            return tokeny.FirstOrDefault();
+            return tokeny[0];
         }
 
         /// <summary>

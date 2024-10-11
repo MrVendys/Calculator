@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Calculator.Commands;
 using System.Windows.Input;
 using Calculator.ViewModels;
+
 namespace Calculator
 {
     /// <summary>

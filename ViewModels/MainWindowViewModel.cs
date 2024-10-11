@@ -1,56 +1,58 @@
-﻿using Calculator.Commands;
-using Calculator.Exceptions;
+﻿using Calculator.Exceptions;
 using System.ComponentModel;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Calculator.ViewModels
 {
-    internal class MainWindowViewModel : INotifyPropertyChanged
+    internal class MainWindowViewModel : ViewModelBase
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private string _priklad;
+
+        private Counting _counting;
+
+        public MainWindowViewModel()
+        {
+            _counting = new Counting();
+        }
 
         /// <summary>
         /// Příklad zadaný uživatelem, nebo spočítaný výsledek
+        /// Bind k Textboxu <see cref="MainWindow.InputTextbox"/>
         /// </summary>
-        private string _priklad;
-
-        public string Priklad { 
-            get 
+        public string Priklad 
+        {
+            get
             {
                 return _priklad;
             }
-            set 
+            set
             {
                 _priklad = value;
                 OnPropertyChanged(nameof(Priklad));
-            } 
+            }
         }
-
-        private void OnPropertyChanged(string jmenoPromenne)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(jmenoPromenne));
-        }
-
-        public MainWindowViewModel() { }
 
         /// <summary>
         /// Výpočet příkladu, volaný z View pomocí RoutedCommand: <see cref="MainWindow.MainWindow"/>
+        /// Chytá vyjíkmy: InputValidationException
         /// </summary>
         public void Vypocitej(object target, ExecutedRoutedEventArgs e)
         {
             try
             {
-                Counting c = new Counting();
-                Priklad = c.Pocitej(Priklad);
+                if(Priklad != "")
+                {
+                    Priklad = _counting.Pocitej(Priklad);
+                }
             }
             catch (InputValidationException en)
             {
                 ZobrazHlasku(en.Message);
             }
         }
+
         public void SmazSymbol(object target, ExecutedRoutedEventArgs e)
         {
             if(Priklad != "")
