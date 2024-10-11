@@ -6,9 +6,9 @@ namespace Calculator.ViewModels
     {
         public virtual event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string jmenoPromenne)
+        protected virtual void OnPropertyChanged(string nazevPromenne)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(jmenoPromenne));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nazevPromenne));
         }
     }
 }

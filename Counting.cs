@@ -1,5 +1,6 @@
 ﻿using Calculator.Exceptions;
 using Calculator.Strategies;
+using System.Configuration;
 
 namespace Calculator
 {
@@ -23,6 +24,8 @@ namespace Calculator
             AddOperace(new FactorialStrategy());
         }
 
+        public List<SpocitanyPriklad> historiePrikladu = new List<SpocitanyPriklad>();
+
         private void AddOperace(OperationStrategyBase operace)
         {
             _operace.Add(operace.ZnakOperatoru, operace);
@@ -37,7 +40,9 @@ namespace Calculator
         /// <returns></returns>
         public string Pocitej(string priklad)
         {
-            return Vyhodnot(DoTokenu(priklad));
+            string vysl = Vyhodnot(DoTokenu(priklad));
+            historiePrikladu.Add(new SpocitanyPriklad(priklad,vysl));
+            return vysl;
         }
 
         /// <summary>

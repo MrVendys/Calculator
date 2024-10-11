@@ -1,5 +1,6 @@
 ﻿using Calculator.Exceptions;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,6 +16,9 @@ namespace Calculator.ViewModels
         public MainWindowViewModel()
         {
             _counting = new Counting();
+            //TODO
+            // UI Prochází List SpocitanyPriklad... ne List stringu..
+            HistoriePrikladu = new ObservableCollection<SpocitanyPriklad>() { new SpocitanyPriklad("1+2", "2") };
         }
 
         /// <summary>
@@ -34,6 +38,8 @@ namespace Calculator.ViewModels
             }
         }
 
+        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; set; }
+
         /// <summary>
         /// Výpočet příkladu, volaný z View pomocí RoutedCommand: <see cref="MainWindow.MainWindow"/>
         /// Chytá vyjíkmy: InputValidationException
@@ -44,7 +50,9 @@ namespace Calculator.ViewModels
             {
                 if(Priklad != "")
                 {
-                    Priklad = _counting.Pocitej(Priklad);
+                    var vysledek = _counting.Pocitej(Priklad);
+                    Priklad = vysledek;
+                    HistoriePrikladu.Add(_counting.historiePrikladu.Last());
                 }
             }
             catch (InputValidationException en)
@@ -71,6 +79,12 @@ namespace Calculator.ViewModels
         private void ZobrazHlasku(string chyba)
         {
             MessageBox.Show(chyba ?? "Neidentifikovatelná chyba", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
+        }
+
+        public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
+        {
+            string[] priklad = e.Parameter as string[];
+            Priklad = priklad[0];
         }
     }
 }

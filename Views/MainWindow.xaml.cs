@@ -43,13 +43,7 @@ namespace Calculator
             InitializeComponent();
             InitializeButtons();
             _viewModel = (MainWindowViewModel)DataContext;
-            CommandBinding VypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, _viewModel.Vypocitej);
-            CommandBinding SmazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, _viewModel.SmazSymbol);
-            CommandBinding PridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, _viewModel.PridejSymbol);
-
-            this.CommandBindings.Add(VypocitejHandler);
-            this.CommandBindings.Add(SmazHandler);
-            this.CommandBindings.Add(PridejHandler);
+            InitializeCommands();
         }
 
         /// <summary>
@@ -75,6 +69,19 @@ namespace Calculator
 
                 WrapPanel.Children.Add(b);
             }
+        }
+
+        private void InitializeCommands()
+        {
+            CommandBinding VypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, _viewModel.Vypocitej);
+            CommandBinding SmazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, _viewModel.SmazSymbol);
+            CommandBinding PridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, _viewModel.PridejSymbol);
+            CommandBinding HistoryPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
+
+            this.CommandBindings.Add(VypocitejHandler);
+            this.CommandBindings.Add(SmazHandler);
+            this.CommandBindings.Add(PridejHandler);
+            this.CommandBindings.Add(HistoryPrikladClickHandler);
         }
     }
 }

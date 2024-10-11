@@ -7,7 +7,7 @@
         xmlns:ViewModels="clr-namespace:Calculator.ViewModels"
         xmlns:Commands="clr-namespace:Calculator"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="550" Height="550" Width="350" MinWidth="350">
+        Title="MainWindow" MinHeight="550" Height="550" Width="500" MinWidth="500">
     <Window.DataContext>
         <ViewModels:MainWindowViewModel/>
     </Window.DataContext>
@@ -23,17 +23,28 @@
             <Setter Property="FontSize" Value="40"/>
         </Style>
         
-        <Style x:Key="Button" TargetType="Button">
+        <Style TargetType="TextBlock">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MaxWidth" Value="130"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
+        <Style TargetType="Button">
             <Setter Property="Width" Value="60"/>
             <Setter Property="MinHeight" Value="60"/>
             <Setter Property="Margin" Value="0,0,5,0"/>
             <Setter Property="FontSize" Value="60"/>
+            <Setter Property="Content" 
+                Value="{Binding RelativeSource={RelativeSource Self}, 
+                Path=Command.Text}"/>
         </Style>
-        <Style x:Key="SmazatButton" BasedOn="{StaticResource Button}" TargetType="Button">
+        <Style x:Key="SmazatButton" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
             <Setter Property="Padding" Value="0,-15,0,0"/>
             <Setter Property="VerticalContentAlignment" Value="Top"/>
         </Style>
-        <Style x:Key="OdeslatButton" BasedOn="{StaticResource Button}" TargetType="Button">
+        <Style x:Key="OdeslatButton" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
             <Setter Property="VerticalAlignment" Value="Stretch"/>
         </Style>
 
@@ -49,6 +60,7 @@
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
@@ -67,19 +79,47 @@
             <WrapPanel Name="WrapPanel" 
                        Grid.Column="0" 
                        Grid.RowSpan="2"/>
-            
+
             <Button Style="{StaticResource SmazatButton}" Name="SmazatButton"
-                    Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand }"
+                    Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand}"
                     Grid.Column="1"
-                    Grid.Row="0"
-                    Content="←"/>
+                    Grid.Row="0"/>
 
             <Button Style="{StaticResource OdeslatButton}" Name="OdeslatButton"
                     Command="{x:Static Commands:CalculatorCommands.OdesliPrikladCommand}"
                     Grid.Column="1"
-                    Grid.Row="1"
-                    Content="="/>
+                    Grid.Row="1"/>
         </Grid>
-        
+        <ItemsControl ItemsSource="{Binding HistoriePrikladu}"  Grid.Column="1" Grid.RowSpan="2" Margin="5,2,2,2">
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10">
+                        <ItemsPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </ItemsControl.Template>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Command="{x:Static Commands:CalculatorCommands.OnHistoryPrikladClickCommand}" 
+                            CommandParameter="{Binding}"
+                            MinWidth="130"
+                            Margin="10" 
+                            Padding="5">
+                        <StackPanel Background="Transparent">
+                            <TextBlock Text="{Binding}" FontSize="20"/>
+                            <TextBlock Text="{Binding [1], StringFormat='= {0}'}" TextAlignment="Right"/>
+                        </StackPanel>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+        </ItemsControl>
     </Grid>
 </Window>
