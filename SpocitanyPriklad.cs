@@ -2,14 +2,14 @@
 {
     public class SpocitanyPriklad
     {
-        private string[] _priklad = new string[2];
-
         public SpocitanyPriklad(string priklad, string vysledek)
         {
-            _priklad.Append(priklad);
-            _priklad.Append(vysledek);
+            Priklad = priklad;
+            Vysledek = vysledek;
         }
 
-        public string[] Priklad => _priklad;
+        public string Priklad { get; }
+        public string Vysledek { get; }
+
     }
 }

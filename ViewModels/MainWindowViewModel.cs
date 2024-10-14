@@ -1,6 +1,5 @@
 ﻿using Calculator.Exceptions;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,9 +15,6 @@ namespace Calculator.ViewModels
         public MainWindowViewModel()
         {
             _counting = new Counting();
-            //TODO
-            // UI Prochází List SpocitanyPriklad... ne List stringu..
-            HistoriePrikladu = new ObservableCollection<SpocitanyPriklad>() { new SpocitanyPriklad("1+2", "2") };
         }
 
         /// <summary>
@@ -38,7 +34,7 @@ namespace Calculator.ViewModels
             }
         }
 
-        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; set; }
+        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _counting.HistoriePrikladu;
 
         /// <summary>
         /// Výpočet příkladu, volaný z View pomocí RoutedCommand: <see cref="MainWindow.MainWindow"/>
@@ -52,7 +48,6 @@ namespace Calculator.ViewModels
                 {
                     var vysledek = _counting.Pocitej(Priklad);
                     Priklad = vysledek;
-                    HistoriePrikladu.Add(_counting.historiePrikladu.Last());
                 }
             }
             catch (InputValidationException en)
@@ -83,8 +78,8 @@ namespace Calculator.ViewModels
 
         public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
         {
-            string[] priklad = e.Parameter as string[];
-            Priklad = priklad[0];
+            SpocitanyPriklad sPriklad = e.Parameter as SpocitanyPriklad;
+            Priklad = sPriklad.Priklad;
         }
     }
 }

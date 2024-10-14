@@ -1,5 +1,6 @@
 ﻿using Calculator.Exceptions;
 using Calculator.Strategies;
+using System.Collections.ObjectModel;
 using System.Configuration;
 
 namespace Calculator
@@ -13,6 +14,8 @@ namespace Calculator
         /// </summary>
         private Dictionary<char, OperationStrategyBase> _operace = new Dictionary<char, OperationStrategyBase>();
 
+        private ObservableCollection<SpocitanyPriklad> _historiePrikladu;
+
         public Counting() 
         {
             AddOperace(new PlusStrategy());
@@ -22,9 +25,10 @@ namespace Calculator
             AddOperace(new PowerStrategy());
             AddOperace(new SquareRootStrategy());
             AddOperace(new FactorialStrategy());
+            _historiePrikladu = new ObservableCollection<SpocitanyPriklad>() { new SpocitanyPriklad("1+2", "3") };
         }
 
-        public List<SpocitanyPriklad> historiePrikladu = new List<SpocitanyPriklad>();
+        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _historiePrikladu;
 
         private void AddOperace(OperationStrategyBase operace)
         {
@@ -32,16 +36,16 @@ namespace Calculator
         }
             
         /// <summary>
-        /// Volaná funkce z <see cref="MainWindow.SubmitButton_Click(object, System.Windows.RoutedEventArgs)"/>
+        /// Začátek počítání. 
+        /// Ukládání příkladu do historie.
         /// </summary>
         /// <param name="priklad"></param>
         /// <exception cref="InputValidationException">Neplatně zadaný příklad</exception>
-        /// Ukázat funkce, kde je volám?
         /// <returns></returns>
         public string Pocitej(string priklad)
         {
             string vysl = Vyhodnot(DoTokenu(priklad));
-            historiePrikladu.Add(new SpocitanyPriklad(priklad,vysl));
+            HistoriePrikladu.Add(new SpocitanyPriklad(priklad, vysl));
             return vysl;
         }
 
@@ -59,9 +63,16 @@ namespace Calculator
             while (index < priklad.Length)
             {
                 string token = priklad.Substring(index, 1);
-                if (int.TryParse(token, out _) || token == ",")
+                if (int.TryParse(token, out _) || token == "," || token == ".")
                 {
-                    cislo += token;
+                    if (token == ",")
+                    {
+                        cislo += ".";
+                    }
+                    else
+                    {
+                        cislo += token;
+                    }
                 }
                 else if (token != " ")
                 {
