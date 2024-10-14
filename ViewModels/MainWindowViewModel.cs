@@ -37,7 +37,7 @@ namespace Calculator.ViewModels
         public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _counting.HistoriePrikladu;
 
         /// <summary>
-        /// Výpočet příkladu, volaný z View pomocí RoutedCommand: <see cref="MainWindow.MainWindow"/>
+        /// Použití výpočetního jádra <see cref="_counting"/> pro výpočet příkladu
         /// Chytá vyjíkmy: InputValidationException
         /// </summary>
         public void Vypocitej(object target, ExecutedRoutedEventArgs e)
@@ -69,13 +69,18 @@ namespace Calculator.ViewModels
         }
 
         /// <summary>
-        /// Zobrazení MessageBox s chybovou hláškou.
+        /// Po chycení vyjímky se uživateli zobrazí MessageBox s chybovou hláškou.
         /// </summary>
         private void ZobrazHlasku(string chyba)
         {
             MessageBox.Show(chyba ?? "Neidentifikovatelná chyba", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
 
+        /// <summary>
+        /// Handler vracející příklad po kliknutí na něj v historii.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
         {
             SpocitanyPriklad sPriklad = e.Parameter as SpocitanyPriklad;

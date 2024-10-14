@@ -7,22 +7,28 @@
         xmlns:ViewModels="clr-namespace:Calculator.ViewModels"
         xmlns:Commands="clr-namespace:Calculator"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="550" Height="550" Width="500" MinWidth="530">
+        Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500"  Background="#FF1C1C1C">
     <Window.DataContext>
         <ViewModels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <Style x:Key="InputTextBox" TargetType="TextBox">
-            <Setter Property="MinWidth" Value="300"/>
-            <Setter Property="Height" Value="100"/>
+        <Style TargetType="TextBox">
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MinHeight" Value="100"/>
+            <Setter Property="Margin" Value="20,0,20,0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Background" Value="#FF2E2E2E"/>
+
         </Style>
-        
+
         <Style TargetType="TextBlock">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontSize" Value="20"/>
@@ -30,11 +36,43 @@
             <Setter Property="MaxWidth" Value="130"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
-        
+
         <Style TargetType="Button">
-            <Setter Property="MinWidth" Value="60"/>
-            <Setter Property="MinHeight" Value="60"/>
-            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="FontSize" Value="30" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Background" Value="#FF2E2E2E" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Hover effect -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3D3D3D" />
+                    <!-- Slightly Lighter Gray -->
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FF505050" />
+                    <!-- Even Darker Gray -->
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="WrapPanel">
@@ -42,56 +80,104 @@
             <Setter Property="FlowDirection" Value="LeftToRight"/>
             <Setter Property="Margin" Value="5,0,0,0"/>
         </Style>
+        
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="8" />
+            <Setter Property="Background" Value="LightGray" />
+        </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Name="InputTextbox" Style="{StaticResource InputTextBox}"
+        <TextBox Name="InputTextbox" 
+                 Grid.Row="0"
                  Grid.Column="0"
                  Text="{Binding Priklad, UpdateSourceTrigger=PropertyChanged}"/>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
+
+        <Grid Margin="10" Grid.Row="2">
+            <!-- Define 5 rows and 4 columns -->
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+
             </Grid.RowDefinitions>
-            <WrapPanel Name="WrapPanel" 
-                       Grid.Column="0" 
-                       Grid.RowSpan="2"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <Button Name="SmazatButton"
-                    Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand}"
-                    Grid.Column="1"
-                    Grid.Row="0"
-                    Padding="0,-15,0,0"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"
-                    FontSize="50"
-                    VerticalContentAlignment="Top"/>
+            <!-- Row 1  -->
+            <Button Content="√" Grid.Row="0" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="^" Grid.Row="0" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="!" Grid.Row="0" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="%" Grid.Row="0" Grid.Column="3" IsEnabled="False" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
 
-            <Button Name="OdeslatButton"
+            <!-- Row 2  -->
+            <Button Content="+" Grid.Row="1" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="-" Grid.Row="1" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="*" Grid.Row="1" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="/" Grid.Row="1" Grid.Column="3" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+
+            <!-- Row 3 -->
+            <Button Content="(" Grid.Row="2" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content=")" Grid.Row="2" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="(-)" Grid.Row="2" Grid.Column="2" IsEnabled="False"/>
+            <Button Content="C" Grid.Row="2" Grid.Column="3" IsEnabled="False"/>
+
+            <!-- Row 4 -->
+            <Button Content="7"  Grid.Row="3" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="8"  Grid.Row="3" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="9"  Grid.Row="3" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" 
+                     Grid.Row="3" Grid.Column="3" 
+                    Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand}"/>
+
+            <!-- Row 5 -->
+            <Button Content="4"  Grid.Row="4" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="5"  Grid.Row="4" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="6"  Grid.Row="4" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+
+            <!-- Row 6 -->
+            <Button Content="1"  Grid.Row="5" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="2"  Grid.Row="5" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="3"  Grid.Row="5" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+
+            <!-- Row 7 -->
+            <Button Content="0"  Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="."  Grid.Row="6" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+
+            <Button Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"
+                     Grid.Row="4" Grid.Column="3" Grid.RowSpan="3"  
                     Command="{x:Static Commands:CalculatorCommands.OdesliPrikladCommand}"
-                    Grid.Column="1"
-                    Grid.Row="1"
-                    VerticalAlignment="Stretch"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"
-                    FontSize="50"/>
+                    Background="#FF007ACC"/>
         </Grid>
 
-        <ItemsControl ItemsSource="{Binding HistoriePrikladu}"  Grid.Column="1" Grid.RowSpan="2" Margin="5,2,2,2">
+        <ItemsControl ItemsSource="{Binding HistoriePrikladu}" 
+                      Grid.Column="1" 
+                      Grid.Row="0" 
+                      Grid.RowSpan="2" 
+                      Margin="5,2,2,2">
             <ItemsControl.Template>
                 <ControlTemplate TargetType="ItemsControl">
-                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10">
-                        <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <Border BorderBrush="#FF2E2E2E" 
+                            BorderThickness="1" 
+                            CornerRadius="10">
+                        <ScrollViewer VerticalScrollBarVisibility="Visible" 
+                                      Margin="5">
                             <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
@@ -100,7 +186,9 @@
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical" Width="150"/>
+                    <UniformGrid Columns="1" 
+                                 Margin="0,0,5,0" 
+                                 VerticalAlignment="Top"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -108,13 +196,17 @@
                 <DataTemplate>
                     <Button Command="{x:Static Commands:CalculatorCommands.OnHistoryPrikladClickCommand}" 
                             CommandParameter="{Binding}"
-                            MinWidth="130"
-                            Margin="10" 
                             Padding="5"
-                            FontSize="30">
+                            Margin="5" 
+                            VerticalAlignment="Stretch"
+                            FontSize="20">
                         <StackPanel Background="Transparent">
-                            <TextBlock Text="{Binding Priklad}"/>
-                            <TextBlock Text="{Binding Vysledek, StringFormat='= {0}'}" TextAlignment="Right"/>
+                            <TextBlock Text="{Binding Priklad}" 
+                                       TextAlignment="Left" 
+                                       MinWidth="100"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Vysledek, StringFormat='= {0}'}"
+                                       TextAlignment="Right"/>
                         </StackPanel>
                     </Button>
                 </DataTemplate>

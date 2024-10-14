@@ -9,7 +9,7 @@ namespace Calculator
     {
         /// <summary>
         /// Výčet použitelných operací.
-        /// Key: string, znak operátoru.
+        /// Key: char, znak operátoru.
         /// Value: OperationStrategy, instance OperationStrategy odpovídajícího znaku.
         /// </summary>
         private Dictionary<char, OperationStrategyBase> _operace = new Dictionary<char, OperationStrategyBase>();
