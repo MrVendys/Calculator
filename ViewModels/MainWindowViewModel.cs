@@ -9,7 +9,6 @@ namespace Calculator.ViewModels
     internal class MainWindowViewModel : ViewModelBase
     {
         private string _priklad;
-
         private Counting _counting;
 
         public MainWindowViewModel()
@@ -38,17 +37,14 @@ namespace Calculator.ViewModels
 
         /// <summary>
         /// Použití výpočetního jádra <see cref="_counting"/> pro výpočet příkladu
-        /// Chytá vyjíkmy: InputValidationException
+        /// Chytá výjimky: InputValidationException
         /// </summary>
         public void Vypocitej(object target, ExecutedRoutedEventArgs e)
         {
             try
             {
-                if(Priklad != "")
-                {
-                    var vysledek = _counting.Pocitej(Priklad);
-                    Priklad = vysledek;
-                }
+                var vysledek = _counting.Pocitej(Priklad);
+                Priklad = vysledek;
             }
             catch (InputValidationException en)
             {
@@ -83,7 +79,7 @@ namespace Calculator.ViewModels
         /// <param name="e"></param>
         public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
         {
-            SpocitanyPriklad sPriklad = e.Parameter as SpocitanyPriklad;
+            SpocitanyPriklad sPriklad = (SpocitanyPriklad)e.Parameter;
             Priklad = sPriklad.Priklad;
         }
     }

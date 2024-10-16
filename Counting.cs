@@ -44,6 +44,10 @@ namespace Calculator
         /// <returns></returns>
         public string Pocitej(string priklad)
         {
+            if(priklad == null)
+            {
+                throw new InputValidationException("Prázdný příklad");
+            }
             string vysl = Vyhodnot(DoTokenu(priklad));
             HistoriePrikladu.Add(new SpocitanyPriklad(priklad, vysl));
             return vysl;
@@ -125,7 +129,7 @@ namespace Calculator
         private string Vyhodnot(string[] tokeny)
         {
             //První fáze = vypočítání závorek
-            tokeny = NajdiZavorky(tokeny); ;
+            tokeny = NajdiZavorky(tokeny);
 
             //Druhá fáze funkce = Postupný výpočet všech tokenů v poli "tokeny".
             //Počítá se podle operací

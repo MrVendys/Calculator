@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -31,6 +32,12 @@ namespace Calculator
             this.CommandBindings.Add(SmazHandler);
             this.CommandBindings.Add(PridejHandler);
             this.CommandBindings.Add(HistoryPrikladClickHandler);
+        }
+
+        private void InputTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9+\\-*/.!^√]");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

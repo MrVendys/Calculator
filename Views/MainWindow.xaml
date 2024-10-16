@@ -38,6 +38,7 @@
         </Style>
 
         <Style TargetType="Button">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
             <Setter Property="FontSize" Value="30" />
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="Margin" Value="2" />
@@ -99,10 +100,10 @@
         <TextBox Name="InputTextbox" 
                  Grid.Row="0"
                  Grid.Column="0"
-                 Text="{Binding Priklad, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding Priklad, UpdateSourceTrigger=PropertyChanged}"
+                 PreviewTextInput="InputTextbox_PreviewTextInput"/>
 
         <Grid Margin="10" Grid.Row="2">
-            <!-- Define 5 rows and 4 columns -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -139,29 +140,27 @@
             <Button Content="C" Grid.Row="2" Grid.Column="3" IsEnabled="False"/>
 
             <!-- Row 4 -->
-            <Button Content="7"  Grid.Row="3" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="8"  Grid.Row="3" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="9"  Grid.Row="3" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}" 
-                     Grid.Row="3" Grid.Column="3" 
+            <Button Content="7" Grid.Row="3" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="8" Grid.Row="3" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="9" Grid.Row="3" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Grid.Row="3" Grid.Column="3" 
                     Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand}"/>
 
             <!-- Row 5 -->
-            <Button Content="4"  Grid.Row="4" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="5"  Grid.Row="4" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="6"  Grid.Row="4" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="4" Grid.Row="4" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="5" Grid.Row="4" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="6" Grid.Row="4" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
 
             <!-- Row 6 -->
-            <Button Content="1"  Grid.Row="5" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="2"  Grid.Row="5" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="3"  Grid.Row="5" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="1" Grid.Row="5" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="2" Grid.Row="5" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="3" Grid.Row="5" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
 
             <!-- Row 7 -->
-            <Button Content="0"  Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="."  Grid.Row="6" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="0" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Content="." Grid.Row="6" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
 
-            <Button Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"
-                     Grid.Row="4" Grid.Column="3" Grid.RowSpan="3"  
+            <Button Grid.Row="4" Grid.Column="3" Grid.RowSpan="3"
                     Command="{x:Static Commands:CalculatorCommands.OdesliPrikladCommand}"
                     Background="#FF007ACC"/>
         </Grid>
@@ -176,7 +175,7 @@
                     <Border BorderBrush="#FF2E2E2E" 
                             BorderThickness="1" 
                             CornerRadius="10">
-                        <ScrollViewer VerticalScrollBarVisibility="Visible" 
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" 
                                       Margin="5">
                             <ItemsPresenter/>
                         </ScrollViewer>
