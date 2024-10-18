@@ -63,7 +63,7 @@ namespace Calculator.ViewModels
 
         public void SmazSymbol(object target, ExecutedRoutedEventArgs e)
         {
-            if(Priklad != "")
+            if (Priklad != "")
                 Priklad = Priklad.Remove(Priklad.Length - 1);
         }
 

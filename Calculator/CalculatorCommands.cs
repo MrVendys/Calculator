@@ -2,7 +2,7 @@
 
 namespace Calculator
 {
-    public class CalculatorCommands : RoutedUICommand
+    public static class CalculatorCommands
     {
         public static readonly RoutedUICommand OdesliPrikladCommand = new RoutedUICommand("=", nameof(OdesliPrikladCommand), typeof(CalculatorCommands), 
             new InputGestureCollection
