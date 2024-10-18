@@ -2,7 +2,7 @@
 
 namespace Calculator.ViewModels
 {
-    internal abstract class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
         public virtual event PropertyChangedEventHandler? PropertyChanged;
 
