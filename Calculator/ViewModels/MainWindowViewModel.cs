@@ -2,8 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Calculation;
-using Calculation.Exceptions;
+using Calculator.Core;
+using Calculator.Core.Exceptions;
 
 namespace Calculator.ViewModels
 {
@@ -34,21 +34,16 @@ namespace Calculator.ViewModels
             }
         }
 
+        internal Counting Counting => _counting;
+
         public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _counting.HistoriePrikladu;
 
         /// <summary>
-        /// Po chycení vyjímky se uživateli zobrazí MessageBox s chybovou hláškou.
-        /// </summary>
-        private void ZobrazHlasku(string chyba)
-        {
-            MessageBox.Show(chyba ?? "Neidentifikovatelná chyba", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
-        }
-
-        /// <summary>
-        /// Použití výpočetního jádra <see cref="_counting"/> pro výpočet příkladu
+        /// Handler <see cref="CalculatorCommands.SmazSymbolCommand"/>. <br/>
+        /// Použití výpočetního jádra <see cref="_counting"/> pro výpočet příkladu.
         /// Chytá výjimky: InputValidationException
         /// </summary>
-        public void Vypocitej(object target, ExecutedRoutedEventArgs e)
+        public void Vypocitej(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
@@ -61,27 +56,38 @@ namespace Calculator.ViewModels
             }
         }
 
-        public void SmazSymbol(object target, ExecutedRoutedEventArgs e)
+        /// <summary>
+        /// Handler <see cref="CalculatorCommands.SmazSymbolCommand"/>
+        /// </summary>
+        public void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
         {
             if (Priklad != "")
                 Priklad = Priklad.Remove(Priklad.Length - 1);
         }
 
-        public void PridejSymbol(object target, ExecutedRoutedEventArgs e)
+        /// <summary>
+        /// Handler <see cref="CalculatorCommands.PridejSymbolCommand"/>
+        /// </summary>
+        public void PridejSymbol(object sender, ExecutedRoutedEventArgs e)
         {
-            Button b = (Button)e.Source;
-            Priklad += b.Content.ToString();
+            Priklad += (string)e.Parameter;
         }
 
         /// <summary>
-        /// Handler vracející příklad po kliknutí na něj v historii.
+        /// Handler <see cref="CalculatorCommands.OnHistoryPrikladClickCommand"/>
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
         {
             SpocitanyPriklad sPriklad = (SpocitanyPriklad)e.Parameter;
             Priklad = sPriklad.Priklad;
+        }
+
+        /// <summary>
+        /// Po chycení vyjímky se uživateli zobrazí MessageBox s chybovou hláškou.
+        /// </summary>
+        private void ZobrazHlasku(string chyba = "Neidentifikovatelná chyba")
+        {
+            MessageBox.Show(chyba, "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
     }
 }

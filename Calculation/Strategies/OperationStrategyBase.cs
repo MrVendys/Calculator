@@ -1,4 +1,4 @@
-﻿namespace Calculation.Strategies
+﻿namespace Calculator.Core.Strategies
 {
     internal abstract class OperationStrategyBase
     {

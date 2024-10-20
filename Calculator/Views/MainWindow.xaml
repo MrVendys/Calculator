@@ -4,12 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calculator" 
-        xmlns:ViewModels="clr-namespace:Calculator.ViewModels"
-        xmlns:Commands="clr-namespace:Calculator"
+        xmlns:viewModels="clr-namespace:Calculator.ViewModels"
+        xmlns:commands="clr-namespace:Calculator"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500"  Background="#FF1C1C1C">
     <Window.DataContext>
-        <ViewModels:MainWindowViewModel/>
+        <viewModels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
         <Style TargetType="TextBox">
@@ -122,46 +122,46 @@
             </Grid.ColumnDefinitions>
 
             <!-- Row 1  -->
-            <Button Content="√" Grid.Row="0" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="^" Grid.Row="0" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="!" Grid.Row="0" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="%" Grid.Row="0" Grid.Column="3" IsEnabled="False" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="√" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="√"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="^" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="^"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="!" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="!"/>
+            <Button Grid.Row="0" Grid.Column="3" Content="%" IsEnabled="False" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="%"/>
 
             <!-- Row 2  -->
-            <Button Content="+" Grid.Row="1" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="-" Grid.Row="1" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="*" Grid.Row="1" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="/" Grid.Row="1" Grid.Column="3" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="+"  Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="+"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="-" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="-"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="*" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="*"/>
+            <Button Grid.Row="1" Grid.Column="3" Content="/" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="/"/>
 
             <!-- Row 3 -->
-            <Button Content="(" Grid.Row="2" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content=")" Grid.Row="2" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="(-)" Grid.Row="2" Grid.Column="2" IsEnabled="False"/>
-            <Button Content="C" Grid.Row="2" Grid.Column="3" IsEnabled="False"/>
+            <Button Grid.Row="2" Grid.Column="0" Content="(" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="("/>
+            <Button Grid.Row="2" Grid.Column="1" Content=")" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter=")"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="(-)" IsEnabled="False"/>
+            <Button Grid.Row="2" Grid.Column="3" Content="C" IsEnabled="False"/>
 
             <!-- Row 4 -->
-            <Button Content="7" Grid.Row="3" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="8" Grid.Row="3" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="9" Grid.Row="3" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Grid.Row="3" Grid.Column="0" Content="7" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="7"/>
+            <Button Grid.Row="3" Grid.Column="1" Content="8" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="8"/>
+            <Button Grid.Row="3" Grid.Column="2" Content="9" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="9"/>
             <Button Grid.Row="3" Grid.Column="3" 
-                    Command="{x:Static Commands:CalculatorCommands.SmazSymbolCommand}"/>
+                    Command="{x:Static commands:CalculatorCommands.SmazSymbolCommand}"/>
 
             <!-- Row 5 -->
-            <Button Content="4" Grid.Row="4" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="5" Grid.Row="4" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="6" Grid.Row="4" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Grid.Row="4" Grid.Column="0" Content="4" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="4"/>
+            <Button Grid.Row="4" Grid.Column="1" Content="5" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="5"/>
+            <Button Grid.Row="4" Grid.Column="2" Content="6" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="6"/>
 
             <!-- Row 6 -->
-            <Button Content="1" Grid.Row="5" Grid.Column="0" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="2" Grid.Row="5" Grid.Column="1" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="3" Grid.Row="5" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="1" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="1"/>
+            <Button Grid.Row="5" Grid.Column="1" Content="2" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="2"/>
+            <Button Grid.Row="5" Grid.Column="2" Content="3" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="3"/>
 
             <!-- Row 7 -->
-            <Button Content="0" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
-            <Button Content="." Grid.Row="6" Grid.Column="2" Command="{x:Static Commands:CalculatorCommands.PridejSymbolCommand}"/>
+            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Content="0" Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="0"/>
+            <Button Grid.Row="6" Grid.Column="2" Content="." Command="{x:Static commands:CalculatorCommands.PridejSymbolCommand}" CommandParameter="."/>
 
             <Button Grid.Row="4" Grid.Column="3" Grid.RowSpan="3"
-                    Command="{x:Static Commands:CalculatorCommands.OdesliPrikladCommand}"
+                    Command="{x:Static commands:CalculatorCommands.OdesliPrikladCommand}"
                     Background="#FF007ACC"/>
         </Grid>
 
@@ -193,7 +193,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{x:Static Commands:CalculatorCommands.OnHistoryPrikladClickCommand}" 
+                    <Button Command="{x:Static commands:CalculatorCommands.OnHistoryPrikladClickCommand}" 
                             CommandParameter="{Binding}"
                             Padding="5"
                             Margin="5" 

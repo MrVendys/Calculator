@@ -1,4 +1,4 @@
-﻿namespace Calculation
+﻿namespace Calculator.Core
 {
     internal enum PoziceCisla
     {

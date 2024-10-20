@@ -1,4 +1,4 @@
-﻿namespace Calculation.Exceptions
+﻿namespace Calculator.Core.Exceptions
 {
     /// <summary>
     /// Vyjímka pro špatně zadaný příklad.</para>

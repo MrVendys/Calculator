@@ -21,21 +21,33 @@ namespace Calculator
 
         private void InitializeCommands()
         {
-            CommandBinding VypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, _viewModel.Vypocitej);
-            CommandBinding SmazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, _viewModel.SmazSymbol);
-            CommandBinding PridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, _viewModel.PridejSymbol);
-            CommandBinding HistoryPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
+            CommandBinding vypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, _viewModel.Vypocitej);
+            CommandBinding smazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, _viewModel.SmazSymbol);
+            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, _viewModel.PridejSymbol);
+            CommandBinding historyPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
 
-            this.CommandBindings.Add(VypocitejHandler);
-            this.CommandBindings.Add(SmazHandler);
-            this.CommandBindings.Add(PridejHandler);
-            this.CommandBindings.Add(HistoryPrikladClickHandler);
+            this.CommandBindings.Add(vypocitejHandler);
+            this.CommandBindings.Add(smazHandler);
+            this.CommandBindings.Add(pridejHandler);
+            this.CommandBindings.Add(historyPrikladClickHandler);
         }
 
         private void InputTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9+\\-*/.!^√]");
-            e.Handled = regex.IsMatch(e.Text);
+            // chyba s "-", Regex pořád bere jako interval a špatně Escapuje
+            string pattern = "[-0-9,.()";
+            
+            foreach (char znak in _viewModel.Counting.ZnakyOperaci)
+            {
+                if (znak == '-')
+                    continue;
+                else
+                    pattern += znak.ToString();
+            }
+            pattern += "]";
+            
+            Regex regex = new Regex(pattern);
+            e.Handled = !regex.IsMatch(e.Text);
         }
     }
 }

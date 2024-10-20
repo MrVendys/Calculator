@@ -14,7 +14,7 @@ namespace Calculator
             {
                 new KeyGesture (Key.Escape)
             });
-        public static readonly RoutedUICommand PridejSymbolCommand = new RoutedUICommand("", nameof(PridejSymbolCommand), typeof(CalculatorCommands));
-        public static readonly RoutedCommand OnHistoryPrikladClickCommand = new RoutedCommand();
+        public static readonly RoutedUICommand PridejSymbolCommand = new RoutedUICommand("",nameof(PridejSymbolCommand), typeof(CalculatorCommands));
+        public static readonly RoutedCommand OnHistoryPrikladClickCommand = new RoutedCommand(nameof(OnHistoryPrikladClickCommand), typeof(CalculatorCommands));
     }
 }

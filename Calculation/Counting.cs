@@ -1,8 +1,8 @@
-﻿using Calculation.Exceptions;
-using Calculation.Strategies;
+﻿using Calculator.Core.Exceptions;
+using Calculator.Core.Strategies;
 using System.Collections.ObjectModel;
 
-namespace Calculation
+namespace Calculator.Core
 {
     public class Counting
     {
@@ -15,7 +15,7 @@ namespace Calculation
 
         private ObservableCollection<SpocitanyPriklad> _historiePrikladu;
 
-        public Counting() 
+        public Counting()
         {
             AddOperace(new PlusStrategy());
             AddOperace(new MinusStrategy());
@@ -24,16 +24,20 @@ namespace Calculation
             AddOperace(new PowerStrategy());
             AddOperace(new SquareRootStrategy());
             AddOperace(new FactorialStrategy());
-            _historiePrikladu = new ObservableCollection<SpocitanyPriklad>() { new SpocitanyPriklad("1+2", "3") };
+            foreach (char c in _operace.Keys)
+                ZnakyOperaci.Add(c);
+            _historiePrikladu = new ObservableCollection<SpocitanyPriklad>();
         }
 
         public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _historiePrikladu;
+
+        public List<char> ZnakyOperaci { get; } = new List<char>();
 
         private void AddOperace(OperationStrategyBase operace)
         {
             _operace.Add(operace.ZnakOperatoru, operace);
         }
-            
+
         /// <summary>
         /// Začátek počítání. 
         /// Ukládání příkladu do historie.
@@ -43,7 +47,7 @@ namespace Calculation
         /// <returns></returns>
         public string Pocitej(string priklad)
         {
-            if(priklad == null)
+            if (string.IsNullOrEmpty(priklad))
             {
                 throw new InputValidationException("Prázdný příklad");
             }
@@ -89,7 +93,7 @@ namespace Calculation
                 index++;
             }
 
-            if(cislo != "")
+            if (cislo != "")
                 tokeny.Add(cislo);
 
             return tokeny.ToArray();
@@ -149,7 +153,7 @@ namespace Calculation
                             // Index: index operatoru
                             // TakeIndex: Kolik tokenů se má vzít z pole (všechny před mezipříkladem)
                             // SkipIndex: Kolik tokenů se má přeskočit v poli (všechny až za mezipříklad)
-                            
+
                             //TODO: Duplicitní kod.. nějak upravit
 
                             // Pro operátory typu: !
@@ -219,12 +223,12 @@ namespace Calculation
             }
             else
             {
-                throw new InputValidationException("Moc krátký příklad pro výpočet.");
+                throw new InputValidationException("Neúplný příklad.");
             }
 
             if (!Zkontroluj(tokeny[indexCisla1], indexCisla2 == null ? "0" : tokeny[indexCisla2.Value]))
             {
-                throw new InputValidationException($"Chybí číslo pro výpočet u operátoru: {pouzitaOperace.ZnakOperatoru}");
+                throw new InputValidationException($"Operator: {pouzitaOperace.ZnakOperatoru} nemá číslo pro výpočet");
             }
         }
 
@@ -236,7 +240,7 @@ namespace Calculation
         private bool Zkontroluj(string cislo1, string cislo2)
         {
             string[] cisla = { cislo1, cislo2 };
-            foreach (var cislo in cisla) 
+            foreach (var cislo in cisla)
             {
                 if (!double.TryParse(cislo, out _))
                     return false;
@@ -285,7 +289,7 @@ namespace Calculation
                 }
             }
 
-            throw new InputValidationException("Neplatná závorka");
+            throw new InputValidationException("Chybý začátek závorky");
         }
 
         /// <summary>
@@ -302,15 +306,15 @@ namespace Calculation
             {
                 if (tokeny[i] == symbol)
                 {
-                    if (i-startovaciId <= 1)
+                    if (i - startovaciId <= 1)
                     {
                         throw new InputValidationException("Prázdná závorka");
                     }
                     return i;
                 }
             }
-            
-            throw new InputValidationException("Neplatná závorka");
+
+            throw new InputValidationException("Chybý konec závorky");
         }
     }
 }
