@@ -2,9 +2,9 @@
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using Calculator.ViewModels;
+using Calculator.UI.ViewModels;
 
-namespace Calculator
+namespace Calculator.UI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml.

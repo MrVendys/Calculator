@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Calculator.ViewModels
+namespace Calculator.UI.ViewModels
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {

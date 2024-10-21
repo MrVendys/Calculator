@@ -5,7 +5,7 @@ using System.Windows.Input;
 using Calculator.Core;
 using Calculator.Core.Exceptions;
 
-namespace Calculator.ViewModels
+namespace Calculator.UI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {

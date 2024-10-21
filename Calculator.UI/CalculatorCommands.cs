@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Calculator
+namespace Calculator.UI
 {
     public static class CalculatorCommands
     {
