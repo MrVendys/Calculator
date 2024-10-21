@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using Calculator.Core;
@@ -12,10 +10,11 @@ namespace Calculator.UI.ViewModels
     {
         private string _priklad;
         private Counting _counting;
-
+        private PrikladValidation _prikladValidation;
         public MainWindowViewModel()
         {
             _counting = new Counting();
+            _prikladValidation = new PrikladValidation(_counting);
         }
 
         /// <summary>
@@ -62,16 +61,16 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         public void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
         {
-            if (Priklad != "")
+            if (_prikladValidation.TrySmazSymbol(Priklad))
                 Priklad = Priklad.Remove(Priklad.Length - 1);
         }
 
         /// <summary>
         /// Handler <see cref="CalculatorCommands.PridejSymbolCommand"/>
         /// </summary>
-        public void PridejSymbol(object sender, ExecutedRoutedEventArgs e)
+        public void PridejSymbol(string parameter)
         {
-            UlozSymbol((string)e.Parameter);
+            Priklad += _prikladValidation.TryPridejSymbol(parameter) ? parameter : null;
         }
 
         /// <summary>
@@ -81,26 +80,6 @@ namespace Calculator.UI.ViewModels
         {
             SpocitanyPriklad sPriklad = (SpocitanyPriklad)e.Parameter;
             Priklad = sPriklad.Priklad;
-        }
-
-        public void UlozSymbol(string symbol)
-        {
-            string pattern = "[-0-9()";
-            string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-            pattern += pattern.Contains(separator) ? null : separator;
-
-            foreach (char znak in Counting.ZnakyOperaci)
-            {
-                if (znak == '-')
-                    continue;
-                else
-                    pattern += znak.ToString();
-            }
-            pattern += "]";
-
-            Regex regex = new Regex(pattern);
-            if(regex.IsMatch(symbol))
-                Priklad += symbol;
         }
 
         /// <summary>

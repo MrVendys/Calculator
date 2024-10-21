@@ -1,6 +1,7 @@
 ﻿using Calculator.Core.Exceptions;
 using Calculator.Core.Strategies;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
 namespace Calculator.Core
 {
@@ -35,6 +36,8 @@ namespace Calculator.Core
 
         public List<char> ZnakyOperaci { get; } = new List<char>();
 
+        public string Priklad { get; private set; }
+
         private void AddOperace(OperationStrategyBase operace)
         {
             _operace.Add(operace.ZnakOperatoru, operace);
@@ -53,8 +56,9 @@ namespace Calculator.Core
             {
                 throw new InputValidationException("Prázdný příklad");
             }
-            string vysl = Vyhodnot(DoTokenu(priklad));
-            HistoriePrikladu.Add(new SpocitanyPriklad(priklad, vysl));
+            Priklad = priklad;
+            string vysl = Vyhodnot(DoTokenu(Priklad));
+            HistoriePrikladu.Add(new SpocitanyPriklad(Priklad, vysl));
             return vysl;
         }
 
