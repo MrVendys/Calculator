@@ -54,11 +54,8 @@ namespace Calculator.UI.Views
 
         private void Window_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (_regex.IsMatch(e.Text))
-            {
-                _viewModel.UlozSymbol(e.Text);
-                e.Handled = true;
-            }
+            _viewModel.UlozSymbol(e.Text);
+            e.Handled = true;
         }
     }
 }

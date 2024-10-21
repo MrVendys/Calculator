@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -84,7 +85,9 @@ namespace Calculator.UI.ViewModels
 
         public void UlozSymbol(string symbol)
         {
-            string pattern = "[-0-9,.()";
+            string pattern = "[-0-9()";
+            string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            pattern += pattern.Contains(separator) ? null : separator;
 
             foreach (char znak in Counting.ZnakyOperaci)
             {

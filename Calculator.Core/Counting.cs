@@ -73,22 +73,10 @@ namespace Calculator.Core
             {
                 string token = priklad.Substring(index, 1);
                 if (int.TryParse(token, out _) 
-                    || token == "," 
-                    || token == "." 
+                    || token == System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator
                     || (token == "-" && !int.TryParse(priklad.Substring(index-1 < 0 ? 0 : index-1,1),out _)))
                 {
-                    if (token == ",")
-                    {
-                        cislo += ".";
-                    }
-                    else if (token == "-")
-                    {
-                        cislo += "-";
-                    }
-                    else
-                    {
-                        cislo += token;
-                    }
+                    cislo += token;
                 }
                 else if (token != " ")
                 {
@@ -242,7 +230,8 @@ namespace Calculator.Core
         /// <summary>
         /// Kontrola znaku vedle operátoru, zda je to číslo
         /// </summary>
-        /// <param name="tokeny"></param>
+        /// <param name="cislo1"></param>
+        /// <param name="cislo2"></param>
         /// <returns>True: Všechno je v pořádku. False: Našla se chyba</returns>
         private bool Zkontroluj(string cislo1, string cislo2)
         {
