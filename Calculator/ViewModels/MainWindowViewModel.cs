@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Calculator.Core;
 using Calculator.Core.Exceptions;
@@ -70,7 +70,7 @@ namespace Calculator.ViewModels
         /// </summary>
         public void PridejSymbol(object sender, ExecutedRoutedEventArgs e)
         {
-            Priklad += (string)e.Parameter;
+            UlozSymbol((string)e.Parameter);
         }
 
         /// <summary>
@@ -80,6 +80,24 @@ namespace Calculator.ViewModels
         {
             SpocitanyPriklad sPriklad = (SpocitanyPriklad)e.Parameter;
             Priklad = sPriklad.Priklad;
+        }
+
+        public void UlozSymbol(string symbol)
+        {
+            string pattern = "[-0-9,.()";
+
+            foreach (char znak in Counting.ZnakyOperaci)
+            {
+                if (znak == '-')
+                    continue;
+                else
+                    pattern += znak.ToString();
+            }
+            pattern += "]";
+
+            Regex regex = new Regex(pattern);
+            if(regex.IsMatch(symbol))
+                Priklad += symbol;
         }
 
         /// <summary>

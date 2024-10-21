@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using Calculator.ViewModels;
@@ -11,12 +12,14 @@ namespace Calculator
     public partial class MainWindow : Window
     {
         private readonly MainWindowViewModel _viewModel;
+        private Regex _regex;
 
         public MainWindow()
         {
             InitializeComponent();
             _viewModel = (MainWindowViewModel)DataContext;
             InitializeCommands();
+            _regex = InitializeRegex();
         }
 
         private void InitializeCommands()
@@ -31,23 +34,32 @@ namespace Calculator
             this.CommandBindings.Add(pridejHandler);
             this.CommandBindings.Add(historyPrikladClickHandler);
         }
-
-        private void InputTextbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private Regex InitializeRegex()
         {
-            // chyba s "-", Regex pořád bere jako interval a špatně Escapuje
             string pattern = "[-0-9,.()";
-            
             foreach (char znak in _viewModel.Counting.ZnakyOperaci)
             {
                 if (znak == '-')
+                {
                     continue;
+                }
                 else
-                    pattern += znak.ToString();
+                {
+                    pattern += Regex.Escape(znak.ToString());
+                }
             }
             pattern += "]";
-            
-            Regex regex = new Regex(pattern);
-            e.Handled = !regex.IsMatch(e.Text);
+
+            return new Regex(pattern, RegexOptions.Compiled);
+        }
+
+        private void Window_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (_regex.IsMatch(e.Text))
+            {
+                _viewModel.UlozSymbol(e.Text);
+                e.Handled = true;
+            }
         }
     }
 }

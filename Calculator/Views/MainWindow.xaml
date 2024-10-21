@@ -7,7 +7,8 @@
         xmlns:viewModels="clr-namespace:Calculator.ViewModels"
         xmlns:commands="clr-namespace:Calculator"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500"  Background="#FF1C1C1C">
+        Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500"  Background="#FF1C1C1C"
+        PreviewTextInput="Window_PreviewTextInput">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
@@ -26,7 +27,6 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Background" Value="#FF2E2E2E"/>
-
         </Style>
 
         <Style TargetType="TextBlock">
@@ -49,6 +49,7 @@
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Focusable" Value="False"/>
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -98,10 +99,10 @@
         </Grid.ColumnDefinitions>
 
         <TextBox Name="InputTextbox" 
-                 Grid.Row="0"
-                 Grid.Column="0"
-                 Text="{Binding Priklad, UpdateSourceTrigger=PropertyChanged}"
-                 PreviewTextInput="InputTextbox_PreviewTextInput"/>
+         Grid.Row="0"
+         Grid.Column="0"
+         Text="{Binding Priklad, UpdateSourceTrigger=PropertyChanged}"
+         PreviewTextInput="InputTextbox_PreviewTextInput"/>
 
         <Grid Margin="10" Grid.Row="2">
             <Grid.RowDefinitions>

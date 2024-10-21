@@ -25,7 +25,9 @@ namespace Calculator.Core
             AddOperace(new SquareRootStrategy());
             AddOperace(new FactorialStrategy());
             foreach (char c in _operace.Keys)
+            {
                 ZnakyOperaci.Add(c);
+            }
             _historiePrikladu = new ObservableCollection<SpocitanyPriklad>();
         }
 
@@ -58,7 +60,7 @@ namespace Calculator.Core
 
         /// <summary>
         /// Přepsání příkladu do pole stringů.
-        /// Vyřešení problémů (mezera, prázdný string, desetiné číslo).
+        /// Vyřešení problémů (mezera, prázdný string, desetiné číslo, negace).
         /// </summary>
         /// <param name="priklad"></param>
         /// <returns>Rozsekaný příklad do pole</returns>
@@ -70,11 +72,18 @@ namespace Calculator.Core
             while (index < priklad.Length)
             {
                 string token = priklad.Substring(index, 1);
-                if (int.TryParse(token, out _) || token == "," || token == ".")
+                if (int.TryParse(token, out _) 
+                    || token == "," 
+                    || token == "." 
+                    || (token == "-" && !int.TryParse(priklad.Substring(index-1 < 0 ? 0 : index-1,1),out _)))
                 {
                     if (token == ",")
                     {
                         cislo += ".";
+                    }
+                    else if (token == "-")
+                    {
+                        cislo += "-";
                     }
                     else
                     {
@@ -153,8 +162,6 @@ namespace Calculator.Core
                             // Index: index operatoru
                             // TakeIndex: Kolik tokenů se má vzít z pole (všechny před mezipříkladem)
                             // SkipIndex: Kolik tokenů se má přeskočit v poli (všechny až za mezipříklad)
-
-                            //TODO: Duplicitní kod.. nějak upravit
 
                             // Pro operátory typu: !
                             case PoziceCisla.Vlevo:
