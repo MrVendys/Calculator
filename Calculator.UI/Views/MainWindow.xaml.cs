@@ -1,10 +1,9 @@
-﻿using System.Reflection.Metadata;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using Calculator.UI.ViewModels;
 
-namespace Calculator.UI
+namespace Calculator.UI.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml.

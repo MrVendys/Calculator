@@ -1,7 +1,7 @@
 ﻿namespace Calculator.Core.Exceptions
 {
     /// <summary>
-    /// Vyjímka pro špatně zadaný příklad.</para>
+    /// Výjimka pro špatně zadaný příklad.
     /// Např: Nekompletní závorka, chybějící číslo 
     /// </summary>
     public class InputValidationException : Exception
