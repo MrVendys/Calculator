@@ -1,7 +1,6 @@
 ﻿using Calculator.Core.Exceptions;
 using Calculator.Core.Strategies;
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 
 namespace Calculator.Core
 {
@@ -15,6 +14,10 @@ namespace Calculator.Core
         private Dictionary<char, OperationStrategyBase> _operace = new Dictionary<char, OperationStrategyBase>();
 
         private ObservableCollection<SpocitanyPriklad> _historiePrikladu;
+
+        private PrikladValidator _prikladValidator;
+
+        private string _priklad;
 
         public Counting()
         {
@@ -30,17 +33,53 @@ namespace Calculator.Core
                 ZnakyOperaci.Add(c);
             }
             _historiePrikladu = new ObservableCollection<SpocitanyPriklad>();
+            _prikladValidator = new PrikladValidator(ZnakyOperaci);
         }
 
         public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _historiePrikladu;
 
         public List<char> ZnakyOperaci { get; } = new List<char>();
 
-        public string Priklad { get; private set; }
-
-        private void AddOperace(OperationStrategyBase operace)
+        public string Priklad
         {
-            _operace.Add(operace.ZnakOperatoru, operace);
+            get
+            {
+                return _priklad;
+            }
+            private set
+            {
+                _priklad = value;
+            }
+        }
+
+        private PrikladValidator PrikladValidator => _prikladValidator;
+
+        /// <summary>
+        /// Volání validace pro přidání symbolu
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <returns>Jestli má ViewModel aktualizovat vlastnot Příklad pro View</returns>
+        public bool TryAddSymbol(string symbol)
+        {
+            bool validate = _prikladValidator.ValidateAddSymbol(symbol);
+            if(validate)
+                Priklad += symbol;
+
+            return validate;
+        }
+
+        /// <summary>
+        /// Volání validace pro smazání symbolu
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <returns>Jestli má ViewModel aktualizovat vlastnot Příklad pro View</returns>
+        public bool TryDeleteSymbol(string symbol)
+        {
+            bool validate = _prikladValidator.ValidateDeleteSymbol(symbol);
+            if (validate)
+                Priklad = Priklad.Remove(Priklad.Length - 1);
+
+            return validate;
         }
 
         /// <summary>
@@ -49,17 +88,21 @@ namespace Calculator.Core
         /// </summary>
         /// <param name="priklad"></param>
         /// <exception cref="InputValidationException">Neplatně zadaný příklad</exception>
-        /// <returns></returns>
-        public string Pocitej(string priklad)
+        public void Pocitej(string priklad)
         {
             if (string.IsNullOrEmpty(priklad))
             {
                 throw new InputValidationException("Prázdný příklad");
             }
+
             Priklad = priklad;
             string vysl = Vyhodnot(DoTokenu(Priklad));
             HistoriePrikladu.Add(new SpocitanyPriklad(Priklad, vysl));
-            return vysl;
+            Priklad = vysl;
+        }
+        private void AddOperace(OperationStrategyBase operace)
+        {
+            _operace.Add(operace.ZnakOperatoru, operace);
         }
 
         /// <summary>

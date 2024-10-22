@@ -10,11 +10,9 @@ namespace Calculator.UI.ViewModels
     {
         private string _priklad;
         private Counting _counting;
-        private PrikladValidation _prikladValidation;
         public MainWindowViewModel()
         {
             _counting = new Counting();
-            _prikladValidation = new PrikladValidation(_counting);
         }
 
         /// <summary>
@@ -47,8 +45,8 @@ namespace Calculator.UI.ViewModels
         {
             try
             {
-                var vysledek = _counting.Pocitej(Priklad);
-                Priklad = vysledek;
+                _counting.Pocitej(Priklad);
+                Priklad = _counting.Priklad;
             }
             catch (InputValidationException en)
             {
@@ -61,8 +59,10 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         public void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_prikladValidation.TrySmazSymbol(Priklad))
-                Priklad = Priklad.Remove(Priklad.Length - 1);
+            if (_counting.TryDeleteSymbol(Priklad))
+            {
+                Priklad = _counting.Priklad;
+            }
         }
 
         /// <summary>
@@ -70,7 +70,10 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         public void PridejSymbol(string parameter)
         {
-            Priklad += _prikladValidation.TryPridejSymbol(parameter) ? parameter : null;
+            if (_counting.TryAddSymbol(parameter))
+            {
+                Priklad = _counting.Priklad;
+            }
         }
 
         /// <summary>
