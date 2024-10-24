@@ -6,17 +6,22 @@ using Calculator.Core.Exceptions;
 
 namespace Calculator.UI.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    internal class MainWindowViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Výpočetní jádro
+        /// </summary>
         private Counting _counting;
-        public MainWindowViewModel()
+
+        internal MainWindowViewModel()
         {
             _counting = new Counting();
         }
 
+        internal Counting Counting => _counting;
+
         /// <summary>
         /// Pro vizualizaci příkladu zadaným uživatelem, nebo spočítaného výsledku
-        /// Bind k Textboxu <see cref="MainWindow.InputTextbox"/>
         /// </summary>
         public string Priklad
         {
@@ -24,28 +29,27 @@ namespace Calculator.UI.ViewModels
             {
                 return _counting.Priklad; 
             }
-            set
-            { 
-            } 
+            set {}
         }
 
-        internal Counting Counting => _counting;
-
+        /// <summary>
+        /// Pro vizualizaci Historie počítání
+        /// </summary>
         public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _counting.HistoriePrikladu;
 
         /// <summary>
         /// Handler <see cref="CalculatorCommands.SmazSymbolCommand"/>. <br/>
         /// Použití výpočetního jádra <see cref="_counting"/> pro výpočet příkladu.
-        /// Chytá výjimky: InputValidationException
+        /// Odchytávání vyjímek vzniklých při výpočtu
         /// </summary>
         internal void Vypocitej(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
-                _counting.Pocitej();
+                _counting.Vypocitej();
                 OnPropertyChanged(nameof(Priklad));
             }
-            catch (InputValidationException en)
+            catch (InputValidationException en) //Exeption en
             {
                 ZobrazHlasku(en.Message);
             }
@@ -60,6 +64,10 @@ namespace Calculator.UI.ViewModels
             {
                 OnPropertyChanged(nameof(Priklad));
             }
+            else
+            {
+                ZobrazHlasku("Nelze smazat poslední symbol");
+            }
         }
 
         /// <summary>
@@ -70,6 +78,10 @@ namespace Calculator.UI.ViewModels
             if (_counting.TryAddSymbol(parameter))
             {
                 OnPropertyChanged(nameof(Priklad));
+            }
+            else
+            {
+                ZobrazHlasku("Nelze přidat symbol");
             }
         }
 
@@ -83,11 +95,14 @@ namespace Calculator.UI.ViewModels
             {
                 OnPropertyChanged(nameof(Priklad));
             }
-            
+            else
+            {
+                ZobrazHlasku("Nelze načíst příklad z historie");
+            }
         }
 
         /// <summary>
-        /// Po chycení vyjímky se uživateli zobrazí MessageBox s chybovou hláškou.
+        /// Zobrazení uživateli MessageBox s chybovou hláškou.
         /// </summary>
         private void ZobrazHlasku(string chyba = "Neidentifikovatelná chyba")
         {

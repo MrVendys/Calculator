@@ -1,4 +1,6 @@
-﻿namespace Calculator.Core.Strategies
+﻿using Calculator.Core.Exceptions;
+
+namespace Calculator.Core.Strategies
 {
     internal class SquareRootStrategy : OperationStrategyBase
     {
@@ -8,9 +10,12 @@
 
         internal override PoziceCisla Pozice => PoziceCisla.Vpravo;
 
-        internal override double Vypocitej(double cislo1, double? cislo2)
+        internal override double Vypocitej(double cislo1, double cislo2)
         {
-            return Math.Sqrt(cislo1);
+            if (cislo1 >= 0)
+                return Math.Sqrt(cislo1);
+            else
+                throw new InputValidationException("Pod odmocninou nemůže být záporné číslo");
         }
     }
 }

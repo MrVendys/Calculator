@@ -14,31 +14,30 @@ namespace Calculator.Core
         private Dictionary<char, OperationStrategyBase> _operace = new Dictionary<char, OperationStrategyBase>();
 
         /// <summary>
-        /// Spočítané příklady, uložené jako objekty SpocitanyPriklad (příklad, vysledek).
+        /// Spočítané příklady, uložené jako objekty <see cref="SpocitanyPriklad"/>.
         /// Pro zobrazování.
         /// </summary>
         private ObservableCollection<SpocitanyPriklad> _historiePrikladu;
 
         private PrikladValidator _prikladValidator;
 
-        internal List<char> ZnakyOperaci { get; } = new List<char>();
-
         public Counting()
         {
             InitializeOperace();
-
             _historiePrikladu = new ObservableCollection<SpocitanyPriklad>();
             _prikladValidator = new PrikladValidator(this);
         }
 
+        internal List<char> ZnakyOperaci { get; } = new List<char>();
+
         public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _historiePrikladu;
 
-        public string Priklad { get; private set; } = "0";
+        public string Priklad { get; private set; } = "";
 
         /// <summary>
         /// Volání validace pro přidání symbolu
         /// </summary>
-        /// <returns>Bool: Jestli byl příklad změněn</returns>
+        /// <returns>Jestli byl příklad změněn</returns>
         public bool TryAddSymbol(string symbol)
         {
             bool validate = _prikladValidator.ValidateAddSymbol(symbol);
@@ -51,7 +50,7 @@ namespace Calculator.Core
         /// <summary>
         /// Volání validace pro smazání symbolu
         /// </summary>
-        /// <returns>Bool: Jestli byl příklad změněn</returns>
+        /// <returns>Jestli byl příklad změněn</returns>
         public bool TryDeleteSymbol(string symbol)
         {
             bool validate = _prikladValidator.ValidateDeleteSymbol(symbol);
@@ -61,6 +60,10 @@ namespace Calculator.Core
             return validate;
         }
 
+        /// <summary>
+        /// Volání validace pro načtení příkladu z <see cref="_historiePrikladu"/>
+        /// </summary>
+        /// <returns>Jestli byl příklad změněn</returns>
         public bool TryVratPriklad(SpocitanyPriklad sPriklad)
         {
             bool validate = _prikladValidator.ValidateVratPriklad(sPriklad);
@@ -71,18 +74,18 @@ namespace Calculator.Core
         }
 
         /// <summary>
-        /// Začátek počítání. 
+        /// Volání funkce pro výpočet.  
         /// Ukládání příkladu do historie.
         /// </summary>
         /// <exception cref="InputValidationException">Neplatně zadaný příklad</exception>
-        public void Pocitej()
+        public void Vypocitej()
         {
             if (string.IsNullOrEmpty(Priklad))
             {
                 throw new InputValidationException("Prázdný příklad");
             }
 
-            string vysl = Vyhodnot(DoTokenu(Priklad));
+            string vysl = Pocitej(DoTokenu(Priklad));
             HistoriePrikladu.Add(new SpocitanyPriklad(Priklad, vysl));
             Priklad = vysl;
         }
@@ -117,9 +120,9 @@ namespace Calculator.Core
 
         /// <summary>
         /// Přepsání příkladu do pole stringů.
-        /// Mazání mezer, prázdných symbolů. Uložení kompletního čísla (vč. negace, desetinnýc míst)
+        /// Mazání mezer, prázdných symbolů. Uložení kompletního čísla (vč. negace, desetinných míst)
         /// </summary>
-        /// <returns>Rozsekaný příklad po symbolech/číslech do pole</returns>
+        /// <returns>Rozsekaný příklad po symbolech/číslech v poli</returns>
         private string[] DoTokenu(string priklad)
         {
             List<string> tokeny = new List<string>();
@@ -157,8 +160,9 @@ namespace Calculator.Core
         /// Nalezení závorek, poslání příkladu v ní na vypočítání a uložení mezivýsledku místo závorek. 
         /// Závorky se hledají postupně zevnitř.
         /// </summary>
-        /// <returns>Příklad v závorkách na vypočítání</returns>
-        private string[] NajdiZavorky(string[] tokeny)
+        /// <param name="tokeny">Příklad, rozložený funkcí <see cref="DoTokenu(string)"/></param>
+        /// <returns>Pole <paramref name="tokeny"/> s vypočítanými závorky</returns>
+        private string[] VyresZavorky(string[] tokeny)
         {
             while (tokeny.Contains("(") || tokeny.Contains(")"))
             {
@@ -170,7 +174,7 @@ namespace Calculator.Core
                 Array.Copy(tokeny, oteviraciId + 1, zavorkyPriklad, 0, (uzaviraciId - oteviraciId - 1));
 
                 //Rekurze pro výpočet části příkladu v závorce
-                var zavorkyVysl = Vyhodnot(zavorkyPriklad);
+                var zavorkyVysl = Pocitej(zavorkyPriklad);
 
                 tokeny = tokeny.Take(oteviraciId).Concat(new string[] { zavorkyVysl.ToString() }).Concat(tokeny.Skip(uzaviraciId + 1)).ToArray();
             }
@@ -178,19 +182,15 @@ namespace Calculator.Core
             return tokeny;
         }
 
-        /// <summary>
-        /// Výpočet příkladu. (Závorka nebo celý příklad)
-        /// </summary>
-        /// <param name="tokeny">Část příkladu pro výpočet</param>
-        /// <returns>Vypočítaná část příkladu</returns>
-        private string Vyhodnot(string[] tokeny)
+        /// <param name="tokeny">Příklad, rozložený funkcí <see cref="DoTokenu(string)"/></param>
+        private string Pocitej(string[] tokeny)
         {
-            //První fáze = Kontrola závorek. 
+            //Kontrola závorek. 
             //Rekurzí se postupně posílají závorky pro výpočet.
             //Na konci zbyde počáteční příklad s vypočítanými závorky
-            tokeny = NajdiZavorky(tokeny);
+            tokeny = VyresZavorky(tokeny);
 
-            //Druhá fáze funkce = Postupný výpočet pole "tokeny".
+            //Postupný výpočet pole "tokeny".
             //Počítá se podle operací
             List<OperationStrategyBase> pouziteOperace = NajdiOperatory(tokeny);
             int index = 0;
@@ -213,7 +213,7 @@ namespace Calculator.Core
                             // Pro operátory typu: !
                             case PoziceCisla.Vlevo:
                                 ZkontrolujCisla(tokeny.Take(index + 1).ToArray(), index, pouzitaOperace);
-                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]), null);
+                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index - 1]));
                                 takeIndex = index - 1;
                                 skipIndex = index + 1;
                                 break;
@@ -221,7 +221,7 @@ namespace Calculator.Core
                             // Pro operátory typu: √
                             case PoziceCisla.Vpravo:
                                 ZkontrolujCisla(tokeny.Take(index + 2).ToArray(), index, pouzitaOperace);
-                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index + 1]), null);
+                                meziVysl = pouzitaOperace.Vypocitej(double.Parse(tokeny[index + 1]));
                                 takeIndex = index;
                                 skipIndex = index + 1 + 1;
                                 break;
@@ -255,9 +255,9 @@ namespace Calculator.Core
         /// <summary>
         /// Kontrola, zda má operátor vedle sebe číslo, se kterým může počítat.
         /// </summary>
-        /// <param name="tokeny">Celý příklad</param>
+        /// <param name="tokeny">Příklad, rozložený funkcí <see cref="DoTokenu(string)"/></param>
         /// <param name="index">Index řešeného operátoru v <paramref name="tokeny"/></param>
-        /// <param name="pouzitaOperace">Řešenéhý operátor jako objekt OperaceStrategy</param>
+        /// <param name="pouzitaOperace">Řešený operátor jako objekt OperaceStrategy</param>
         private void ZkontrolujCisla(string[] tokeny, int index, OperationStrategyBase pouzitaOperace)
         {
             int indexCisla1;
@@ -289,8 +289,8 @@ namespace Calculator.Core
         /// <summary>
         /// Kontrola symbolů vedle operátoru, zda jsou to čísla
         /// </summary>
-        /// <param name="cislo1"></param>
-        /// <param name="cislo2"></param>
+        /// <param name="symbol1"></param>
+        /// <param name="symbol2"></param>
         /// <returns>True: Všechno je v pořádku. False: Našla se chyba</returns>
         private bool Zkontroluj(string symbol1, string symbol2)
         {
@@ -307,9 +307,8 @@ namespace Calculator.Core
         /// <summary>
         /// Nalezení použitých operátorů v části příkladu.
         /// </summary>
-        /// <param name="tokeny">Část příkladu</param>
-        /// <returns>List naleznutých operací, uložených jako objekty OperationStrategy. 
-        /// Uspořádaný sestupně podle vlastnosti Priorita</returns>
+        /// <param name="tokeny">Příklad, rozložený funkcí <see cref="DoTokenu(string)"/></param>
+        /// <returns>List naleznutých operací. Uspořádaný sestupně podle vlastnosti <see cref="OperationStrategyBase.Priorita"/></returns>
         private List<OperationStrategyBase> NajdiOperatory(string[] tokeny)
         {
             List<OperationStrategyBase> pouziteOperace = new List<OperationStrategyBase>();
@@ -353,7 +352,7 @@ namespace Calculator.Core
         /// </summary>
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
-        /// <param name="startovaciId">Index otevřené závorky, od kterého se začne vyhledávat</param>
+        /// <param name="startovaciId">Index (otevřené závorky), od kterého se začne vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>
         private int NajdiPrvni(string symbol, string[] tokeny, int startovaciId)
         {

@@ -1,4 +1,6 @@
-﻿namespace Calculator.Core.Strategies
+﻿using Calculator.Core.Exceptions;
+
+namespace Calculator.Core.Strategies
 {
     internal class DivideStrategy : OperationStrategyBase
     {
@@ -6,9 +8,12 @@
 
         internal override char ZnakOperatoru => '/';
 
-        internal override double Vypocitej(double cislo1, double? cislo2)
+        internal override double Vypocitej(double cislo1, double cislo2)
         {
-            return cislo1 / cislo2.Value;
+            if(cislo2 != 0)
+                return cislo1 / cislo2;
+            else
+                throw new InputValidationException("Dělení nulou!!!!", new DivideByZeroException());
         }
     }
 }

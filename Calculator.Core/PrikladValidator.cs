@@ -45,7 +45,7 @@ namespace Calculator.Core
                 }
                 else
                 {
-                    pattern += znak.ToString();
+                    pattern += Regex.Escape(znak.ToString());
                 }
             }
             pattern += "]";
