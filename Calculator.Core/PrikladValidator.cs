@@ -2,24 +2,34 @@
 
 namespace Calculator.Core
 {
+    /// <summary>
+    /// Validace úpravy příkladu. Přidání, odebrání symbolu
+    /// </summary>
     internal class PrikladValidator
     {
         private Regex _regex;
-        private List<char> _znakyOperaci;
-        public PrikladValidator(List<char> znakyOperaci)
+        private Counting _counting;
+
+        /// <param name="counting">Výpočetní jádro pro získání znaků používaných operátorů</param>
+        internal PrikladValidator(Counting counting)
         {
-            _znakyOperaci = znakyOperaci;
+            _counting = counting;
             _regex = InicializeRegex();
         }
 
-        public bool ValidateAddSymbol(string symbol)
+        internal bool ValidateAddSymbol(string symbol)
         {
-            return _regex.IsMatch(symbol) ? true : false;
+            return _regex.IsMatch(symbol);
         }
 
-        public bool ValidateDeleteSymbol(string symbol)
+        internal bool ValidateDeleteSymbol(string symbol)
         {
-            return string.IsNullOrWhiteSpace(symbol) ? false : true;
+            return !string.IsNullOrWhiteSpace(symbol);
+        }
+
+        internal bool ValidateVratPriklad(SpocitanyPriklad sPriklad)
+        {
+            return _counting.HistoriePrikladu.Contains(sPriklad);
         }
 
         private Regex InicializeRegex()
@@ -27,7 +37,7 @@ namespace Calculator.Core
             string pattern = "[-0-9()";
             string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 
-            foreach (char znak in _znakyOperaci)
+            foreach (char znak in _counting.ZnakyOperaci)
             {
                 if (znak == '-')
                 {

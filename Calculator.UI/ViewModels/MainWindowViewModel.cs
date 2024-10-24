@@ -8,7 +8,6 @@ namespace Calculator.UI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private string _priklad;
         private Counting _counting;
         public MainWindowViewModel()
         {
@@ -16,20 +15,18 @@ namespace Calculator.UI.ViewModels
         }
 
         /// <summary>
-        /// Příklad zadaný uživatelem, nebo spočítaný výsledek
+        /// Pro vizualizaci příkladu zadaným uživatelem, nebo spočítaného výsledku
         /// Bind k Textboxu <see cref="MainWindow.InputTextbox"/>
         /// </summary>
-        public string Priklad 
+        public string Priklad
         {
             get
             {
-                return _priklad;
+                return _counting.Priklad; 
             }
             set
-            {
-                _priklad = value;
-                OnPropertyChanged(nameof(Priklad));
-            }
+            { 
+            } 
         }
 
         internal Counting Counting => _counting;
@@ -41,12 +38,12 @@ namespace Calculator.UI.ViewModels
         /// Použití výpočetního jádra <see cref="_counting"/> pro výpočet příkladu.
         /// Chytá výjimky: InputValidationException
         /// </summary>
-        public void Vypocitej(object sender, ExecutedRoutedEventArgs e)
+        internal void Vypocitej(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
-                _counting.Pocitej(Priklad);
-                Priklad = _counting.Priklad;
+                _counting.Pocitej();
+                OnPropertyChanged(nameof(Priklad));
             }
             catch (InputValidationException en)
             {
@@ -57,32 +54,36 @@ namespace Calculator.UI.ViewModels
         /// <summary>
         /// Handler <see cref="CalculatorCommands.SmazSymbolCommand"/>
         /// </summary>
-        public void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
+        internal void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
         {
             if (_counting.TryDeleteSymbol(Priklad))
             {
-                Priklad = _counting.Priklad;
+                OnPropertyChanged(nameof(Priklad));
             }
         }
 
         /// <summary>
         /// Handler <see cref="CalculatorCommands.PridejSymbolCommand"/>
         /// </summary>
-        public void PridejSymbol(string parameter)
+        internal void PridejSymbol(string parameter)
         {
             if (_counting.TryAddSymbol(parameter))
             {
-                Priklad = _counting.Priklad;
+                OnPropertyChanged(nameof(Priklad));
             }
         }
 
         /// <summary>
         /// Handler <see cref="CalculatorCommands.OnHistoryPrikladClickCommand"/>
         /// </summary>
-        public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
+        internal void VratPriklad(object sender, ExecutedRoutedEventArgs e)
         {
             SpocitanyPriklad sPriklad = (SpocitanyPriklad)e.Parameter;
-            Priklad = sPriklad.Priklad;
+            if (_counting.TryVratPriklad(sPriklad))
+            {
+                OnPropertyChanged(nameof(Priklad));
+            }
+            
         }
 
         /// <summary>
