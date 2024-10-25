@@ -2,13 +2,13 @@
 {
     internal class FactorialStrategy : OperationStrategyBase
     {
-        internal override byte Priorita => 5;
+        public override byte Priorita => 5;
 
-        internal override char ZnakOperatoru => '!';
+        public override char ZnakOperatoru => '!';
 
-        internal override PoziceCisla Pozice => PoziceCisla.Vlevo;
+        public override PoziceCisla Pozice => PoziceCisla.Vlevo;
 
-        internal override double Vypocitej(double cislo1, double cislo2)
+        public override double Vypocitej(double cislo1)
         {
             double result = 1;
             for (int i = (int)cislo1; i > 1; i--)

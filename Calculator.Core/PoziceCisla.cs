@@ -1,6 +1,6 @@
 ﻿namespace Calculator.Core
 {
-    internal enum PoziceCisla
+    public enum PoziceCisla
     {
         Vlevo,
         Vpravo,

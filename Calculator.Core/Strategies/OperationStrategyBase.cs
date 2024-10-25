@@ -1,21 +1,28 @@
 ﻿namespace Calculator.Core.Strategies
 {
-    internal abstract class OperationStrategyBase
+    public abstract class OperationStrategyBase
     {
         /// <summary>
         /// Priorita operatoru od 1 (default). <br/>
         /// 1 == nejmensi -> resi se jako posledni (příklad: +,-).
         /// </summary>
-        internal virtual byte Priorita => 1;
+        public virtual byte Priorita => 1;
 
-        internal abstract char ZnakOperatoru { get; }
+        public abstract char ZnakOperatoru { get; }
 
         /// <summary>
         /// Kde se nacházejí čísla, se kterými operátor pracuje.: Před ním (Vlevo), za ním (Vpravo), nebo oboje (VlevoIVpravo). <br/>
         /// Default: VlevoIVpravo
         /// </summary>
-        internal virtual PoziceCisla Pozice => PoziceCisla.VlevoIVpravo;
+        public virtual PoziceCisla Pozice => PoziceCisla.VlevoIVpravo;
 
-        internal abstract double Vypocitej(double cislo1, double cislo2 = 0);
+        public virtual double Vypocitej(double cislo1)
+        {
+            throw new NotImplementedException();
+        }
+        public virtual double Vypocitej(double cislo1, double cislo2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

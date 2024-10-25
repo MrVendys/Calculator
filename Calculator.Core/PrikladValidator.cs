@@ -3,39 +3,51 @@
 namespace Calculator.Core
 {
     /// <summary>
-    /// Validace úpravy příkladu. Přidání, odebrání symbolu
+    /// Validace úpravy příkladu. Přidání, odebrání symbolu, vrácení příkladu z historie
     /// </summary>
     internal class PrikladValidator
     {
-        private Regex _regex;
-        private Counting _counting;
+        private readonly Regex _regex;
+        private readonly Counting _counting;
 
-        /// <param name="counting">Výpočetní jádro pro získání znaků používaných operátorů</param>
-        internal PrikladValidator(Counting counting)
+        public PrikladValidator(Counting counting)
         {
             _counting = counting;
-            _regex = InicializeRegex();
+            _regex = InitializeRegex();
         }
 
-        internal bool ValidateAddSymbol(string symbol)
+        /// <summary>
+        /// Zkontroluje, jestli je symbol povolený v <see cref="_regex"/>.
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <returns>Vrací, jestli může být symbol zapsán</returns>
+        public bool ValidateAddSymbol(string symbol)
         {
             return _regex.IsMatch(symbol);
         }
 
-        internal bool ValidateDeleteSymbol(string symbol)
+        /// <summary>
+        /// Zkontroluje, jestli je symbol nějaký znak.
+        /// </summary>
+        /// <returns>Vrací, jestli může být symbol odstraněn</returns>
+        public bool ValidateDeleteSymbol(string symbol)
         {
             return !string.IsNullOrWhiteSpace(symbol);
         }
 
-        internal bool ValidateVratPriklad(SpocitanyPriklad sPriklad)
+        public bool ValidateReturnPriklad(SpocitanyPriklad sPriklad)
         {
             return _counting.HistoriePrikladu.Contains(sPriklad);
         }
-
-        private Regex InicializeRegex()
+        internal void Refresh()
         {
-            string pattern = "[-0-9()";
+            InitializeRegex();
+        }
+
+        private Regex InitializeRegex()
+        {
             string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            string pattern = $"[-0-9(){separator}";
 
             foreach (char znak in _counting.ZnakyOperaci)
             {
