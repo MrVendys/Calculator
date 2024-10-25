@@ -18,7 +18,7 @@
 
         public virtual double Vypocitej(double cislo1)
         {
-            if(Pozice == PoziceCisla.VlevoIVpravo)
+            if (Pozice == PoziceCisla.VlevoIVpravo)
             {
                 return Vypocitej(cislo1, 0);
             }
