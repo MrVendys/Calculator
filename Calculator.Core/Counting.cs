@@ -15,19 +15,13 @@ namespace Calculator.Core
 
         private readonly PrikladValidator _prikladValidator;
 
+        #region Nastavení proměnných
+
         public Counting()
         {
             InitializeOperace();
             _prikladValidator = new PrikladValidator(this);
         }
-
-        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; } = new ObservableCollection<SpocitanyPriklad>();
-
-        public string Priklad { get; private set; } = "";
-
-        internal char[] ZnakyOperaci => _operace.Keys.ToArray();
-
-        #region Initializace
 
         private void InitializeOperace()
         {
@@ -40,12 +34,19 @@ namespace Calculator.Core
             AddOperace(new FactorialStrategy());
         }
 
-        private void AddOperace(OperationStrategyBase operace)
+        public void AddOperace(OperationStrategyBase operace)
         {
             _operace.Add(operace.ZnakOperatoru, operace);
+            _prikladValidator?.Refresh();
         }
 
         #endregion
+
+        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; } = new ObservableCollection<SpocitanyPriklad>();
+
+        public string Priklad { get; private set; } = "";
+
+        public IEnumerable<char> ZnakyOperaci => _operace.Keys;
 
         #region Validace
 
@@ -76,29 +77,26 @@ namespace Calculator.Core
         }
 
         /// <summary>
-        /// Pokusí se načíst příklad z <see cref="_historiePrikladu"/>
+        /// Pokusí se uložit <paramref name="spocitanyPriklad"/> do <see cref="Priklad"/>
         /// </summary>
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
-        public bool TryVratPriklad(SpocitanyPriklad sPriklad)
+        public bool TryVratPriklad(SpocitanyPriklad spocitanyPriklad)
         {
-            bool valid = _prikladValidator.ValidateReturnPriklad(sPriklad);
+            bool valid = _prikladValidator.ValidateReturnPriklad(spocitanyPriklad);
             if (valid)
-                Priklad = sPriklad.Priklad;
+                Priklad = spocitanyPriklad.Priklad;
 
             return valid;
         }
 
         #endregion
 
-        public void AddNewOperace(OperationStrategyBase newOperace)
-        {
-            AddOperace(newOperace);
-            _prikladValidator.Refresh();
-        }
-
         /// <summary>
-        /// Vypočíta <see cref="Priklad"/> a s výsledkem jej uloží do <see cref="HistoriePrikladu"/>
+        /// Vypočítá <see cref="Priklad"/> a výsledek uloží zpět do <see cref="Priklad"/>
         /// </summary>
+        /// <remarks>
+        /// Zároveň uloží počítaný příklad s výsledkem do <see cref="HistoriePrikladu"/>
+        /// </remarks>
         /// <exception cref="InputValidationException">Neplatně zadaný příklad</exception>
         public void Vypocitej()
         {
@@ -161,9 +159,9 @@ namespace Calculator.Core
         {
             while (tokeny.Contains("(") || tokeny.Contains(")"))
             {
-                int oteviraciId = NajdiPosledni("(", tokeny);
+                int oteviraciId = NajdiPosledniZavorku("(", tokeny);
 
-                int uzaviraciId = NajdiPrvni(")", tokeny, oteviraciId);
+                int uzaviraciId = NajdiPrvniZavorku(")", tokeny, oteviraciId);
 
                 string[] zavorkyPriklad = new string[uzaviraciId - oteviraciId - 1];
                 Array.Copy(tokeny, oteviraciId + 1, zavorkyPriklad, 0, (uzaviraciId - oteviraciId - 1));
@@ -291,7 +289,7 @@ namespace Calculator.Core
         /// Nalezení použitých operátorů v příkladu.
         /// </summary>
         /// <param name="tokeny">Příklad, rozložený funkcí <see cref="DoTokenu(string)"/></param>
-        /// <returns>List naleznutých operací. Uspořádaný sestupně podle vlastnosti <see cref="OperationStrategyBase.Priorita"/></returns>
+        /// <returns>List nalezených operací. Uspořádaný sestupně podle vlastnosti <see cref="OperationStrategyBase.Priorita"/></returns>
         private List<OperationStrategyBase> NajdiOperatory(string[] tokeny)
         {
             List<OperationStrategyBase> pouziteOperace = new List<OperationStrategyBase>();
@@ -310,13 +308,12 @@ namespace Calculator.Core
         }
 
         /// <summary>
-        /// Nalezení první instance symbolu v poli odzadu. <br/>
-        /// Používá se pro nalezení začátku závorky.
+        /// Nalezení poslední instance symbolu "(" v poli. <br/>
         /// </summary>
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>
-        private int NajdiPosledni(string symbol, string[] tokeny)
+        private int NajdiPosledniZavorku(string symbol, string[] tokeny)
         {
             for (int i = tokeny.Length - 1; i >= 0; i--)
             {
@@ -326,18 +323,17 @@ namespace Calculator.Core
                 }
             }
 
-            throw new InputValidationException("Chybý začátek závorky");
+            throw new InputValidationException("Chybí začátek závorky");
         }
 
         /// <summary>
-        /// Nalezení první instance symbolu v poli zepředu. <br/>
-        /// Používá se pro nalezení konce závorky.
+        /// Nalezení první instance symbolu ")" v poli. <br/>
         /// </summary>
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <param name="startovaciId">Index (otevřené závorky), od kterého se začne vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>
-        private int NajdiPrvni(string symbol, string[] tokeny, int startovaciId)
+        private int NajdiPrvniZavorku(string symbol, string[] tokeny, int startovaciId)
         {
             for (int i = startovaciId; i < tokeny.Length; i++)
             {
@@ -351,7 +347,7 @@ namespace Calculator.Core
                 }
             }
 
-            throw new InputValidationException("Chybý konec závorky");
+            throw new InputValidationException("Chybí konec závorky");
         }
     }
 }

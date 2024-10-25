@@ -19,7 +19,6 @@ namespace Calculator.Core
         /// <summary>
         /// Zkontroluje, jestli je symbol povolený v <see cref="_regex"/>.
         /// </summary>
-        /// <param name="symbol"></param>
         /// <returns>Vrací, jestli může být symbol zapsán</returns>
         public bool ValidateAddSymbol(string symbol)
         {
@@ -35,11 +34,15 @@ namespace Calculator.Core
             return !string.IsNullOrWhiteSpace(symbol);
         }
 
-        public bool ValidateReturnPriklad(SpocitanyPriklad sPriklad)
+        /// <summary>
+        /// Zkontroluje, zda se <paramref name="spocitanyPriklad"/> nachází v historii
+        /// </summary>
+        public bool ValidateReturnPriklad(SpocitanyPriklad spocitanyPriklad)
         {
-            return _counting.HistoriePrikladu.Contains(sPriklad);
+            return _counting.HistoriePrikladu.Contains(spocitanyPriklad);
         }
-        internal void Refresh()
+
+        public void Refresh()
         {
             InitializeRegex();
         }
@@ -47,7 +50,7 @@ namespace Calculator.Core
         private Regex InitializeRegex()
         {
             string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-            string pattern = $"[-0-9(){separator}";
+            string pattern = "[-0-9()" + Regex.Escape(separator);
 
             foreach (char znak in _counting.ZnakyOperaci)
             {

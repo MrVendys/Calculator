@@ -18,11 +18,26 @@
 
         public virtual double Vypocitej(double cislo1)
         {
-            throw new NotImplementedException();
+            if(Pozice == PoziceCisla.VlevoIVpravo)
+            {
+                return Vypocitej(cislo1, 0);
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
+
         public virtual double Vypocitej(double cislo1, double cislo2)
         {
-            throw new NotImplementedException();
+            if (Pozice != PoziceCisla.VlevoIVpravo)
+            {
+                return Vypocitej(cislo1);
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }
