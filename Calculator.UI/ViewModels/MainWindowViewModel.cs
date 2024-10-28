@@ -15,16 +15,12 @@ namespace Calculator.UI.ViewModels
             _counting = new Counting();
         }
 
+        public string DesetinnyOddelovac => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+
         /// <summary>
         /// Pro vizualizaci příkladu zadaným uživatelem, nebo spočítaného výsledku
         /// </summary>
-        public string Priklad
-        {
-            get
-            {
-                return _counting.Priklad; 
-            }
-        }
+        public string Priklad => _counting.Priklad;
 
         /// <summary>
         /// Pro vizualizaci Historie počítání
@@ -56,13 +52,21 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         public void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_counting.TryDeleteSymbol(Priklad))
+            if (_counting.TrySmazSymbol(Priklad))
             {
                 OnPropertyChanged(nameof(Priklad));
             }
-            else
+        }
+
+        /// <summary>
+        /// Handler <see cref="CalculatorCommands.SmazAllSymbolyCommand"/>. <br/>
+        /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném smazání všech symbolů.
+        /// </summary>
+        public void SmazAllSymboly(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (_counting.TrySmazAllSymboly(Priklad))
             {
-                ZobrazHlasku("Nelze smazat poslední symbol");
+                OnPropertyChanged(nameof(Priklad));
             }
         }
 
@@ -72,13 +76,9 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         public void PridejSymbol(string parameter)
         {
-            if (_counting.TryAddSymbol(parameter))
+            if (_counting.TryPridejSymbol(parameter))
             {
                 OnPropertyChanged(nameof(Priklad));
-            }
-            else
-            {
-                ZobrazHlasku("Nelze přidat symbol");
             }
         }
 
@@ -95,7 +95,7 @@ namespace Calculator.UI.ViewModels
             }
             else
             {
-                ZobrazHlasku("Nelze načíst příklad z historie");
+                ZobrazHlasku("Chyba v programu. Nelze načíst příklad z historie");
             }
         }
 
