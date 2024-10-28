@@ -8,17 +8,12 @@ namespace Calculator.UI.ViewModels
 {
     internal class MainWindowViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Výpočetní jádro
-        /// </summary>
-        private Counting _counting;
+        private readonly Counting _counting;
 
-        internal MainWindowViewModel()
+        public MainWindowViewModel()
         {
             _counting = new Counting();
         }
-
-        internal Counting Counting => _counting;
 
         /// <summary>
         /// Pro vizualizaci příkladu zadaným uživatelem, nebo spočítaného výsledku
@@ -29,7 +24,6 @@ namespace Calculator.UI.ViewModels
             {
                 return _counting.Priklad; 
             }
-            set {}
         }
 
         /// <summary>
@@ -38,27 +32,29 @@ namespace Calculator.UI.ViewModels
         public ObservableCollection<SpocitanyPriklad> HistoriePrikladu => _counting.HistoriePrikladu;
 
         /// <summary>
-        /// Handler <see cref="CalculatorCommands.SmazSymbolCommand"/>. <br/>
+        /// Handler <see cref="CalculatorCommands.OdesliPrikladCommand"/>. <br/>
         /// Použití výpočetního jádra <see cref="_counting"/> pro výpočet příkladu.
-        /// Odchytávání vyjímek vzniklých při výpočtu
+        /// Odchytávání vyjímek vzniklých při výpočtu. <br/>
+        /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném smazání symbolu.
         /// </summary>
-        internal void Vypocitej(object sender, ExecutedRoutedEventArgs e)
+        public void Vypocitej(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
                 _counting.Vypocitej();
                 OnPropertyChanged(nameof(Priklad));
             }
-            catch (InputValidationException en) //Exeption en
+            catch (InputValidationException en)
             {
                 ZobrazHlasku(en.Message);
             }
         }
 
         /// <summary>
-        /// Handler <see cref="CalculatorCommands.SmazSymbolCommand"/>
+        /// Handler <see cref="CalculatorCommands.SmazSymbolCommand"/>. <br/>
+        /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném smazání symbolu.
         /// </summary>
-        internal void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
+        public void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
         {
             if (_counting.TryDeleteSymbol(Priklad))
             {
@@ -72,8 +68,9 @@ namespace Calculator.UI.ViewModels
 
         /// <summary>
         /// Handler <see cref="CalculatorCommands.PridejSymbolCommand"/>
+        /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném přidání symbolu.
         /// </summary>
-        internal void PridejSymbol(string parameter)
+        public void PridejSymbol(string parameter)
         {
             if (_counting.TryAddSymbol(parameter))
             {
@@ -87,8 +84,9 @@ namespace Calculator.UI.ViewModels
 
         /// <summary>
         /// Handler <see cref="CalculatorCommands.OnHistoryPrikladClickCommand"/>
+        /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném vrácení příkladu z historie.
         /// </summary>
-        internal void VratPriklad(object sender, ExecutedRoutedEventArgs e)
+        public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
         {
             SpocitanyPriklad sPriklad = (SpocitanyPriklad)e.Parameter;
             if (_counting.TryVratPriklad(sPriklad))
@@ -102,7 +100,7 @@ namespace Calculator.UI.ViewModels
         }
 
         /// <summary>
-        /// Zobrazení uživateli MessageBox s chybovou hláškou.
+        /// Zobrazení uživateli MessageBox s <paramref name="chyba"/>.
         /// </summary>
         private void ZobrazHlasku(string chyba = "Neidentifikovatelná chyba")
         {
