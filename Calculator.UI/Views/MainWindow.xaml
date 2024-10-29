@@ -8,7 +8,8 @@
         xmlns:commands="clr-namespace:Calculator.UI"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500" Background="#FF1C1C1C"
-        PreviewTextInput="Window_PreviewTextInput">
+        PreviewTextInput="Window_PreviewTextInput"
+        PreviewKeyDown="Window_PreviewKeyDown">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
@@ -23,7 +24,7 @@
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Visible"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontSize" Value="30"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -46,8 +47,6 @@
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
@@ -81,10 +80,19 @@
             <Setter Property="Command" Value="{x:Static commands:CalculatorCommands.PridejSymbolCommand}"/>
         </Style>
 
-        <Style TargetType="WrapPanel">
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="FlowDirection" Value="LeftToRight"/>
-            <Setter Property="Margin" Value="5,0,0,0"/>
+        <Style x:Key="HistoryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
@@ -213,19 +221,18 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{x:Static commands:CalculatorCommands.OnHistoryPrikladClickCommand}"
+                    <Button Style="{StaticResource HistoryButton}"
+                            Command="{x:Static commands:CalculatorCommands.OnHistoryPrikladClickCommand}"
                             CommandParameter="{Binding}"
                             Padding="5"
                             Margin="5"
-                            VerticalAlignment="Stretch"
                             FontSize="20">
-                        <StackPanel Background="Transparent">
-                            <TextBlock Text="{Binding Priklad}"
-                                       TextAlignment="Left"
-                                       MinWidth="100"
-                                       TextWrapping="Wrap"/>
+                        <StackPanel Margin="10,0,10,0" Background="Transparent" HorizontalAlignment="Right">
+                            <TextBlock Foreground="#FF858585"
+                                       Text="{Binding Priklad}"
+                                       TextAlignment="Left" TextWrapping="Wrap"/>
                             <TextBlock Text="{Binding Vysledek, StringFormat='= {0}'}"
-                                       TextAlignment="Right"/>
+                                       TextAlignment="Right" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Button>
                 </DataTemplate>

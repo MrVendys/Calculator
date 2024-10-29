@@ -11,6 +11,11 @@ namespace Calculator.UI.Views
     {
         private readonly MainWindowViewModel _viewModel;
 
+        /// <summary>
+        /// Pro správné zobrazování desetinného oddělovače u numpadu
+        /// </summary>
+        private bool _carkaHandled = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -35,13 +40,22 @@ namespace Calculator.UI.Views
 
         private void Window_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (e.Text == "," || e.Text == ".")
+            if (_carkaHandled)
             {
-                _viewModel.PridejSymbol(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                _carkaHandled = false;
             }
             else
             {
                 _viewModel.PridejSymbol(e.Text);
+            }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Decimal)
+            {
+                _carkaHandled = true;
+                _viewModel.PridejSymbol(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
             }
         }
     }
