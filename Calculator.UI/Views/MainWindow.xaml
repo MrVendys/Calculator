@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Calculator.UI"
+        xmlns:local="clr-namespace:Calculator.UI" 
         xmlns:viewModels="clr-namespace:Calculator.UI.ViewModels"
         xmlns:commands="clr-namespace:Calculator.UI"
         xmlns:converters="clr-namespace:Calculator.UI.Converters"
@@ -24,6 +24,7 @@
             <Setter Property="Padding" Value="10,0,10,0"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="30"/>
