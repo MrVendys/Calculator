@@ -71,6 +71,7 @@ namespace Calculator.UI.ViewModels
             if (_counting.TrySmazAllSymboly(Priklad))
             {
                 OnPropertyChanged(nameof(Priklad));
+                OnPropertyChanged(nameof(Priklad));
                 MainWindow mw = (MainWindow)sender;
                 mw.InputLabel.FontSize = 30;
             }

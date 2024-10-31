@@ -54,9 +54,9 @@ namespace Calculator.Core
         /// Pokusí se přidat symbol do <see cref="Priklad"/>
         /// </summary>
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
-        public bool TryAddSymbol(string symbol)
+        public bool TryPridejSymbol(string symbol)
         {
-            bool valid = _prikladValidator.ValidateAddSymbol(symbol);
+            bool valid = _prikladValidator.ValidatePridejSymbol(symbol);
             if (valid)
                 Priklad += symbol;
 
@@ -67,11 +67,24 @@ namespace Calculator.Core
         /// Pokusí se odebrat poslední symbol z <see cref="Priklad"/>
         /// </summary>
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
-        public bool TryDeleteSymbol(string symbol)
+        public bool TrySmazSymbol(string symbol)
         {
-            bool valid = _prikladValidator.ValidateDeleteSymbol(symbol);
+            bool valid = _prikladValidator.ValidateSmazSymbol(symbol);
             if (valid)
                 Priklad = Priklad.Remove(Priklad.Length - 1);
+
+            return valid;
+        }
+
+        /// <summary>
+        /// Pokusí se smazat celý <see cref="Priklad"/>
+        /// </summary>
+        /// <returns>Vrací bool, jestli byl příklad změněn</returns>
+        public bool TrySmazAllSymboly(string priklad)
+        {
+            bool valid = _prikladValidator.ValidateSmazSymbol(priklad);
+            if (valid)
+                Priklad = "";
 
             return valid;
         }
@@ -82,7 +95,7 @@ namespace Calculator.Core
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
         public bool TryVratPriklad(SpocitanyPriklad spocitanyPriklad)
         {
-            bool valid = _prikladValidator.ValidateReturnPriklad(spocitanyPriklad);
+            bool valid = _prikladValidator.ValidateVratPriklad(spocitanyPriklad);
             if (valid)
                 Priklad = spocitanyPriklad.Priklad;
 
@@ -102,7 +115,7 @@ namespace Calculator.Core
         {
             if (string.IsNullOrEmpty(Priklad))
             {
-                throw new InputValidationException("Prázdný příklad");
+                return;
             }
 
             string vysl = Pocitej(DoTokenu(Priklad));
@@ -159,9 +172,9 @@ namespace Calculator.Core
         {
             while (tokeny.Contains("(") || tokeny.Contains(")"))
             {
-                int oteviraciId = NajdiPosledniZavorku("(", tokeny);
+                int oteviraciId = NajdiPosledniZavorku(tokeny);
 
-                int uzaviraciId = NajdiPrvniZavorku(")", tokeny, oteviraciId);
+                int uzaviraciId = NajdiPrvniZavorku(tokeny, oteviraciId);
 
                 string[] zavorkyPriklad = new string[uzaviraciId - oteviraciId - 1];
                 Array.Copy(tokeny, oteviraciId + 1, zavorkyPriklad, 0, (uzaviraciId - oteviraciId - 1));
@@ -313,11 +326,11 @@ namespace Calculator.Core
         /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>
-        private int NajdiPosledniZavorku(string symbol, string[] tokeny)
+        private int NajdiPosledniZavorku(string[] tokeny)
         {
             for (int i = tokeny.Length - 1; i >= 0; i--)
             {
-                if (tokeny[i] == symbol)
+                if (tokeny[i] == "(")
                 {
                     return i;
                 }
@@ -333,11 +346,11 @@ namespace Calculator.Core
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <param name="startovaciId">Index (otevřené závorky), od kterého se začne vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>
-        private int NajdiPrvniZavorku(string symbol, string[] tokeny, int startovaciId)
+        private int NajdiPrvniZavorku(string[] tokeny, int startovaciId)
         {
             for (int i = startovaciId; i < tokeny.Length; i++)
             {
-                if (tokeny[i] == symbol)
+                if (tokeny[i] == ")")
                 {
                     if (i - startovaciId <= 1)
                     {

@@ -12,6 +12,11 @@ namespace Calculator.UI.Views
     {
         private readonly MainWindowViewModel _viewModel;
 
+        /// <summary>
+        /// Pro správné zobrazování desetinného oddělovače u numpadu
+        /// </summary>
+        private bool _carkaHandled = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,6 +34,7 @@ namespace Calculator.UI.Views
 
             this.CommandBindings.Add(vypocitejHandler);
             this.CommandBindings.Add(smazHandler);
+            this.CommandBindings.Add(smazAllHandler);
             this.CommandBindings.Add(pridejHandler);
             this.CommandBindings.Add(historyPrikladClickHandler);
         }

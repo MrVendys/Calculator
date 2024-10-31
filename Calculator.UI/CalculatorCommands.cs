@@ -14,6 +14,11 @@ namespace Calculator.UI
             {
                 new KeyGesture(Key.Back)
             });
+        public static readonly RoutedUICommand SmazAllSymbolyCommand = new RoutedUICommand("C", nameof(SmazAllSymbolyCommand), typeof(CalculatorCommands),
+            new InputGestureCollection
+            {
+                new KeyGesture(Key.Escape)
+            });
         public static readonly RoutedUICommand PridejSymbolCommand = new RoutedUICommand("", nameof(PridejSymbolCommand), typeof(CalculatorCommands));
         public static readonly RoutedCommand OnHistoryPrikladClickCommand = new RoutedCommand(nameof(OnHistoryPrikladClickCommand), typeof(CalculatorCommands));
     }

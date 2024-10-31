@@ -20,7 +20,7 @@ namespace Calculator.Core
         /// Zkontroluje, jestli je symbol povolený v <see cref="_regex"/>.
         /// </summary>
         /// <returns>Vrací, jestli může být symbol zapsán</returns>
-        public bool ValidateAddSymbol(string symbol)
+        public bool ValidatePridejSymbol(string symbol)
         {
             return _regex.IsMatch(symbol);
         }
@@ -29,7 +29,7 @@ namespace Calculator.Core
         /// Zkontroluje, jestli je symbol nějaký znak.
         /// </summary>
         /// <returns>Vrací, jestli může být symbol odstraněn</returns>
-        public bool ValidateDeleteSymbol(string symbol)
+        public bool ValidateSmazSymbol(string symbol)
         {
             return !string.IsNullOrWhiteSpace(symbol);
         }
@@ -37,7 +37,7 @@ namespace Calculator.Core
         /// <summary>
         /// Zkontroluje, zda se <paramref name="spocitanyPriklad"/> nachází v historii
         /// </summary>
-        public bool ValidateReturnPriklad(SpocitanyPriklad spocitanyPriklad)
+        public bool ValidateVratPriklad(SpocitanyPriklad spocitanyPriklad)
         {
             return _counting.HistoriePrikladu.Contains(spocitanyPriklad);
         }
