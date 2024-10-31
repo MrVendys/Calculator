@@ -1,8 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using Calculator.Core;
+using Calculator.Core.Exceptions;
+using Calculator.UI.Views;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using Calculator.Core;
-using Calculator.Core.Exceptions;
+using System.Windows.Media;
 
 namespace Calculator.UI.ViewModels
 {
@@ -63,10 +65,14 @@ namespace Calculator.UI.ViewModels
             if (_counting.TryDeleteSymbol(Priklad))
             {
                 OnPropertyChanged(nameof(Priklad));
+                MainWindow mw = (MainWindow)sender;
+                mw.IncreaseFontSize();
             }
             else
             {
-                ZobrazHlasku("Nelze smazat poslední symbol");
+                OnPropertyChanged(nameof(Priklad));
+                MainWindow mw = (MainWindow)sender;
+                mw.InputLabel.FontSize = 30;
             }
         }
 
@@ -84,6 +90,17 @@ namespace Calculator.UI.ViewModels
                 ZobrazHlasku("Nelze přidat symbol");
             }
         }
+        public void PridejSymbol(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainWindow mw = (MainWindow)sender;
+            if (mw.DecreaseFontSize((string)e.Parameter))
+            {
+                if (_counting.TryPridejSymbol((string)e.Parameter))
+                {
+                    OnPropertyChanged(nameof(Priklad));
+                }
+            }
+        }
 
         /// <summary>
         /// Handler <see cref="CalculatorCommands.OnHistoryPrikladClickCommand"/>
@@ -94,6 +111,8 @@ namespace Calculator.UI.ViewModels
             if (_counting.TryVratPriklad(sPriklad))
             {
                 OnPropertyChanged(nameof(Priklad));
+                MainWindow mw = (MainWindow)sender;
+                mw.DecreaseFontSize();
             }
             else
             {

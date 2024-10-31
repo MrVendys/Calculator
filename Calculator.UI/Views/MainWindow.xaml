@@ -3,32 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Calculator.UI" 
+        xmlns:local="clr-namespace:Calculator.UI"
         xmlns:viewModels="clr-namespace:Calculator.UI.ViewModels"
         xmlns:commands="clr-namespace:Calculator.UI"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500"  Background="#FF1C1C1C"
-        PreviewTextInput="Window_PreviewTextInput">
+        Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500" Background="#FF1C1C1C"
+        PreviewTextInput="Window_PreviewTextInput"
+        PreviewKeyDown="Window_PreviewKeyDown">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <Style TargetType="TextBox">
+        <Style TargetType="Label">
             <Setter Property="MinWidth" Value="100"/>
             <Setter Property="MinHeight" Value="100"/>
             <Setter Property="Margin" Value="20,0,20,0"/>
+            <Setter Property="Padding" Value="5"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Visible"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontSize" Value="30"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Background" Value="#FF2E2E2E"/>
         </Style>
-
         <Style TargetType="TextBlock">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontSize" Value="20"/>
@@ -46,16 +47,14 @@
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="{TemplateBinding BorderThickness}" 
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -81,13 +80,22 @@
             <Setter Property="Command" Value="{x:Static commands:CalculatorCommands.PridejSymbolCommand}"/>
         </Style>
 
-        <Style TargetType="WrapPanel">
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="FlowDirection" Value="LeftToRight"/>
-            <Setter Property="Margin" Value="5,0,0,0"/>
+        <Style x:Key="HistoryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
-    
+
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -98,86 +106,104 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0"
-                 Grid.Column="0"
-                 Text="{Binding Priklad, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="True"/>
+        <Label x:Name="InputLabel" Grid.Row="0" Grid.Column="0"
+               Padding="10,0,10,0" Content="{Binding Priklad, Mode=OneWay}"/>
 
         <Grid Margin="10" Grid.Row="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
 
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Row 1  -->
-            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PridejSymbolButton}" CommandParameter="√"/>
-            <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PridejSymbolButton}" CommandParameter="^"/>
-            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource PridejSymbolButton}" CommandParameter="!"/>
-            <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource PridejSymbolButton}" CommandParameter="%" IsEnabled="False"/>
+            <Button Grid.Row="0" Grid.Column="0"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="√"/>
+            <Button Grid.Row="0" Grid.Column="1"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="^"/>
+            <Button Grid.Row="0" Grid.Column="2"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="!"/>
+            <Button Grid.Row="0" Grid.Column="3"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="%" IsEnabled="False"/>
 
             <!-- Row 2  -->
-            <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource PridejSymbolButton}" CommandParameter="+"/>
-            <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource PridejSymbolButton}" CommandParameter="-"/>
-            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource PridejSymbolButton}" CommandParameter="*"/>
-            <Button Grid.Row="1" Grid.Column="3" Style="{StaticResource PridejSymbolButton}" CommandParameter="/"/>
+            <Button Grid.Row="1" Grid.Column="0"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="+"/>
+            <Button Grid.Row="1" Grid.Column="1"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="-"/>
+            <Button Grid.Row="1" Grid.Column="2"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="*"/>
+            <Button Grid.Row="1" Grid.Column="3"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="/"/>
 
             <!-- Row 3 -->
-            <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource PridejSymbolButton}" CommandParameter="("/>
-            <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource PridejSymbolButton}" CommandParameter=")"/>
-            <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource PridejSymbolButton}" Content="(-)" IsEnabled="False"/>
-            <Button Grid.Row="2" Grid.Column="3" Content="C" IsEnabled="False"/> 
-            
-            <!-- Row 4 -->
-            <Button Grid.Row="3" Grid.Column="0" Style="{StaticResource PridejSymbolButton}" CommandParameter="7"/>
-            <Button Grid.Row="3" Grid.Column="1" Style="{StaticResource PridejSymbolButton}" CommandParameter="8"/>
-            <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource PridejSymbolButton}" CommandParameter="9"/>
-            <Button Grid.Row="3" Grid.Column="3" 
-                    Command="{x:Static commands:CalculatorCommands.SmazSymbolCommand}" 
+            <Button Grid.Row="2" Grid.Column="0"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="("/>
+            <Button Grid.Row="2" Grid.Column="1"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter=")"/>
+            <Button Grid.Row="2" Grid.Column="2"
+                    Command="{x:Static commands:CalculatorCommands.SmazAllSymbolyCommand}"
+                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+            <Button Grid.Row="2" Grid.Column="3"
+                    Command="{x:Static commands:CalculatorCommands.SmazSymbolCommand}"
                     Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
 
+            <!-- Row 4 -->
+            <Button Grid.Row="3" Grid.Column="0"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="7"/>
+            <Button Grid.Row="3" Grid.Column="1"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="8"/>
+            <Button Grid.Row="3" Grid.Column="2"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="9"/>
+
             <!-- Row 5 -->
-            <Button Grid.Row="4" Grid.Column="0" Style="{StaticResource PridejSymbolButton}" CommandParameter="4"/>
-            <Button Grid.Row="4" Grid.Column="1" Style="{StaticResource PridejSymbolButton}" CommandParameter="5"/>
-            <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource PridejSymbolButton}" CommandParameter="6"/>
+            <Button Grid.Row="4" Grid.Column="0"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="4"/>
+            <Button Grid.Row="4" Grid.Column="1"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="5"/>
+            <Button Grid.Row="4" Grid.Column="2"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="6"/>
 
             <!-- Row 6 -->
-            <Button Grid.Row="5" Grid.Column="0" Style="{StaticResource PridejSymbolButton}" CommandParameter="1"/>
-            <Button Grid.Row="5" Grid.Column="1" Style="{StaticResource PridejSymbolButton}" CommandParameter="2"/>
-            <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource PridejSymbolButton}" CommandParameter="3"/>
+            <Button Grid.Row="5" Grid.Column="0"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="1"/>
+            <Button Grid.Row="5" Grid.Column="1"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="2"/>
+            <Button Grid.Row="5" Grid.Column="2"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="3"/>
 
             <!-- Row 7 -->
-            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource PridejSymbolButton}" CommandParameter="0"/>
-            <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource PridejSymbolButton}" CommandParameter="."/>
+            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="0"/>
+            <Button Grid.Row="6" Grid.Column="2"
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="{Binding DesetinnyOddelovac}"/>
 
-            <Button Grid.Row="4" Grid.Column="3" Grid.RowSpan="3"
+            <Button Grid.Row="3" Grid.Column="3" Grid.RowSpan="4"
                     Command="{x:Static commands:CalculatorCommands.OdesliPrikladCommand}"
                     Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"
                     Background="#FF007ACC"/>
         </Grid>
 
-        <ItemsControl ItemsSource="{Binding HistoriePrikladu}" 
-                      Grid.Column="1" 
-                      Grid.Row="0" 
-                      Grid.RowSpan="2" 
+        <ItemsControl Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                      ItemsSource="{Binding HistoriePrikladu}"
                       Margin="5,2,2,2">
             <ItemsControl.Template>
                 <ControlTemplate TargetType="ItemsControl">
-                    <Border BorderBrush="#FF2E2E2E" 
-                            BorderThickness="1" 
+                    <Border BorderBrush="#FF2E2E2E"
+                            BorderThickness="1"
                             CornerRadius="10">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                        <ScrollViewer VerticalScrollBarVisibility="Auto"
                                       Margin="5">
                             <ItemsPresenter/>
                         </ScrollViewer>
@@ -187,27 +213,26 @@
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="1" 
-                                 Margin="0,0,5,0" 
+                    <UniformGrid Columns="1"
+                                 Margin="0,0,5,0"
                                  VerticalAlignment="Top"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{x:Static commands:CalculatorCommands.OnHistoryPrikladClickCommand}" 
+                    <Button Style="{StaticResource HistoryButton}"
+                            Command="{x:Static commands:CalculatorCommands.OnHistoryPrikladClickCommand}"
                             CommandParameter="{Binding}"
                             Padding="5"
-                            Margin="5" 
-                            VerticalAlignment="Stretch"
+                            Margin="5"
                             FontSize="20">
-                        <StackPanel Background="Transparent">
-                            <TextBlock Text="{Binding Priklad}" 
-                                       TextAlignment="Left" 
-                                       MinWidth="100"
-                                       TextWrapping="Wrap"/>
+                        <StackPanel Margin="10,0,10,0" Background="Transparent" HorizontalAlignment="Right">
+                            <TextBlock Foreground="#FF858585"
+                                       Text="{Binding Priklad}"
+                                       TextAlignment="Left" TextWrapping="Wrap"/>
                             <TextBlock Text="{Binding Vysledek, StringFormat='= {0}'}"
-                                       TextAlignment="Right"/>
+                                       TextAlignment="Right" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Button>
                 </DataTemplate>
