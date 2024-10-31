@@ -82,12 +82,11 @@ namespace Calculator.UI.ViewModels
             }
         }
 
-        /// <summary>
-        /// Handler <see cref="CalculatorCommands.OnHistoryPrikladClickCommand"/>
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném vrácení příkladu z historie.
-        /// </summary>
+        /// <summary>
         public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
-        {
+
+
             SpocitanyPriklad spocitanyPriklad = (SpocitanyPriklad)e.Parameter;
             if (_counting.TryVratPriklad(spocitanyPriklad))
             {
