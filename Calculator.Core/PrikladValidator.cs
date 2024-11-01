@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace Calculator.Core
 {
@@ -17,12 +18,38 @@ namespace Calculator.Core
         }
 
         /// <summary>
-        /// Zkontroluje, jestli je symbol povolený v <see cref="_regex"/>.
+        /// Zkontroluje, jestli je symbol povolený v <see cref="_regex"/>. <br/>
+        /// Zároveň zkontroluje, zda lze symbol logicky zapsat. (Víc desetinných čárek v čísle, zavírací závorka dřív, jak otevírací)
         /// </summary>
         /// <returns>Vrací, jestli může být symbol zapsán</returns>
-        public bool ValidatePridejSymbol(string symbol)
+        public bool ValidatePridejSymbol(string symbol, string priklad)
+        {
+            if (_regex.IsMatch(symbol))
+            {
+                if (priklad != "")
+                {
+
+                    switch (symbol)
+                    {
+                        case ")":
+                            if (!priklad.Contains("("))
                             {
-            return _regex.IsMatch(symbol);
+                                return false;
+                            }
+                            break;
+
+                        case var value when value == _counting.DesetinnyOddelovac:
+                            if (priklad.Contains(_counting.DesetinnyOddelovac))
+                            {
+                                return false;
+                            }
+                            break;
+                    }
+
+                }
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

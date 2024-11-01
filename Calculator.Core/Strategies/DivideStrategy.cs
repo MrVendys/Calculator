@@ -16,7 +16,7 @@ namespace Calculator.Core.Strategies
             }
             else
             {
-                throw new InputValidationException("Dělení nulou!!!!");
+                throw new InputValidationException("Dělení nulou!");
             }
         }
     }

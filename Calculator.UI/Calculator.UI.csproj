@@ -26,13 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="project_icon.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Calculator.Core\Calculator.Core.csproj" />
   </ItemGroup>
 

@@ -17,7 +17,8 @@ namespace Calculator.UI
         public static readonly RoutedUICommand SmazAllSymbolyCommand = new RoutedUICommand("C", nameof(SmazAllSymbolyCommand), typeof(CalculatorCommands),
             new InputGestureCollection
             {
-                new KeyGesture(Key.Escape)
+                new KeyGesture(Key.Escape),
+                new KeyGesture(Key.Delete)
             });
         public static readonly RoutedUICommand PridejSymbolCommand = new RoutedUICommand("", nameof(PridejSymbolCommand), typeof(CalculatorCommands));
         public static readonly RoutedCommand OnHistoryPrikladClickCommand = new RoutedCommand(nameof(OnHistoryPrikladClickCommand), typeof(CalculatorCommands));

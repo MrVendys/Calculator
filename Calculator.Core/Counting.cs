@@ -32,6 +32,7 @@ namespace Calculator.Core
             AddOperace(new PowerStrategy());
             AddOperace(new SquareRootStrategy());
             AddOperace(new FactorialStrategy());
+            AddOperace(new ModuloStrategy());
         }
 
         public void AddOperace(OperationStrategyBase operace)
@@ -58,7 +59,7 @@ namespace Calculator.Core
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
         public bool TryPridejSymbol(string symbol)
         {
-            bool valid = _prikladValidator.ValidatePridejSymbol(symbol);
+            bool valid = _prikladValidator.ValidatePridejSymbol(symbol, Priklad);
             if (valid)
                 Priklad += symbol;
 
@@ -71,7 +72,7 @@ namespace Calculator.Core
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
         public bool TrySmazSymbol()
         {
-            bool valid = _prikladValidator.ValidateSmazSymbol(Priklad?.Last().ToString());
+            bool valid = _prikladValidator.ValidateSmazSymbol(Priklad);
             if (valid)
                 Priklad = Priklad.Remove(Priklad.Length - 1);
 
