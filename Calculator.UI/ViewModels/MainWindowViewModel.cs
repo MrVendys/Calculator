@@ -52,7 +52,7 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         public void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_counting.TrySmazSymbol(Priklad))
+            if (_counting.TrySmazSymbol())
             {
                 OnPropertyChanged(nameof(Priklad));
             }
@@ -64,7 +64,7 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         public void SmazAllSymboly(object sender, ExecutedRoutedEventArgs e)
         {
-            if (_counting.TrySmazAllSymboly(Priklad))
+            if (_counting.TrySmazPriklad())
             {
                 OnPropertyChanged(nameof(Priklad));
             }

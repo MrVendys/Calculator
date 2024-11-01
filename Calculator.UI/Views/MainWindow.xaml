@@ -80,6 +80,10 @@
             <Setter Property="Command" Value="{x:Static commands:CalculatorCommands.PridejSymbolCommand}"/>
         </Style>
 
+        <Style x:Key="ActionButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Content" Value="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+        </Style>
+
         <Style x:Key="HistoryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -153,11 +157,11 @@
             <Button Grid.Row="2" Grid.Column="1"
                     Style="{StaticResource PridejSymbolButton}" CommandParameter=")"/>
             <Button Grid.Row="2" Grid.Column="2"
-                    Command="{x:Static commands:CalculatorCommands.SmazAllSymbolyCommand}"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+                    Style="{StaticResource ActionButton}"
+                    Command="{x:Static commands:CalculatorCommands.SmazAllSymbolyCommand}"/>
             <Button Grid.Row="2" Grid.Column="3"
-                    Command="{x:Static commands:CalculatorCommands.SmazSymbolCommand}"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"/>
+                    Style="{StaticResource ActionButton}"
+                    Command="{x:Static commands:CalculatorCommands.SmazSymbolCommand}"/>
 
             <!-- Row 4 -->
             <Button Grid.Row="3" Grid.Column="0"
@@ -190,8 +194,8 @@
                     Style="{StaticResource PridejSymbolButton}" CommandParameter="{Binding DesetinnyOddelovac}"/>
 
             <Button Grid.Row="3" Grid.Column="3" Grid.RowSpan="4"
+                    Style="{StaticResource ActionButton}"
                     Command="{x:Static commands:CalculatorCommands.OdesliPrikladCommand}"
-                    Content="{Binding RelativeSource={RelativeSource Self}, Path=Command.Text}"
                     Background="#FF007ACC"/>
         </Grid>
 

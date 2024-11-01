@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <PackageIcon>project_icon.png</PackageIcon>
+    <ApplicationIcon>Icons\project_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +18,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Icons\project_icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\project_icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="project_icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Calculator.Core\Calculator.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\project_icon.ico" />
   </ItemGroup>
 
 </Project>

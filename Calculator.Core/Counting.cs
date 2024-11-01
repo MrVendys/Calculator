@@ -44,6 +44,8 @@ namespace Calculator.Core
 
         public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; } = new ObservableCollection<SpocitanyPriklad>();
 
+        public string DesetinnyOddelovac => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+
         public string Priklad { get; private set; } = "";
 
         public IEnumerable<char> ZnakyOperaci => _operace.Keys;
@@ -67,9 +69,9 @@ namespace Calculator.Core
         /// Pokusí se odebrat poslední symbol z <see cref="Priklad"/>
         /// </summary>
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
-        public bool TrySmazSymbol(string symbol)
+        public bool TrySmazSymbol()
         {
-            bool valid = _prikladValidator.ValidateSmazSymbol(symbol);
+            bool valid = _prikladValidator.ValidateSmazSymbol(Priklad?.Last().ToString());
             if (valid)
                 Priklad = Priklad.Remove(Priklad.Length - 1);
 
@@ -80,9 +82,9 @@ namespace Calculator.Core
         /// Pokusí se smazat celý <see cref="Priklad"/>
         /// </summary>
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
-        public bool TrySmazAllSymboly(string priklad)
+        public bool TrySmazPriklad()
         {
-            bool valid = _prikladValidator.ValidateSmazSymbol(priklad);
+            bool valid = _prikladValidator.ValidateSmazSymbol(Priklad);
             if (valid)
                 Priklad = "";
 
@@ -136,8 +138,8 @@ namespace Calculator.Core
             for(int index = 0; index < priklad.Length; index++)
             {
                 char token = priklad[index];
-                if (char.IsNumber(token) 
-                    || token == System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator[0]
+                if (char.IsNumber(token)
+                    || token == DesetinnyOddelovac[0]
                     || (token == '-' && !char.IsNumber(priklad[index - 1 < 0 ? 0 : index - 1])))
                 {
                     cislo += token;

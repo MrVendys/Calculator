@@ -21,7 +21,7 @@ namespace Calculator.Core
         /// </summary>
         /// <returns>Vrací, jestli může být symbol zapsán</returns>
         public bool ValidatePridejSymbol(string symbol)
-        {
+                            {
             return _regex.IsMatch(symbol);
         }
 
@@ -29,7 +29,7 @@ namespace Calculator.Core
         /// Zkontroluje, jestli je symbol nějaký znak.
         /// </summary>
         /// <returns>Vrací, jestli může být symbol odstraněn</returns>
-        public bool ValidateSmazSymbol(string symbol)
+        public bool ValidateSmazSymbol(string? symbol)
         {
             return !string.IsNullOrWhiteSpace(symbol);
         }
