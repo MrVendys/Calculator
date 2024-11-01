@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Calculator.UI"
         xmlns:viewModels="clr-namespace:Calculator.UI.ViewModels"
         xmlns:commands="clr-namespace:Calculator.UI"
+        xmlns:converters="clr-namespace:Calculator.UI.Converters"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500" Background="#FF1C1C1C"
         PreviewTextInput="Window_PreviewTextInput"
@@ -14,6 +15,8 @@
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
+        <converters:StringToRegexConverter x:Key="CiselnyConverter"/>
+        
         <Style TargetType="Label">
             <Setter Property="MinWidth" Value="100"/>
             <Setter Property="MinHeight" Value="100"/>
@@ -233,7 +236,7 @@
                             FontSize="20">
                         <StackPanel Margin="10,0,10,0" Background="Transparent" HorizontalAlignment="Right">
                             <TextBlock Foreground="#FF858585"
-                                       Text="{Binding Priklad}"
+                                       Text="{Binding Priklad, Converter={StaticResource CiselnyConverter}}"
                                        TextAlignment="Left" TextWrapping="Wrap"/>
                             <TextBlock Text="{Binding Vysledek, StringFormat='= {0}'}"
                                        TextAlignment="Right" TextWrapping="Wrap"/>

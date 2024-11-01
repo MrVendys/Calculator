@@ -1,12 +1,10 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Calculator.Core
+﻿namespace Calculator.Core
 {
     public class SpocitanyPriklad
     {
         public SpocitanyPriklad(string priklad, string vysledek)
         {
-            Priklad = Regex.Replace(priklad, @"(\d+)", "\u200B$1\u200B");
+            Priklad = priklad;
             Vysledek = vysledek;
         }
 

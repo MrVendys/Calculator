@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using Calculator.Core;
 using Calculator.Core.Exceptions;
+using Calculator.UI.Converters;
 
 namespace Calculator.UI.ViewModels
 {
