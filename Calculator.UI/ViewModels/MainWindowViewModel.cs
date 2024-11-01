@@ -58,7 +58,7 @@ namespace Calculator.UI.ViewModels
             {
                 OnPropertyChanged(nameof(Priklad));
                 MainWindow mw = (MainWindow)sender;
-                mw.IncreaseFontSize();
+                mw.ResizeLabel();
             }
         }
 
@@ -91,7 +91,7 @@ namespace Calculator.UI.ViewModels
         public void PridejSymbol(object sender, ExecutedRoutedEventArgs e)
         {
             MainWindow mw = (MainWindow)sender;
-            if (mw.DecreaseFontSize((string)e.Parameter))
+            if (mw.ResizeLabel((string)e.Parameter))
             {
                 if (_counting.TryPridejSymbol((string)e.Parameter))
                 {
@@ -111,7 +111,7 @@ namespace Calculator.UI.ViewModels
             {
                 OnPropertyChanged(nameof(Priklad));
                 MainWindow mw = (MainWindow)sender;
-                mw.DecreaseFontSize();
+                mw.ResizeLabel();
             }
             else
             {

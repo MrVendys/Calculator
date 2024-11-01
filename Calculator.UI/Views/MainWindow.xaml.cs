@@ -60,7 +60,7 @@ namespace Calculator.UI.Views
             }
         }
 
-        internal bool DecreaseFontSize(string symbol = null)
+        internal bool SnizFontSize(string symbol = null)
         {
             var label = InputLabel;
             double dostupnyWidth = label.ActualWidth - (label.Padding.Left + label.Padding.Right) - 10;
@@ -101,7 +101,7 @@ namespace Calculator.UI.Views
             return true;
         }
 
-        internal void IncreaseFontSize()
+        internal void ZvysFontSize()
         {
             var label = InputLabel;
             double dostupnyWidth = label.ActualWidth - (label.Padding.Left + label.Padding.Right) - 10;
@@ -136,6 +136,57 @@ namespace Calculator.UI.Views
             }
 
             label.FontSize = fontSize;
+        }
+
+        internal bool ResizeLabel(string pridavanySymbol = null)
+        {
+            var label = InputLabel;
+            double dostupnyWidth = label.ActualWidth - (label.Padding.Left + label.Padding.Right) - 10;
+            double fontSize = label.FontSize;
+
+            FormattedText formattedText = new FormattedText(
+                label.Content.ToString() + pridavanySymbol,
+                System.Globalization.CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface(label.FontFamily, label.FontStyle, label.FontWeight, label.FontStretch),
+                fontSize,
+                Brushes.Black,
+                VisualTreeHelper.GetDpi(label).PixelsPerDip);
+
+            bool limit = false;
+            bool? zmensilo = null;
+            while(!limit)
+            {
+                formattedText.SetFontSize(fontSize);
+                if (formattedText.Width > dostupnyWidth)
+                {
+                    if (zmensilo == null || zmensilo == true)
+                    {
+                        fontSize -= 0.5;
+                        zmensilo = true;
+                    }
+                }
+                else if (zmensilo == true)
+                {
+                    limit = true;
+                }
+                
+                if (formattedText.Width < dostupnyWidth && fontSize < 30)
+                {
+                    if (zmensilo == null || zmensilo == false)
+                    {
+                        fontSize += 0.5;
+                        zmensilo = false;
+                    }
+                }
+                else if (zmensilo == false)
+                {
+                    limit = true;
+                }
+            }
+
+            label.FontSize = fontSize;
+            return true;
         }
     }
 }
