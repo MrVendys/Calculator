@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Calculator.UI.ViewModels;
@@ -60,133 +61,65 @@ namespace Calculator.UI.Views
             }
         }
 
-        internal bool SnizFontSize(string symbol = null)
+        private void InputTextBlock_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var label = InputLabel;
-            double dostupnyWidth = label.ActualWidth - (label.Padding.Left + label.Padding.Right) - 10;
-            double fontSize = label.FontSize;
+            var textBlock = InputTextBlock;
+            double dostupnyWidth = textBlock.ActualWidth - (textBlock.Padding.Left + textBlock.Padding.Right) - 10;
+            double fontSize = textBlock.FontSize;
+
 
             FormattedText formattedText = new FormattedText(
-                label.Content.ToString() + symbol,
+                textBlock.Text.ToString(),
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
-                new Typeface(label.FontFamily, label.FontStyle, label.FontWeight, label.FontStretch),
+                new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch),
                 fontSize,
                 Brushes.Black,
-                VisualTreeHelper.GetDpi(label).PixelsPerDip);
+                VisualTreeHelper.GetDpi(textBlock).PixelsPerDip);
 
-            bool isShrinking = formattedText.Width > dostupnyWidth;
-            bool withinLimit = false;
-
-            while (!withinLimit && fontSize >= 15)
+            if (textBlock.FontSize == 30 && formattedText.Width < dostupnyWidth)
             {
-                if (isShrinking && fontSize > 15)
-                {
-                    fontSize -= 0.5;
-                    formattedText.SetFontSize(fontSize);
-                    isShrinking = formattedText.Width > dostupnyWidth;
-                }
-                else if(fontSize <= 15)
-                {
-                    withinLimit = true;
-                    return false; //Nejde přidat symbol
-                }
-                else
-                {
-                    withinLimit = true; //Nepotřebuje zmenšit
-                }
+                return;
+            }
+            //Zavolá se znova, protože textChanged on Text.Remove
+            if (textBlock.FontSize == 15 && formattedText.Width > dostupnyWidth)
+            {
+                textBlock.Text = textBlock.Text.Remove(textBlock.Text.Length - 1);
+                return;
             }
 
-            label.FontSize = fontSize;
-            return true;
-        }
 
-        internal void ZvysFontSize()
-        {
-            var label = InputLabel;
-            double dostupnyWidth = label.ActualWidth - (label.Padding.Left + label.Padding.Right) - 10;
-            double fontSize = label.FontSize;
-
-            FormattedText formattedText = new FormattedText(
-                label.Content.ToString(),
-                System.Globalization.CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                new Typeface(label.FontFamily, label.FontStyle, label.FontWeight, label.FontStretch),
-                fontSize,
-                Brushes.Black,
-                VisualTreeHelper.GetDpi(label).PixelsPerDip);
-
-            bool isShrinking = formattedText.Width > dostupnyWidth;
-            bool withinLimit = false;
-
-            while (!withinLimit && fontSize <= 30)
+            bool potrebujeResize = true;
+            bool zmensit = formattedText.Width > dostupnyWidth;
+            while (potrebujeResize)
             {
-                if (!isShrinking && fontSize < 30)
+                if (zmensit)
                 {
-                    fontSize += 0.5;
-                    formattedText.SetFontSize(fontSize);
-                    isShrinking = formattedText.Width < dostupnyWidth;
-                }
-                else
-                {
-                    withinLimit = true;
-                }
-
-                formattedText.SetFontSize(fontSize);
-            }
-
-            label.FontSize = fontSize;
-        }
-
-        internal bool ResizeLabel(string pridavanySymbol = null)
-        {
-            var label = InputLabel;
-            double dostupnyWidth = label.ActualWidth - (label.Padding.Left + label.Padding.Right) - 10;
-            double fontSize = label.FontSize;
-
-            FormattedText formattedText = new FormattedText(
-                label.Content.ToString() + pridavanySymbol,
-                System.Globalization.CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                new Typeface(label.FontFamily, label.FontStyle, label.FontWeight, label.FontStretch),
-                fontSize,
-                Brushes.Black,
-                VisualTreeHelper.GetDpi(label).PixelsPerDip);
-
-            bool limit = false;
-            bool? zmensilo = null;
-            while(!limit)
-            {
-                formattedText.SetFontSize(fontSize);
-                if (formattedText.Width > dostupnyWidth)
-                {
-                    if (zmensilo == null || zmensilo == true)
+                    potrebujeResize = formattedText.Width > dostupnyWidth;
+                    if (potrebujeResize && fontSize > 15)
                     {
                         fontSize -= 0.5;
-                        zmensilo = true;
+                        formattedText.SetFontSize(fontSize);
+                        continue;
                     }
+                    if (potrebujeResize)
+                        textBlock.Text = textBlock.Text.Remove(textBlock.Text.Length - 1);
+                    break;
                 }
-                else if (zmensilo == true)
+                else
                 {
-                    limit = true;
-                }
-                
-                if (formattedText.Width < dostupnyWidth && fontSize < 30)
-                {
-                    if (zmensilo == null || zmensilo == false)
+                    potrebujeResize = formattedText.Width < dostupnyWidth;
+                    if (potrebujeResize && fontSize < 30)
                     {
                         fontSize += 0.5;
-                        zmensilo = false;
+                        formattedText.SetFontSize(fontSize);
+                        continue;
                     }
-                }
-                else if (zmensilo == false)
-                {
-                    limit = true;
+                    break;
                 }
             }
 
-            label.FontSize = fontSize;
-            return true;
+            textBlock.FontSize = fontSize;
         }
     }
 }

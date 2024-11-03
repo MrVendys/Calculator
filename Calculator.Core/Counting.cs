@@ -142,7 +142,7 @@ namespace Calculator.Core
                 {
                     cislo += token;
                 }
-                else if (token != ' ')
+                else if (token != '​')
                 {
                     if (cislo != "")
                     {

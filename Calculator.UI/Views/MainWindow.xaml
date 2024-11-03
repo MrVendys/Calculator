@@ -7,30 +7,27 @@
         xmlns:viewModels="clr-namespace:Calculator.UI.ViewModels"
         xmlns:commands="clr-namespace:Calculator.UI"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="500" Background="#FF1C1C1C"
+        Title="MainWindow" MinHeight="620" Height="620" Width="500" MinWidth="550" Background="#FF1C1C1C"
         PreviewTextInput="Window_PreviewTextInput"
         PreviewKeyDown="Window_PreviewKeyDown">
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <Style TargetType="Label">
+        <Style x:Key="InputTextBlock" TargetType="TextBox">
             <Setter Property="MinWidth" Value="100"/>
             <Setter Property="MinHeight" Value="100"/>
             <Setter Property="Margin" Value="20,0,20,0"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Visible"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="30"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Background" Value="#FF2E2E2E"/>
         </Style>
-        <Style TargetType="TextBlock">
+
+        <Style x:Key="HistoryTextBlock" TargetType="TextBlock">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="MinWidth" Value="100"/>
@@ -103,11 +100,13 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
 
-        <Label x:Name="InputLabel" Grid.Row="0" Grid.Column="0"
-               Padding="10,0,10,0" Content="{Binding Priklad, Mode=OneWay}"/>
+        <TextBox x:Name="InputTextBlock" Grid.Row="0" Grid.Column="0"
+                   Style="{StaticResource InputTextBlock}"
+                   Padding="10,0,10,0" Text="{Binding Priklad, Mode=OneWay}"
+                   TextChanged="InputTextBlock_TextChanged"/>
 
         <Grid Margin="10" Grid.Row="2">
             <Grid.RowDefinitions>
@@ -228,11 +227,13 @@
                             Margin="5"
                             FontSize="20">
                         <StackPanel Margin="10,0,10,0" Background="Transparent" HorizontalAlignment="Right">
-                            <TextBlock Foreground="#FF858585"
+                            <TextBlock Style="{StaticResource HistoryTextBlock}"
+                                       Foreground="#FF858585"
                                        Text="{Binding Priklad}"
-                                       TextAlignment="Left" TextWrapping="Wrap"/>
-                            <TextBlock Text="{Binding Vysledek, StringFormat='= {0}'}"
-                                       TextAlignment="Right" TextWrapping="Wrap"/>
+                                       TextAlignment="Left"/>
+                            <TextBlock Style="{StaticResource HistoryTextBlock}"
+                                       Text="{Binding Vysledek, StringFormat='= {0}'}"                                       
+                                       TextAlignment="Right"/>
                         </StackPanel>
                     </Button>
                 </DataTemplate>

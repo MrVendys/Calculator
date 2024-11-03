@@ -57,8 +57,6 @@ namespace Calculator.UI.ViewModels
             if (_counting.TrySmazSymbol(Priklad))
             {
                 OnPropertyChanged(nameof(Priklad));
-                MainWindow mw = (MainWindow)sender;
-                mw.ResizeLabel();
             }
         }
 
@@ -71,9 +69,6 @@ namespace Calculator.UI.ViewModels
             if (_counting.TrySmazAllSymboly(Priklad))
             {
                 OnPropertyChanged(nameof(Priklad));
-                OnPropertyChanged(nameof(Priklad));
-                MainWindow mw = (MainWindow)sender;
-                mw.InputLabel.FontSize = 30;
             }
         }
 
@@ -90,13 +85,9 @@ namespace Calculator.UI.ViewModels
         }
         public void PridejSymbol(object sender, ExecutedRoutedEventArgs e)
         {
-            MainWindow mw = (MainWindow)sender;
-            if (mw.ResizeLabel((string)e.Parameter))
+            if (_counting.TryPridejSymbol((string)e.Parameter))
             {
-                if (_counting.TryPridejSymbol((string)e.Parameter))
-                {
-                    OnPropertyChanged(nameof(Priklad));
-                }
+                OnPropertyChanged(nameof(Priklad));
             }
         }
 
@@ -110,8 +101,6 @@ namespace Calculator.UI.ViewModels
             if (_counting.TryVratPriklad(sPriklad))
             {
                 OnPropertyChanged(nameof(Priklad));
-                MainWindow mw = (MainWindow)sender;
-                mw.ResizeLabel();
             }
             else
             {
