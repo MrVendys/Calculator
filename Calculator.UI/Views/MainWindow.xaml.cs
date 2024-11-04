@@ -1,7 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using Calculator.UI.ViewModels;
 
 namespace Calculator.UI.Views
@@ -28,9 +26,9 @@ namespace Calculator.UI.Views
         private void InitializeCommands()
         {
             CommandBinding vypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, _viewModel.Vypocitej);
-            CommandBinding smazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, _viewModel.SmazSymbol);
+            CommandBinding smazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, (s, e) => _viewModel.SmazSymbol());
             CommandBinding smazAllHandler = new CommandBinding(CalculatorCommands.SmazAllSymbolyCommand, _viewModel.SmazAllSymboly);
-            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, _viewModel.PridejSymbol);
+            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, (s, e) => _viewModel.PridejSymbol((string)e.Parameter, PridejSymbolCanExecute));
             CommandBinding historyPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
 
             this.CommandBindings.Add(vypocitejHandler);
@@ -48,7 +46,7 @@ namespace Calculator.UI.Views
             }
             else
             {
-                _viewModel.PridejSymbol(e.Text);
+                _viewModel.PridejSymbol(e.Text, PridejSymbolCanExecute);
             }
         }
 
@@ -57,69 +55,16 @@ namespace Calculator.UI.Views
             if (e.Key == Key.Decimal)
             {
                 _carkaHandled = true;
-                _viewModel.PridejSymbol(_viewModel.DesetinnyOddelovac);
+                _viewModel.PridejSymbol(_viewModel.DesetinnyOddelovac, PridejSymbolCanExecute);
             }
         }
 
-        private void InputTextBlock_TextChanged(object sender, TextChangedEventArgs e)
+        /// <summary>
+        /// Zkusí zjistit, jestli má přidaný znak místo na vykreslení
+        /// </summary>
+        private bool PridejSymbolCanExecute()
         {
-            var textBlock = InputTextBlock;
-            double dostupnyWidth = textBlock.ActualWidth - (textBlock.Padding.Left + textBlock.Padding.Right) - 10;
-            double fontSize = textBlock.FontSize;
-
-
-            FormattedText formattedText = new FormattedText(
-                textBlock.Text.ToString(),
-                System.Globalization.CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch),
-                fontSize,
-                Brushes.Black,
-                VisualTreeHelper.GetDpi(textBlock).PixelsPerDip);
-
-            if (textBlock.FontSize == 30 && formattedText.Width < dostupnyWidth)
-            {
-                return;
-            }
-            //Zavolá se znova, protože textChanged on Text.Remove
-            if (textBlock.FontSize == 15 && formattedText.Width > dostupnyWidth)
-            {
-                textBlock.Text = textBlock.Text.Remove(textBlock.Text.Length - 1);
-                return;
-            }
-
-
-            bool potrebujeResize = true;
-            bool zmensit = formattedText.Width > dostupnyWidth;
-            while (potrebujeResize)
-            {
-                if (zmensit)
-                {
-                    potrebujeResize = formattedText.Width > dostupnyWidth;
-                    if (potrebujeResize && fontSize > 15)
-                    {
-                        fontSize -= 0.5;
-                        formattedText.SetFontSize(fontSize);
-                        continue;
-                    }
-                    if (potrebujeResize)
-                        textBlock.Text = textBlock.Text.Remove(textBlock.Text.Length - 1);
-                    break;
-                }
-                else
-                {
-                    potrebujeResize = formattedText.Width < dostupnyWidth;
-                    if (potrebujeResize && fontSize < 30)
-                    {
-                        fontSize += 0.5;
-                        formattedText.SetFontSize(fontSize);
-                        continue;
-                    }
-                    break;
-                }
-            }
-
-            textBlock.FontSize = fontSize;
+            return InputTextBox.TryZmenFontSize();
         }
     }
 }

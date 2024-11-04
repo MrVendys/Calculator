@@ -14,17 +14,20 @@
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <Style x:Key="InputTextBlock" TargetType="TextBox">
+        <Style x:Key="InputTextBox" TargetType="TextBox">
             <Setter Property="MinWidth" Value="100"/>
             <Setter Property="MinHeight" Value="100"/>
             <Setter Property="Margin" Value="20,0,20,0"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="30"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#FF2E2E2E"/>
+            <Setter Property="Focusable" Value="False"/>
         </Style>
 
         <Style x:Key="HistoryTextBlock" TargetType="TextBlock">
@@ -103,10 +106,10 @@
             <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="InputTextBlock" Grid.Row="0" Grid.Column="0"
-                   Style="{StaticResource InputTextBlock}"
-                   Padding="10,0,10,0" Text="{Binding Priklad, Mode=OneWay}"
-                   TextChanged="InputTextBlock_TextChanged"/>
+        <local:InputTextBox x:Name="InputTextBox" 
+                            Grid.Row="0" Grid.Column="0"
+                            Style="{StaticResource InputTextBox}"
+                            Text="{Binding Priklad, Mode=OneWay}"/>
 
         <Grid Margin="10" Grid.Row="2">
             <Grid.RowDefinitions>
