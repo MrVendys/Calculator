@@ -51,7 +51,7 @@ namespace Calculator.UI.ViewModels
         /// Handler <see cref="CalculatorCommands.SmazSymbolCommand"/>. <br/>
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném smazání symbolu.
         /// </summary>
-        public void SmazSymbol(object sender, ExecutedRoutedEventArgs e)
+        public void SmazSymbol()
         {
             if (_counting.TrySmazSymbol())
             {
@@ -75,12 +75,17 @@ namespace Calculator.UI.ViewModels
         /// Handler <see cref="CalculatorCommands.PridejSymbolCommand"/>
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném přidání symbolu.
         /// </summary>
-        public void PridejSymbol(string parameter)
+        public void PridejSymbol(string parameter, Func<bool> canExecute)
         {
-            if (_counting.TryPridejSymbol(parameter))
+            if ((canExecute?.Invoke() ?? true) && _counting.TryPridejSymbol(parameter))
             {
                 OnPropertyChanged(nameof(Priklad));
             }
+        }
+
+        public void PridejSymbol(string parameter)
+        {
+            PridejSymbol(parameter, () => true);
         }
 
         /// <summary>

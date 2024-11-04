@@ -17,14 +17,13 @@
     <Window.Resources>
         <converters:StringToRegexConverter x:Key="CiselnyConverter"/>
         
-        <Style TargetType="Label">
+        <Style x:Key="InputTextBox" TargetType="TextBox">
             <Setter Property="MinWidth" Value="100"/>
             <Setter Property="MinHeight" Value="100"/>
             <Setter Property="Margin" Value="20,0,20,0"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Visible"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="30"/>
@@ -32,8 +31,10 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Background" Value="#FF2E2E2E"/>
+            <Setter Property="Focusable" Value="False"/>
         </Style>
-        <Style TargetType="TextBlock">
+
+        <Style x:Key="HistoryTextBlock" TargetType="TextBlock">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="MinWidth" Value="100"/>
@@ -110,11 +111,13 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0"
-               Content="{Binding Priklad, Mode=OneWay}"/>
+        <local:InputTextBox x:Name="InputTextBox" 
+                            Grid.Row="0" Grid.Column="0"
+                            Style="{StaticResource InputTextBox}"
+                            Text="{Binding Priklad, Mode=OneWay}"/>
 
         <Grid Margin="10" Grid.Row="2">
             <Grid.RowDefinitions>
@@ -235,11 +238,13 @@
                             Margin="5"
                             FontSize="20">
                         <StackPanel Margin="10,0,10,0" Background="Transparent" HorizontalAlignment="Right">
-                            <TextBlock Foreground="#FF858585"
-                                       Text="{Binding Priklad, Converter={StaticResource CiselnyConverter}}"
-                                       TextAlignment="Left" TextWrapping="Wrap"/>
-                            <TextBlock Text="{Binding Vysledek, StringFormat='= {0}'}"
-                                       TextAlignment="Right" TextWrapping="Wrap"/>
+                            <TextBlock Style="{StaticResource HistoryTextBlock}"
+                                       Foreground="#FF858585"
+                                       Text="{Binding Priklad}"
+                                       TextAlignment="Left"/>
+                            <TextBlock Style="{StaticResource HistoryTextBlock}"
+                                       Text="{Binding Vysledek, StringFormat='= {0}'}"                                       
+                                       TextAlignment="Right"/>
                         </StackPanel>
                     </Button>
                 </DataTemplate>

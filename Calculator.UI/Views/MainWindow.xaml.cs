@@ -26,9 +26,9 @@ namespace Calculator.UI.Views
         private void InitializeCommands()
         {
             CommandBinding vypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, _viewModel.Vypocitej);
-            CommandBinding smazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, _viewModel.SmazSymbol);
+            CommandBinding smazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, (s, e) => _viewModel.SmazSymbol());
             CommandBinding smazAllHandler = new CommandBinding(CalculatorCommands.SmazAllSymbolyCommand, _viewModel.SmazAllSymboly);
-            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, (s,e) => _viewModel.PridejSymbol((string)e.Parameter));
+            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, (s, e) => _viewModel.PridejSymbol((string)e.Parameter, PridejSymbolCanExecute));
             CommandBinding historyPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
 
             this.CommandBindings.Add(vypocitejHandler);
@@ -46,7 +46,7 @@ namespace Calculator.UI.Views
             }
             else
             {
-                _viewModel.PridejSymbol(e.Text);
+                _viewModel.PridejSymbol(e.Text, PridejSymbolCanExecute);
             }
         }
 
@@ -55,8 +55,16 @@ namespace Calculator.UI.Views
             if (e.Key == Key.Decimal)
             {
                 _carkaHandled = true;
-                _viewModel.PridejSymbol(System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+                _viewModel.PridejSymbol(_viewModel.DesetinnyOddelovac, PridejSymbolCanExecute);
             }
+        }
+
+        /// <summary>
+        /// Zkusí zjistit, jestli má přidaný znak místo na vykreslení
+        /// </summary>
+        private bool PridejSymbolCanExecute()
+        {
+            return InputTextBox.TryZmenFontSize();
         }
     }
 }
