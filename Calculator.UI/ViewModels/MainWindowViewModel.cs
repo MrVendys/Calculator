@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using Calculator.Core;
-using Calculator.Core.Exceptions;
+using System.Windows.Media;
 
 namespace Calculator.UI.ViewModels
 {

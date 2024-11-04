@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Calculator.UI.ViewModels;
 
@@ -46,7 +45,7 @@ namespace Calculator.UI.Views
             }
             else if (PridejSymbolCanExecute(e.Text))
             {
-                _viewModel.PridejSymbol(e.Text);
+                _viewModel.PridejSymbol(e.Text, PridejSymbolCanExecute);
             }
         }
 
