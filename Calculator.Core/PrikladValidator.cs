@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Calculator.Core
 {
@@ -8,48 +7,55 @@ namespace Calculator.Core
     /// </summary>
     internal class PrikladValidator
     {
-        private readonly Regex _regex;
+        private readonly Regex _symbolValidator;
         private readonly Counting _counting;
 
         public PrikladValidator(Counting counting)
         {
             _counting = counting;
-            _regex = InitializeRegex();
+            _symbolValidator = InitializeRegex();
         }
 
         /// <summary>
-        /// Zkontroluje, jestli je symbol povolený v <see cref="_regex"/>. <br/>
-        /// Zároveň zkontroluje, zda lze symbol logicky zapsat. (Víc desetinných čárek v čísle, zavírací závorka dřív, jak otevírací)
+        /// Zkontroluje, jestli je symbol povolený v <see cref="_symbolValidator"/>. <br/>
+        /// Zároveň zkontroluje, zda lze symbol logicky zapsat do <see cref="Counting.Priklad"/>. (Víc desetinných čárek za sebou, zavírací závorka dřív, jak otevírací)
         /// </summary>
         /// <returns>Vrací, jestli může být symbol zapsán</returns>
-        public bool ValidatePridejSymbol(string symbol, string priklad)
+        public bool ValidatePridejSymbol(string symbol)
         {
-            if (_regex.IsMatch(symbol))
+            if (!_symbolValidator.IsMatch(symbol))
+                return false;
+
+            string priklad = _counting.Priklad;
+            if (symbol == ")")
             {
-                if (priklad != "")
+                int pocetOtevrenychZavorek = 0;
+                foreach (char s in priklad)
                 {
-
-                    switch (symbol)
+                    if (s == '(')
                     {
-                        case ")":
-                            if (!priklad.Contains("("))
-                            {
-                                return false;
-                            }
-                            break;
-
-                        case var value when value == _counting.DesetinnyOddelovac:
-                            if (priklad.Contains(_counting.DesetinnyOddelovac))
-                            {
-                                return false;
-                            }
-                            break;
+                        pocetOtevrenychZavorek++;
                     }
-
+                    if (s == ')')
+                    {
+                        pocetOtevrenychZavorek--;
+                    }
                 }
-                return true;
+
+                if (pocetOtevrenychZavorek <= 0)
+                {
+                    return false;
+                }
             }
-            return false;
+            else if (symbol == _counting.DesetinnyOddelovac)
+            {
+                if (priklad[priklad.Length - 1] == _counting.DesetinnyOddelovac.First())
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
