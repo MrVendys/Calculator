@@ -1,11 +1,12 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
+
 namespace Calculator.UI
 {
-    internal class InputTextBox : TextBox
+    internal class FontSizeTextBox : TextBox
     {
-        public InputTextBox()
+        public FontSizeTextBox()
         {
             this.SizeChanged += (s, e) => ZmenFontSize();
             this.TextChanged += (s, e) => ZmenFontSize();
@@ -25,22 +26,33 @@ namespace Calculator.UI
                 Brushes.Black,
                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
-            if (FontSize == 30 && formattedText.Width < dostupnyWidth)
+            double formattedTextWidth = formattedText.Width + formattedText.OverhangTrailing + formattedText.OverhangLeading;
+
+            if (FontSize == 30 && formattedTextWidth < dostupnyWidth)
                 return;
 
-            if (FontSize == 15 && formattedText.Width > dostupnyWidth)
+            if (FontSize == 15 && formattedTextWidth > dostupnyWidth)
                 return;
 
             bool potrebujeResize = true;
-            bool zmensit = formattedText.Width + 2 > dostupnyWidth;
-            while (potrebujeResize)
+            bool prvniCyklus = true;
+            bool zmensit = true;
+            while (true)
             {
+                formattedTextWidth = formattedText.Width + formattedText.OverhangTrailing + formattedText.OverhangLeading;
+                potrebujeResize = formattedTextWidth > dostupnyWidth;
+
+                if (prvniCyklus)
+                {
+                    zmensit = formattedTextWidth + (formattedText.Width / Text.Length) > dostupnyWidth;
+                    prvniCyklus = false;
+                }
+
                 if (zmensit)
                 {
-                    potrebujeResize = formattedText.Width + 2 > dostupnyWidth;
                     if (potrebujeResize && fontSize > 15)
                     {
-                        fontSize -= 0.5;
+                        fontSize -= 1;
                         formattedText.SetFontSize(fontSize);
                         continue;
                     }
@@ -48,15 +60,13 @@ namespace Calculator.UI
                 }
                 else
                 {
-                    fontSize += 0.5;
-                    formattedText.SetFontSize(fontSize);
-                    potrebujeResize = Math.Round(formattedText.Width, 0) < Math.Round(dostupnyWidth, 0);
-                    if (potrebujeResize && fontSize < 30)
+                    if (!potrebujeResize && fontSize < 30)
                     {
+                        fontSize += 1;
+                        formattedText.SetFontSize(fontSize);
                         continue;
                     }
-
-                    fontSize -= 0.5;
+                    fontSize -= 1;
                     break;
                 }
             }
@@ -76,7 +86,9 @@ namespace Calculator.UI
                 Brushes.Black,
                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
-            if (FontSize <= 15 && formattedText.Width + 2 > dostupnyWidth)
+            double formattedTextWidth = formattedText.Width + formattedText.OverhangLeading + formattedText.OverhangTrailing;
+
+            if (FontSize <= 15 && formattedTextWidth + (formattedText.Width / Text.Length) > dostupnyWidth)
                 return false;
             return true;
         }
