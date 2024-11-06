@@ -59,6 +59,9 @@ namespace Calculator.Core
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
         public bool TryPridejSymbol(string symbol)
         {
+            if (symbol.ToLower() == "mod")
+                symbol = "%";
+
             bool valid = _prikladValidator.ValidatePridejSymbol(symbol);
             if (valid)
                 Priklad += symbol;
@@ -72,7 +75,7 @@ namespace Calculator.Core
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
         public bool TrySmazSymbol()
         {
-            bool valid = _prikladValidator.ValidateSmazSymbol(Priklad);
+            bool valid = _prikladValidator.ValidateSmazSymbol();
             if (valid)
                 Priklad = Priklad.Remove(Priklad.Length - 1);
 
@@ -85,7 +88,7 @@ namespace Calculator.Core
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
         public bool TrySmazPriklad()
         {
-            bool valid = _prikladValidator.ValidateSmazSymbol(Priklad);
+            bool valid = _prikladValidator.ValidateSmazPriklad();
             if (valid)
                 Priklad = "";
 
@@ -136,7 +139,7 @@ namespace Calculator.Core
         {
             List<string> tokeny = new List<string>();
             string cislo = "";
-            for(int index = 0; index < priklad.Length; index++)
+            for (int index = 0; index < priklad.Length; index++)
             {
                 char token = priklad[index];
                 if (char.IsNumber(token)

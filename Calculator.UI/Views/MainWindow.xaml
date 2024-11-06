@@ -15,7 +15,7 @@
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <converters:StringToRegexConverter x:Key="CiselnyConverter"/>
+        <converters:SeskupCislaConverter x:Key="CiselnyConverter"/>
         
         <Style x:Key="InputTextBox" TargetType="TextBox">
             <Setter Property="MinWidth" Value="100"/>
@@ -145,7 +145,8 @@
             <Button Grid.Row="0" Grid.Column="2"
                     Style="{StaticResource PridejSymbolButton}" CommandParameter="!"/>
             <Button Grid.Row="0" Grid.Column="3"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="%"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="Mod"
+                    FontSize="25"/>
 
             <!-- Row 2  -->
             <Button Grid.Row="1" Grid.Column="0"

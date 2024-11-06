@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Calculator.UI.Converters
 {
-    internal class StringToRegexConverter : IValueConverter
+    internal class SeskupCislaConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

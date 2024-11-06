@@ -12,20 +12,16 @@ namespace Calculator.Core.Strategies
 
         public override double Vypocitej(double cislo1)
         {
-            if (cislo1 % 1.0 == 0)
-            {
-                double result = 1;
-                for (int i = (int)cislo1; i > 1; i--)
-                {
-                    result = result * i;
-                }
+            if (cislo1 % 1.0 != 0)
+                throw new InputValidationException("Faktorial desetinného čísla není podporován");
 
-                return result;
-            }
-            else
+            double result = 1;
+            for (int i = (int)cislo1; i > 1; i--)
             {
-                throw new InputValidationException("Faktorial desetinného čísla momentálně nelze vypočítat");
+                result = result * i;
             }
+
+            return result;
         }
     }
 }

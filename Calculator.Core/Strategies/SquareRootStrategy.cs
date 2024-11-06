@@ -12,14 +12,10 @@ namespace Calculator.Core.Strategies
 
         public override double Vypocitej(double cislo1)
         {
-            if (cislo1 >= 0)
-            {
-                return Math.Sqrt(cislo1);
-            }
-            else
-            {
+            if (cislo1 < 0)
                 throw new InputValidationException("Pod odmocninou nemůže být záporné číslo");
-            }
+
+            return Math.Sqrt(cislo1);
         }
     }
 }

@@ -10,23 +10,13 @@ namespace Calculator.Core.Strategies
 
         public override double Vypocitej(double cislo1, double cislo2)
         {
-            if (cislo2 != 0)
-            {
-
-                if (cislo1 % 1.0 == 0 && cislo2 % 1.0 == 0)
-                {
-                    return cislo1 % cislo2;
-                }
-                else
-                {
-                    throw new InputValidationException("Modulo s desetinným číslem");
-                }
-                
-            }
-            else
-            {
+            if (cislo2 == 0)
                 throw new InputValidationException("Dělení nulou!");
-            }
+
+            if (cislo1 % 1.0 != 0 || cislo2 % 1.0 != 0)
+                throw new InputValidationException("Modulo s desetinným číslem");
+
+            return cislo1 % cislo2;
         }
     }
 }

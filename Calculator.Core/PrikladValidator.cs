@@ -59,12 +59,17 @@ namespace Calculator.Core
         }
 
         /// <summary>
-        /// Zkontroluje, jestli je symbol nějaký znak.
+        /// Zkontroluje, jestli lze smazat poslední znak z <see cref="Counting.Priklad"/>. 
         /// </summary>
         /// <returns>Vrací, jestli může být symbol odstraněn</returns>
-        public bool ValidateSmazSymbol(string? symbol)
+        public bool ValidateSmazSymbol()
         {
-            return !string.IsNullOrWhiteSpace(symbol);
+            return _counting.Priklad != "";
+        }
+
+        public bool ValidateSmazPriklad()
+        {
+            return _counting.Priklad != "";
         }
 
         /// <summary>
