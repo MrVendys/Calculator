@@ -116,7 +116,7 @@
             <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
 
-        <local:FontSizeTextBox x:Name="InputTextBox"
+        <local:FontSizeScalingTextBox x:Name="InputTextBox"
                                Grid.Row="0" Grid.Column="0"
                                Style="{StaticResource InputTextBox}"
                                Text="{Binding Priklad, Mode=OneWay}"/>

@@ -10,11 +10,36 @@ namespace Calculator.Core
         private readonly Regex _symbolValidator;
         private readonly Counting _counting;
 
+        #region Nastavení proměnných
+
         public PrikladValidator(Counting counting)
         {
             _counting = counting;
             _symbolValidator = InitializeRegex();
         }
+
+        private Regex InitializeRegex()
+        {
+            string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            string pattern = "[-0-9()" + Regex.Escape(separator);
+
+            foreach (char znak in _counting.ZnakyOperaci)
+            {
+                if (znak == '-')
+                {
+                    continue;
+                }
+                else
+                {
+                    pattern += Regex.Escape(znak.ToString());
+                }
+            }
+            pattern += "]";
+
+            return new Regex(pattern);
+        }
+
+        #endregion
 
         /// <summary>
         /// Zkontroluje, jestli je symbol povolený v <see cref="_symbolValidator"/>. <br/>
@@ -83,27 +108,6 @@ namespace Calculator.Core
         public void Refresh()
         {
             InitializeRegex();
-        }
-
-        private Regex InitializeRegex()
-        {
-            string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-            string pattern = "[-0-9()" + Regex.Escape(separator);
-
-            foreach (char znak in _counting.ZnakyOperaci)
-            {
-                if (znak == '-')
-                {
-                    continue;
-                }
-                else
-                {
-                    pattern += Regex.Escape(znak.ToString());
-                }
-            }
-            pattern += "]";
-
-            return new Regex(pattern);
         }
     }
 }
