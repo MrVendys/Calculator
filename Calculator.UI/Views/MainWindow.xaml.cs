@@ -59,9 +59,9 @@ namespace Calculator.UI.Views
         /// <summary>
         /// Zkusí zjistit, jestli má přidaný znak místo na vykreslení
         /// </summary>
-        private bool PridejSymbolCanExecute()
+        private bool PridejSymbolCanExecute(string symbol)
         {
-            return InputTextBox.TryZmenFontSize();
+            return InputTextBox.TryZmenFontSize(symbol);
         }
     }
 }

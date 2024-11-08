@@ -14,7 +14,7 @@ namespace Calculator.UI
 
         private void ZmenFontSize()
         {
-            double dostupnyWidth = ActualWidth - (Padding.Left + Padding.Right);
+            double dostupnyWidth = ActualWidth - (Padding.Left + Padding.Right) - (BorderThickness.Left + BorderThickness.Right);
             double fontSize = FontSize;
 
             FormattedText formattedText = new FormattedText(
@@ -44,7 +44,7 @@ namespace Calculator.UI
 
                 if (prvniCyklus)
                 {
-                    zmensit = formattedTextWidth + (formattedText.Width / Text.Length) > dostupnyWidth;
+                    zmensit = formattedTextWidth > dostupnyWidth;
                     prvniCyklus = false;
                 }
 
@@ -73,12 +73,12 @@ namespace Calculator.UI
             FontSize = fontSize;
         }
 
-        public bool TryZmenFontSize()
+        public bool TryZmenFontSize(string symbol)
         {
-            double dostupnyWidth = ActualWidth - (Padding.Left + Padding.Right);
+            double dostupnyWidth = RenderSize.Width - (Padding.Left + Padding.Right) - (BorderThickness.Left + BorderThickness.Right);
 
             FormattedText formattedText = new FormattedText(
-                Text.ToString(),
+                Text.ToString() + symbol,
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
                 new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
@@ -88,7 +88,7 @@ namespace Calculator.UI
 
             double formattedTextWidth = formattedText.Width + formattedText.OverhangLeading + formattedText.OverhangTrailing;
 
-            if (FontSize <= 15 && formattedTextWidth + (formattedText.Width / Text.Length) > dostupnyWidth)
+            if (FontSize <= 15 && formattedTextWidth > dostupnyWidth)
                 return false;
             return true;
         }
