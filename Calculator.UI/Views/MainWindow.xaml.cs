@@ -4,9 +4,6 @@ using Calculator.UI.ViewModels;
 
 namespace Calculator.UI.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml.
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly MainWindowViewModel _viewModel;
@@ -25,9 +22,9 @@ namespace Calculator.UI.Views
 
         private void InitializeCommands()
         {
-            CommandBinding vypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, _viewModel.Vypocitej);
+            CommandBinding vypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, (s, e) => _viewModel.Vypocitej());
             CommandBinding smazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, (s, e) => _viewModel.SmazSymbol());
-            CommandBinding smazAllHandler = new CommandBinding(CalculatorCommands.SmazAllSymbolyCommand, _viewModel.SmazAllSymboly);
+            CommandBinding smazAllHandler = new CommandBinding(CalculatorCommands.SmazAllSymbolyCommand, (s, e) => _viewModel.SmazPriklad());
             CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, (s, e) => _viewModel.PridejSymbol((string)e.Parameter, PridejSymbolCanExecute));
             CommandBinding historyPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
 

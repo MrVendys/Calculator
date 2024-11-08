@@ -15,8 +15,8 @@
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <converters:SeskupCislaConverter x:Key="CiselnyConverter"/>
-        
+        <converters:SeskupCislaConverter x:Key="SeskupCislaConverter"/>
+
         <Style x:Key="InputTextBox" TargetType="TextBox">
             <Setter Property="MinWidth" Value="100"/>
             <Setter Property="MinHeight" Value="100"/>
@@ -38,8 +38,8 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="MinWidth" Value="100"/>
-            <Setter Property="MaxWidth" Value="130"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
 
         <Style TargetType="Button">
@@ -89,6 +89,8 @@
         </Style>
 
         <Style x:Key="HistoryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -114,12 +116,12 @@
             <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
 
-        <local:FontSizeTextBox x:Name="InputTextBox" 
-                            Grid.Row="0" Grid.Column="0"
-                            Style="{StaticResource InputTextBox}"
-                            Text="{Binding Priklad, Mode=OneWay}"/>
+        <local:FontSizeTextBox x:Name="InputTextBox"
+                               Grid.Row="0" Grid.Column="0"
+                               Style="{StaticResource InputTextBox}"
+                               Text="{Binding Priklad, Mode=OneWay}"/>
 
-        <Grid Margin="10" Grid.Row="2">
+        <Grid Margin="10" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -234,14 +236,11 @@
                 <DataTemplate>
                     <Button Style="{StaticResource HistoryButton}"
                             Command="{x:Static commands:CalculatorCommands.OnHistoryPrikladClickCommand}"
-                            CommandParameter="{Binding}"
-                            Padding="5"
-                            Margin="5"
-                            FontSize="20">
-                        <StackPanel Margin="10,0,10,0" Background="Transparent" HorizontalAlignment="Right">
+                            CommandParameter="{Binding}">
+                        <StackPanel Margin="10,0,10,0" Background="Transparent" HorizontalAlignment="Stretch">
                             <TextBlock Style="{StaticResource HistoryTextBlock}"
+                                       Text="{Binding Priklad, Converter={StaticResource SeskupCislaConverter}}"
                                        Foreground="#FF858585"
-                                       Text="{Binding Priklad}"
                                        TextAlignment="Left"/>
                             <TextBlock Style="{StaticResource HistoryTextBlock}"
                                        Text="{Binding Vysledek, StringFormat='= {0}'}"                                       

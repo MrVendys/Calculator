@@ -49,7 +49,7 @@ namespace Calculator.Core
             }
             else if (symbol == _counting.DesetinnyOddelovac)
             {
-                if (priklad[priklad.Length - 1] == _counting.DesetinnyOddelovac.First())
+                if (priklad.Last() == _counting.DesetinnyOddelovac.First())
                 {
                     return false;
                 }

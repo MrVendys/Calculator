@@ -29,11 +29,11 @@ namespace Calculator.UI.ViewModels
 
         /// <summary>
         /// Handler <see cref="CalculatorCommands.OdesliPrikladCommand"/>. <br/>
-        /// Použití výpočetního jádra <see cref="_counting"/> pro výpočet příkladu.
+        /// Použití výpočetního jádra <see cref="Counting"/> pro výpočet příkladu.
         /// Odchytávání vyjímek vzniklých při výpočtu. <br/>
-        /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném smazání symbolu.
+        /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném vypočítání příkladu.
         /// </summary>
-        public void Vypocitej(object sender, ExecutedRoutedEventArgs e)
+        public void Vypocitej()
         {
             try
             {
@@ -62,7 +62,7 @@ namespace Calculator.UI.ViewModels
         /// Handler <see cref="CalculatorCommands.SmazAllSymbolyCommand"/>. <br/>
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném smazání všech symbolů.
         /// </summary>
-        public void SmazAllSymboly(object sender, ExecutedRoutedEventArgs e)
+        public void SmazPriklad()
         {
             if (_counting.TrySmazPriklad())
             {
@@ -73,18 +73,19 @@ namespace Calculator.UI.ViewModels
         /// <summary>
         /// Handler <see cref="CalculatorCommands.PridejSymbolCommand"/>
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném přidání symbolu.
+        /// <paramref name="canExecute">Dodatečná kontrola</paramref>
         /// </summary>
-        public void PridejSymbol(string parameter, Func<bool> canExecute)
+        public void PridejSymbol(string symbol, Func<bool> canExecute)
         {
-            if ((canExecute?.Invoke() ?? true) && _counting.TryPridejSymbol(parameter))
+            if ((canExecute?.Invoke() ?? true) && _counting.TryPridejSymbol(symbol))
             {
                 OnPropertyChanged(nameof(Priklad));
             }
         }
 
-        public void PridejSymbol(string parameter)
+        public void PridejSymbol(string symbol)
         {
-            PridejSymbol(parameter, () => true);
+            PridejSymbol(symbol, () => true);
         }
 
         /// <summary>
@@ -93,8 +94,8 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
         {
-            SpocitanyPriklad sPriklad = (SpocitanyPriklad)e.Parameter;
-            if (_counting.TryVratPriklad(sPriklad))
+            SpocitanyPriklad spocitanyPriklad = (SpocitanyPriklad)e.Parameter;
+            if (_counting.TryVratPriklad(spocitanyPriklad))
             {
                 OnPropertyChanged(nameof(Priklad));
             }
