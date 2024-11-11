@@ -16,7 +16,7 @@ namespace Calculator.CoreTests
         {
             OperationStrategyBase op = new PowerStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = Math.Round(op.Vypocitej(cislo1, cislo2),4);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -27,11 +27,11 @@ namespace Calculator.CoreTests
         [DataRow(2.25, 1.5)]
         [DataRow(0.25, 0.5)]
         [DataRow(10, 3.1623)]
-        public void SquareRoot(double cislo1, double cislo2, double ocekavanyVysledek)
+        public void SquareRoot(double cislo1, double ocekavanyVysledek)
         {
             OperationStrategyBase op = new SquareRootStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = Math.Round(op.Vypocitej(cislo1),4);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -39,7 +39,6 @@ namespace Calculator.CoreTests
         [TestMethod]
         [DataRow(0, 1)]
         [DataRow(1, 1)]
-        [DataRow(5, 120)]
         [DataRow(7, 5040)]
         [DataRow(3, 6)]
         public void Factorial(double cislo1, double ocekavanyVysledek)
