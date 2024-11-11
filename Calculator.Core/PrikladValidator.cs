@@ -18,6 +18,15 @@ namespace Calculator.Core
             _symbolValidator = InitializeRegex();
         }
 
+        /// <summary>
+        /// Kalkulačka umožňuje přidávat nové operace za chodu. <br/>
+        /// Tato metoda se volá při vytvoření nové operace. Aktualizuje <see cref="_symbolValidator"/> pro přidání znaku nového operátoru.
+        /// </summary>
+        public void Refresh()
+        {
+            InitializeRegex();
+        }
+
         private Regex InitializeRegex()
         {
             string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
@@ -45,7 +54,7 @@ namespace Calculator.Core
         /// Zkontroluje, jestli je symbol povolený v <see cref="_symbolValidator"/>. <br/>
         /// Zároveň zkontroluje, zda lze symbol logicky zapsat do <see cref="Counting.Priklad"/>. (Víc desetinných čárek za sebou, zavírací závorka dřív, jak otevírací)
         /// </summary>
-        /// <returns>Vrací, jestli může být symbol zapsán</returns>
+        /// <returns>Vrací, jestli může být <paramref name="symbol"/> zapsán</returns>
         public bool ValidatePridejSymbol(string symbol)
         {
             if (!_symbolValidator.IsMatch(symbol))
@@ -84,6 +93,21 @@ namespace Calculator.Core
         }
 
         /// <summary>
+        /// Zkontroluje, jestli <paramref name="novyPriklad"/> obsahuje jen povolené znaky
+        /// </summary>
+        /// <returns>Vrací, jestli může být <paramref name="novyPriklad"/> zapsán</returns>
+        public bool ValidatePridejPriklad(string novyPriklad)
+        {
+            foreach (char c in novyPriklad)
+            {
+                if (!_symbolValidator.IsMatch(c.ToString()))
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Zkontroluje, jestli lze smazat poslední znak z <see cref="Counting.Priklad"/>. 
         /// </summary>
         /// <returns>Vrací, jestli může být symbol odstraněn</returns>
@@ -103,11 +127,6 @@ namespace Calculator.Core
         public bool ValidateVratPriklad(SpocitanyPriklad spocitanyPriklad)
         {
             return _counting.HistoriePrikladu.Contains(spocitanyPriklad);
-        }
-
-        public void Refresh()
-        {
-            InitializeRegex();
         }
     }
 }

@@ -69,6 +69,15 @@ namespace Calculator.Core
             return valid;
         }
 
+        public bool TryPridejPriklad(string priklad)
+        {
+            bool valid = _prikladValidator.ValidatePridejPriklad(priklad);
+            if (valid)
+                Priklad = priklad;
+
+            return valid;
+        }
+
         /// <summary>
         /// Pokusí se odebrat poslední symbol z <see cref="Priklad"/>
         /// </summary>
