@@ -97,7 +97,8 @@
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
+                                CornerRadius="5"
+                                >
                             <ContentPresenter HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -117,9 +118,10 @@
         </Grid.ColumnDefinitions>
 
         <local:FontSizeScalingTextBox x:Name="InputTextBox"
-                               Grid.Row="0" Grid.Column="0"
-                               Style="{StaticResource InputTextBox}"
-                               Text="{Binding Priklad, Mode=OneWay}"/>
+                                      Grid.Row="0" Grid.Column="0"
+                                      Style="{StaticResource InputTextBox}"
+                                      Text="{Binding Priklad, Mode=OneWay}"
+                                      />
 
         <Grid Margin="10" Grid.Row="1">
             <Grid.RowDefinitions>
@@ -141,83 +143,110 @@
 
             <!-- Row 1  -->
             <Button Grid.Row="0" Grid.Column="0"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="√"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="√"
+                    />
             <Button Grid.Row="0" Grid.Column="1"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="^"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="^"
+                    />
             <Button Grid.Row="0" Grid.Column="2"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="!"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="!"
+                    />
             <Button Grid.Row="0" Grid.Column="3"
                     Style="{StaticResource PridejSymbolButton}" CommandParameter="Mod"
-                    FontSize="25"/>
+                    FontSize="25"
+                    />
 
             <!-- Row 2  -->
             <Button Grid.Row="1" Grid.Column="0"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="+"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="+"
+                    />
             <Button Grid.Row="1" Grid.Column="1"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="-"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="-"
+                    />
             <Button Grid.Row="1" Grid.Column="2"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="*"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="*"
+                    />
             <Button Grid.Row="1" Grid.Column="3"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="/"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="/"
+                    />
 
             <!-- Row 3 -->
             <Button Grid.Row="2" Grid.Column="0"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="("/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="("
+                    />
             <Button Grid.Row="2" Grid.Column="1"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter=")"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter=")"
+                    />
             <Button Grid.Row="2" Grid.Column="2"
                     Style="{StaticResource ActionButton}"
-                    Command="{x:Static commands:CalculatorCommands.SmazAllSymbolyCommand}"/>
+                    Command="{x:Static commands:CalculatorCommands.SmazAllSymbolyCommand}"
+                    />
             <Button Grid.Row="2" Grid.Column="3"
                     Style="{StaticResource ActionButton}"
-                    Command="{x:Static commands:CalculatorCommands.SmazSymbolCommand}"/>
+                    Command="{x:Static commands:CalculatorCommands.SmazSymbolCommand}"
+                    />
 
             <!-- Row 4 -->
             <Button Grid.Row="3" Grid.Column="0"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="7"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="7"
+                    />
             <Button Grid.Row="3" Grid.Column="1"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="8"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="8"
+                    />
             <Button Grid.Row="3" Grid.Column="2"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="9"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="9"
+                    />
 
             <!-- Row 5 -->
             <Button Grid.Row="4" Grid.Column="0"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="4"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="4"
+                    />
             <Button Grid.Row="4" Grid.Column="1"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="5"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="5"
+                    />
             <Button Grid.Row="4" Grid.Column="2"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="6"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="6"
+                    />
 
             <!-- Row 6 -->
             <Button Grid.Row="5" Grid.Column="0"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="1"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="1"
+                    />
             <Button Grid.Row="5" Grid.Column="1"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="2"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="2"
+                    />
             <Button Grid.Row="5" Grid.Column="2"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="3"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="3"
+                    />
 
             <!-- Row 7 -->
             <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="0"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="0"
+                    />
             <Button Grid.Row="6" Grid.Column="2"
-                    Style="{StaticResource PridejSymbolButton}" CommandParameter="{Binding DesetinnyOddelovac}"/>
+                    Style="{StaticResource PridejSymbolButton}" CommandParameter="{Binding DesetinnyOddelovac}"
+                    />
 
             <Button Grid.Row="3" Grid.Column="3" Grid.RowSpan="4"
                     Style="{StaticResource ActionButton}"
                     Command="{x:Static commands:CalculatorCommands.OdesliPrikladCommand}"
-                    Background="#FF007ACC"/>
+                    Background="#FF007ACC"
+                    />
         </Grid>
 
         <ItemsControl Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
                       ItemsSource="{Binding HistoriePrikladu}"
-                      Margin="5,2,2,2">
+                      Margin="5,2,2,2"
+                      >
             <ItemsControl.Template>
                 <ControlTemplate TargetType="ItemsControl">
                     <Border BorderBrush="#FF2E2E2E"
                             BorderThickness="1"
-                            CornerRadius="10">
+                            CornerRadius="10"
+                            >
                         <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                      Margin="5">
+                                      Margin="5"
+                                      >
                             <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
@@ -228,7 +257,8 @@
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="1"
                                  Margin="0,0,5,0"
-                                 VerticalAlignment="Top"/>
+                                 VerticalAlignment="Top"
+                                 />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -236,15 +266,18 @@
                 <DataTemplate>
                     <Button Style="{StaticResource HistoryButton}"
                             Command="{x:Static commands:CalculatorCommands.OnHistoryPrikladClickCommand}"
-                            CommandParameter="{Binding}">
+                            CommandParameter="{Binding}"
+                            >
                         <StackPanel Margin="10,0,10,0" Background="Transparent" HorizontalAlignment="Stretch">
                             <TextBlock Style="{StaticResource HistoryTextBlock}"
                                        Text="{Binding Priklad, Converter={StaticResource SeskupCislaConverter}}"
                                        Foreground="#FF858585"
-                                       TextAlignment="Left"/>
+                                       TextAlignment="Left"
+                                       />
                             <TextBlock Style="{StaticResource HistoryTextBlock}"
-                                       Text="{Binding Vysledek, StringFormat='= {0}'}"                                       
-                                       TextAlignment="Right"/>
+                                       Text="{Binding Vysledek, StringFormat='= {0}'}"
+                                       TextAlignment="Right"
+                                       />
                         </StackPanel>
                     </Button>
                 </DataTemplate>

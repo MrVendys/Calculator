@@ -73,19 +73,13 @@ namespace Calculator.UI.ViewModels
         /// <summary>
         /// Handler <see cref="CalculatorCommands.PridejSymbolCommand"/>
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném přidání symbolu.
-        /// <paramref name="canExecute">Dodatečná kontrola</paramref>
         /// </summary>
-        public void PridejSymbol(string parameter, Func<string, bool> canExecute)
+        public void PridejSymbol(string symbol)
         {
-            if ((canExecute?.Invoke(parameter) ?? true) && _counting.TryPridejSymbol(parameter))
+            if (_counting.TryPridejSymbol(symbol))
             {
                 OnPropertyChanged(nameof(Priklad));
             }
-        }
-
-        public void PridejSymbol(string parameter)
-        {
-            PridejSymbol(parameter, (s) => true);
         }
 
         /// <summary>

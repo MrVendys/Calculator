@@ -9,9 +9,7 @@ namespace Calculator.UI
         private const int _MINFONTSIZE = 15;
         private const int _MAXFONTSIZE = 30;
 
-        private FormattedText formattedText;
-        private int _textBoxActualWidth;
-        private double _textActualWidth;
+        private FormattedText? _formattedText;
 
         public FontSizeScalingTextBox()
         {
@@ -21,87 +19,105 @@ namespace Calculator.UI
 
         public bool TryZmenFontSize(string symbol)
         {
-            SetPromenne(symbol);
+            double textActualWidth = GetTextActualWidth(symbol);
+            int textBoxActualWidth = GetTextBoxActualWidth();
 
-            if (FontSize <= _MINFONTSIZE && _textActualWidth > _textBoxActualWidth)
+            if (FontSize <= _MINFONTSIZE && textActualWidth > textBoxActualWidth)
                 return false;
 
             return true;
         }
 
+
         private void ZmenFontSize()
         {
-            SetPromenne();
+            double textActualWidth = GetTextActualWidth();
+            int textBoxActualWidth = GetTextBoxActualWidth();
 
-            if (_textActualWidth > _textBoxActualWidth)
+            if (textActualWidth > textBoxActualWidth)
             {
-                FontSize = ZmensujFontSize(FontSize);
+                FontSize = ZmensujFontSize(FontSize, textActualWidth, textBoxActualWidth);
             }
             else
             {
-                FontSize = ZvetsujFontSize(FontSize);
+                FontSize = ZvetsujFontSize(FontSize, textActualWidth, textBoxActualWidth);
             }
         }
 
         /// <summary>
-        /// Postupné zmenšování <paramref name="fontSize"/>, dokud se text velikostně vejde do <see cref="_textBoxActualWidth"/>, nebo je dosažen <see cref="_MINFONTSIZE"/>
+        /// Postupné zmenšování <paramref name="fontSize"/>, dokud se text velikostně vejde do <paramref name="textBoxActualWidth"/>, nebo je dosažen <see cref="_MINFONTSIZE"/>
         /// </summary>
-        private double ZmensujFontSize(double fontSize)
+        /// <param name="textActualWidth">Počítán metodou <see cref="GetTextActualWidth(string)"/></param>
+        /// <param name="textBoxActualWidth">Počítán metodou <see cref="GetTextBoxActualWidth()"/></param>
+        private double ZmensujFontSize(double fontSize, double textActualWidth, int textBoxActualWidth)
         {
-            while (_textActualWidth > _textBoxActualWidth)
+            while (textActualWidth > textBoxActualWidth)
             {
                 if (fontSize <= _MINFONTSIZE)
                 {
                     return fontSize;
                 }
+
                 fontSize--;
-                formattedText.SetFontSize(fontSize);
-                VypocitejTextActualWidth();
+                _formattedText!.SetFontSize(fontSize);
+                textActualWidth = GetTextActualWidth();
             }
+
             return fontSize;
         }
 
         /// <summary>
-        /// Postupné zvětšování <paramref name="fontSize"/>, dokud se text velikostně vejde do <see cref="_textBoxActualWidth"/>, nebo je dosažen <see cref="_MAXFONTSIZE"/> 
+        /// Postupné zvětšování <paramref name="fontSize"/>, dokud se text velikostně vejde do <paramref name="textBoxActualWidth"/>, nebo je dosažen <see cref="_MAXFONTSIZE"/> 
         /// </summary>
-        private double ZvetsujFontSize(double fontSize)
+        /// <param name="textActualWidth">Počítán metodou <see cref="GetTextActualWidth(string)"/></param>
+        /// <param name="textBoxActualWidth">Počítán metodou <see cref="GetTextBoxActualWidth()"/></param>
+        private double ZvetsujFontSize(double fontSize, double textActualWidth, int textBoxActualWidth)
         {
-            while (_textActualWidth < _textBoxActualWidth)
+            while (textActualWidth < textBoxActualWidth)
             {
                 if (fontSize >= _MAXFONTSIZE)
                 {
                     return fontSize;
                 }
+
                 fontSize++;
-                formattedText.SetFontSize(fontSize);
-                VypocitejTextActualWidth();
+                _formattedText!.SetFontSize(fontSize);
+                textActualWidth = GetTextActualWidth();
             }
-            //Vrácení poslední změny. While skončí, jakmile je Text VĚTŠÍ, než TextBox. Vrátí poslední změnu, aby se text vešel.
-            fontSize--;
-            return fontSize;
+
+            //While skončí, jakmile je Text VĚTŠÍ, než TextBox. Vrátí poslední změnu, aby se text vešel.
+            return --fontSize;
         }
 
-        /// <summary>
-        /// Nastaví proměnné <see cref="formattedText"/>, <see cref="_textBoxActualWidth"/> a <see cref="_textActualWidth"/>
-        /// </summary>
-        private void SetPromenne(string symbol = "")
+        #region Helper
+
+        private double GetTextActualWidth(string symbol = "")
         {
-            formattedText = new FormattedText(
-                Text.ToString() + symbol,
+            if (_formattedText == null || _formattedText.Text != Text + symbol)
+                SetFormattedText(symbol);
+
+            return _formattedText!.Width + _formattedText.OverhangTrailing + _formattedText.OverhangLeading;
+        }
+
+        private int GetTextBoxActualWidth()
+        {
+            return (int)(RenderSize.Width - (Padding.Left + Padding.Right) - (BorderThickness.Left + BorderThickness.Right));
+        }
+
+        private void SetFormattedText(string symbol)
+        {
+            _formattedText = new FormattedText(
+                Text + symbol,
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
                 new Typeface(FontFamily, FontStyle, FontWeight, FontStretch),
                 FontSize,
                 Brushes.Black,
-                VisualTreeHelper.GetDpi(this).PixelsPerDip);
-
-            _textBoxActualWidth = (int)(RenderSize.Width - (Padding.Left + Padding.Right) - (BorderThickness.Left + BorderThickness.Right));
-            VypocitejTextActualWidth();
+                VisualTreeHelper.GetDpi(this).PixelsPerDip
+            );
         }
 
-        private void VypocitejTextActualWidth()
-        {
-            _textActualWidth = formattedText.Width + formattedText.OverhangTrailing + formattedText.OverhangLeading;
-        }
+        #endregion
+
     }
 }

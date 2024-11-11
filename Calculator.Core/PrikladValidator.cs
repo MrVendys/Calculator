@@ -94,7 +94,7 @@ namespace Calculator.Core
 
         public bool ValidateSmazPriklad()
         {
-            return _counting.Priklad != "";
+            return ValidateSmazSymbol();
         }
 
         /// <summary>

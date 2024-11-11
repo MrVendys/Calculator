@@ -120,9 +120,7 @@ namespace Calculator.Core
         public void Vypocitej()
         {
             if (string.IsNullOrEmpty(Priklad))
-            {
                 return;
-            }
 
             string vysl = Pocitej(DoTokenu(Priklad));
             HistoriePrikladu.Add(new SpocitanyPriklad(Priklad, vysl));
@@ -133,7 +131,7 @@ namespace Calculator.Core
         /// Přepíše příklad do string pole.
         /// </summary>
         /// <remarks>
-        /// Mazání mezer, prázdných symbolů. Uložení kompletního čísla (vč. negace, desetinných míst)
+        /// Uložení kompletního čísla (vč. negace, desetinných míst)
         /// </remarks>
         private string[] DoTokenu(string priklad)
         {
@@ -147,24 +145,22 @@ namespace Calculator.Core
                     || (token == '-' && !char.IsNumber(priklad[index - 1 < 0 ? 0 : index - 1])))
                 {
                     cislo += token;
-                }
-                else if (token != ' ')
-                {
-                    if (cislo != "")
-                    {
-                        tokeny.Add(cislo);
-                        cislo = "";
-                    }
 
-                    tokeny.Add(token.ToString());
+                    continue;
                 }
+                if (cislo != "")
+                {
+                    tokeny.Add(cislo);
+                    cislo = "";
+                }
+                tokeny.Add(token.ToString());
             }
 
             if (cislo != "")
             {
                 tokeny.Add(cislo);
             }
-
+                
             return tokeny.ToArray();
         }
 
@@ -179,15 +175,14 @@ namespace Calculator.Core
             while (tokeny.Contains("(") || tokeny.Contains(")"))
             {
                 int oteviraciId = NajdiPosledniZavorku(tokeny);
-
                 int uzaviraciId = NajdiPrvniZavorku(tokeny, oteviraciId);
 
                 string[] zavorkyPriklad = new string[uzaviraciId - oteviraciId - 1];
                 Array.Copy(tokeny, oteviraciId + 1, zavorkyPriklad, 0, (uzaviraciId - oteviraciId - 1));
 
-                var zavorkyVysl = Pocitej(zavorkyPriklad);
+                string zavorkyVysl = Pocitej(zavorkyPriklad);
 
-                tokeny = tokeny.Take(oteviraciId).Concat(new string[] { zavorkyVysl.ToString() }).Concat(tokeny.Skip(uzaviraciId + 1)).ToArray();
+                tokeny = tokeny.Take(oteviraciId).Concat(new string[] { zavorkyVysl }).Concat(tokeny.Skip(uzaviraciId + 1)).ToArray();
             }
 
             return tokeny;
@@ -208,8 +203,8 @@ namespace Calculator.Core
                     {
                         OperationStrategyBase pouzitaOperace = pouziteOperace[0];
                         double meziVysl;
-                        int takeIndex = 0;
-                        int skipIndex = 0;
+                        int takeIndex;
+                        int skipIndex;
                         switch (pouzitaOperace.Pozice)
                         {
                             // Index: index operatoru
@@ -255,6 +250,7 @@ namespace Calculator.Core
                 }
                 index++;
             }
+
             return tokeny[0];
         }
 
@@ -329,7 +325,6 @@ namespace Calculator.Core
         /// <summary>
         /// Nalezení poslední instance symbolu "(" v poli. <br/>
         /// </summary>
-        /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>
         private int NajdiPosledniZavorku(string[] tokeny)
@@ -348,7 +343,6 @@ namespace Calculator.Core
         /// <summary>
         /// Nalezení první instance symbolu ")" v poli. <br/>
         /// </summary>
-        /// <param name="symbol">Charakter, který se bude hledat</param>
         /// <param name="tokeny">Pole, ve kterém se bude vyhledávat</param>
         /// <param name="startovaciId">Index (otevřené závorky), od kterého se začne vyhledávat</param>
         /// <returns>Index hledaného symbolu</returns>

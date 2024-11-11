@@ -25,8 +25,10 @@ namespace Calculator.UI.Views
             CommandBinding vypocitejHandler = new CommandBinding(CalculatorCommands.OdesliPrikladCommand, (s, e) => _viewModel.Vypocitej());
             CommandBinding smazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, (s, e) => _viewModel.SmazSymbol());
             CommandBinding smazAllHandler = new CommandBinding(CalculatorCommands.SmazAllSymbolyCommand, (s, e) => _viewModel.SmazPriklad());
-            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, (s, e) => _viewModel.PridejSymbol((string)e.Parameter, PridejSymbolCanExecute));
             CommandBinding historyPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
+            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, 
+                (s, e) => _viewModel.PridejSymbol((string)e.Parameter),
+                (s, e) => e.CanExecute = PridejSymbolCanExecute((string)e.Parameter));
 
             this.CommandBindings.Add(vypocitejHandler);
             this.CommandBindings.Add(smazHandler);
@@ -41,9 +43,9 @@ namespace Calculator.UI.Views
             {
                 _carkaHandled = false;
             }
-            else
+            else if (PridejSymbolCanExecute(e.Text))
             {
-                _viewModel.PridejSymbol(e.Text, PridejSymbolCanExecute);
+                _viewModel.PridejSymbol(e.Text);
             }
         }
 
@@ -52,7 +54,11 @@ namespace Calculator.UI.Views
             if (e.Key == Key.Decimal)
             {
                 _carkaHandled = true;
-                _viewModel.PridejSymbol(_viewModel.DesetinnyOddelovac, PridejSymbolCanExecute);
+
+                if (PridejSymbolCanExecute(_viewModel.DesetinnyOddelovac))
+                {
+                    _viewModel.PridejSymbol(_viewModel.DesetinnyOddelovac);
+                }
             }
         }
 
