@@ -55,13 +55,13 @@ namespace Calculator.Core
         /// Zároveň zkontroluje, zda lze symbol logicky zapsat do <see cref="Counting.Priklad"/>. (Víc desetinných čárek za sebou, zavírací závorka dřív, jak otevírací)
         /// </summary>
         /// <returns>Vrací, jestli může být <paramref name="symbol"/> zapsán</returns>
-        public bool ValidatePridejSymbol(string symbol)
+        public bool ValidatePridejSymbol(char symbol)
         {
-            if (!_symbolValidator.IsMatch(symbol))
+            if (!_symbolValidator.IsMatch(symbol.ToString()))
                 return false;
 
             string priklad = _counting.Priklad;
-            if (symbol == ")")
+            if (symbol == ')')
             {
                 int pocetOtevrenychZavorek = 0;
                 foreach (char s in priklad)
@@ -81,7 +81,7 @@ namespace Calculator.Core
                     return false;
                 }
             }
-            else if (symbol == _counting.DesetinnyOddelovac)
+            else if (symbol == _counting.DesetinnyOddelovac.First())
             {
                 if (priklad.Last() == _counting.DesetinnyOddelovac.First())
                 {

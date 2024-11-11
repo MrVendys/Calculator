@@ -62,7 +62,7 @@ namespace Calculator.Core
             if (symbol.ToLower() == "mod")
                 symbol = "%";
 
-            bool valid = _prikladValidator.ValidatePridejSymbol(symbol);
+            bool valid = _prikladValidator.ValidatePridejSymbol(symbol.First());
             if (valid)
                 Priklad += symbol;
 
