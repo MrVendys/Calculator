@@ -5,15 +5,15 @@ namespace Calculator.CoreTests
     [TestClass]
     public class PokrocileOperaceTest
     {
+        //Odchylka u porovnávání desetinných čísel
         private readonly double delta = 0.00000001;
-
 
         [TestMethod]
         [DataRow(2, 3, 8)]
         [DataRow(5, 0, 1)]
         [DataRow(-2, 3, -8)]
         [DataRow(4, 0.5, 2)]
-        [DataRow(3, -2, 0.1111)]
+        [DataRow(3, -2, 0.11111111)]
         public void Power(double cislo1, double cislo2, double ocekavanyVysledek)
         {
             OperationStrategyBase op = new PowerStrategy();

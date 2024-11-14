@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Calculator.Core.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace Calculator.Core
 {
@@ -60,30 +61,17 @@ namespace Calculator.Core
             if (!_symbolValidator.IsMatch(symbol.ToString()))
                 return false;
 
-            string priklad = _counting.Priklad;
             if (symbol == ')')
             {
-                int pocetOtevrenychZavorek = 0;
-                foreach (char s in priklad)
-                {
-                    if (s == '(')
-                    {
-                        pocetOtevrenychZavorek++;
-                    }
-                    if (s == ')')
-                    {
-                        pocetOtevrenychZavorek--;
-                    }
-                }
-
-                if (pocetOtevrenychZavorek <= 0)
+                int pocet = GetPocetZavorek();
+                if (pocet <= 0)
                 {
                     return false;
                 }
             }
             else if (symbol == _counting.DesetinnyOddelovac.First())
             {
-                if (priklad.Last() == _counting.DesetinnyOddelovac.First())
+                if (_counting.Priklad.Last() == _counting.DesetinnyOddelovac.First())
                 {
                     return false;
                 }
@@ -127,6 +115,42 @@ namespace Calculator.Core
         public bool ValidateVratPriklad(SpocitanyPriklad spocitanyPriklad)
         {
             return _counting.HistoriePrikladu.Contains(spocitanyPriklad);
+        }
+
+        /// <summary>
+        /// Zkontroluje, zda jsou v příkladu 
+        /// </summary>
+        /// <exception cref="InputValidationException"></exception>
+        public void ValidateVypocitej()
+        {
+            int pocet = GetPocetZavorek();
+
+            if (pocet > 0)
+            {
+                throw new InputValidationException("Neuzavřená závorka.");
+            }
+            else if (pocet < 0)
+            {
+                throw new InputValidationException("Chybí otevírací závorka závorka.");
+            }
+        }
+
+        private int GetPocetZavorek()
+        {
+            int pocetOtevrenychZavorek = 0;
+            foreach (char s in _counting.Priklad)
+            {
+                if (s == '(')
+                {
+                    pocetOtevrenychZavorek++;
+                }
+                if (s == ')')
+                {
+                    pocetOtevrenychZavorek--;
+                }
+            }
+
+            return pocetOtevrenychZavorek;
         }
     }
 }

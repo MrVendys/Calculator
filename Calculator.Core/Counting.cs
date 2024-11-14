@@ -117,6 +117,16 @@ namespace Calculator.Core
             return valid;
         }
 
+        /// <summary>
+        /// Pokusí se vypočítat <see cref="Priklad"/>
+        /// </summary>
+        /// <returns>Vrací bool, jestli byl příklad vypočítán</returns>
+        public void TryVypocitej()
+        {
+            _prikladValidator.ValidateVypocitej();
+            Vypocitej();
+        }
+
         #endregion
 
         /// <summary>
@@ -126,7 +136,7 @@ namespace Calculator.Core
         /// Zároveň uloží počítaný příklad s výsledkem do <see cref="HistoriePrikladu"/>
         /// </remarks>
         /// <exception cref="InputValidationException">Neplatně zadaný příklad</exception>
-        public void Vypocitej()
+        private void Vypocitej()
         {
             if (string.IsNullOrEmpty(Priklad))
                 return;
@@ -169,7 +179,7 @@ namespace Calculator.Core
             {
                 tokeny.Add(cislo);
             }
-                
+
             return tokeny.ToArray();
         }
 
@@ -346,7 +356,7 @@ namespace Calculator.Core
                 }
             }
 
-            throw new InputValidationException("Chybí začátek závorky");
+            throw new InputValidationException($"Chyba programu v závorkách u příkladu: {Priklad} . Kontaktujte vývojáře.");
         }
 
         /// <summary>
@@ -369,7 +379,7 @@ namespace Calculator.Core
                 }
             }
 
-            throw new InputValidationException("Chybí konec závorky");
+            throw new InputValidationException($"Chyba programu v závorkách u příkladu: {Priklad} . Kontaktujte vývojáře.");
         }
     }
 }
