@@ -5,6 +5,8 @@ namespace Calculator.CoreTests
     [TestClass]
     public class PokrocileOperaceTest
     {
+        private readonly double delta = 0.00000001;
+
 
         [TestMethod]
         [DataRow(2, 3, 8)]
@@ -16,9 +18,9 @@ namespace Calculator.CoreTests
         {
             OperationStrategyBase op = new PowerStrategy();
 
-            double skutecnyVysledek = Math.Round(op.Vypocitej(cislo1, cislo2),4);
+            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
 
-            Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
+            Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek, delta);
         }
 
         [TestMethod]
@@ -31,9 +33,9 @@ namespace Calculator.CoreTests
         {
             OperationStrategyBase op = new SquareRootStrategy();
 
-            double skutecnyVysledek = Math.Round(op.Vypocitej(cislo1),4);
+            double skutecnyVysledek = op.Vypocitej(cislo1, ocekavanyVysledek);
 
-            Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
+            Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek, delta);
         }
 
         [TestMethod]
