@@ -45,7 +45,7 @@ namespace Calculator.UI.Views
             }
             else if (PridejSymbolCanExecute(e.Text))
             {
-                _viewModel.PridejSymbol(e.Text);
+                _viewModel.PridejSymbol(e.Text, PridejSymbolCanExecute);
             }
         }
 
