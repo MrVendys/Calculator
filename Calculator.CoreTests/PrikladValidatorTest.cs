@@ -17,7 +17,6 @@ namespace Calculator.CoreTests
         [TestMethod]
         [DataRow('1')]
         [DataRow('(')]
-        [DataRow('+')]
         [DataRow('√')]
         public void ValidateSymbol(char symbol)
         {

@@ -1,5 +1,4 @@
-﻿using Calculator.Core.Exceptions;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Calculator.Core
 {
@@ -58,26 +57,16 @@ namespace Calculator.Core
         /// <returns>Vrací, jestli může být <paramref name="symbol"/> zapsán</returns>
         public bool ValidatePridejSymbol(char symbol)
         {
-            if (!_symbolValidator.IsMatch(symbol.ToString()))
-                return false;
-
-            if (symbol == ')')
+            if (_symbolValidator.IsMatch(symbol.ToString()))
             {
-                int pocet = GetPocetZavorek();
-                if (pocet <= 0)
+                if (int.TryParse(symbol.ToString(), out _))
                 {
-                    return false;
+                    return true;
                 }
-            }
-            else if (symbol == _counting.DesetinnyOddelovac.First())
-            {
-                if (_counting.Priklad.Last() == _counting.DesetinnyOddelovac.First())
-                {
-                    return false;
-                }
+                return ValidateSymbol(symbol);
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -133,6 +122,48 @@ namespace Calculator.Core
             }
 
             return pocetOtevrenychZavorek;
+        }
+
+        private bool ValidateSymbol(char symbol)
+        {
+            string priklad = _counting.Priklad;
+            char oddelovac = _counting.DesetinnyOddelovac.First();
+            IEnumerable<char> operace = _counting.ZnakyOperaci;
+            MatchCollection matches = Regex.Matches(priklad, @"\d+(\.\d+)?");
+            string posledniCislo = matches.Count == 0 ? "" : matches.Last().Value;
+
+            if (priklad == "" && (operace.Contains(symbol) || symbol == oddelovac))
+            {
+                if (symbol == '√')
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            if (symbol == ')')
+            {
+                int pocet = GetPocetZavorek();
+                if (pocet <= 0)
+                {
+                    return false;
+                }
+            }
+            else if (symbol == oddelovac)
+            {
+                if (posledniCislo == "" || posledniCislo.Contains(oddelovac))
+                {
+                    return false;
+                }
+            }
+            else if (operace.Contains(symbol))
+            {
+                if (operace.Contains(priklad.Last()) || priklad.Last() == '(' || symbol == oddelovac)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
