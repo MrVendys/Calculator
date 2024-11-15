@@ -28,7 +28,7 @@ namespace Calculator.CoreTests
         [DataRow(0, 0)]
         [DataRow(2.25, 1.5)]
         [DataRow(0.25, 0.5)]
-        [DataRow(10, 3.1623)]
+        [DataRow(10, 3.16227766)]
         public void SquareRoot(double cislo1, double ocekavanyVysledek)
         {
             OperationStrategyBase op = new SquareRootStrategy();

@@ -37,7 +37,7 @@ namespace Calculator.UI.ViewModels
         {
             try
             {
-                _counting.TryVypocitej();
+                _counting.Vypocitej();
                 OnPropertyChanged(nameof(Priklad));
             }
             catch (InputValidationException en)
