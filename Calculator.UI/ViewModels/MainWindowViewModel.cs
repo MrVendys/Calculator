@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using Calculator.Core;
+using Calculator.Core.Exceptions;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Calculator.UI.ViewModels
 {
@@ -29,7 +30,7 @@ namespace Calculator.UI.ViewModels
         /// <summary>
         /// Handler <see cref="CalculatorCommands.OdesliPrikladCommand"/>. <br/>
         /// Použití výpočetního jádra <see cref="Counting"/> pro výpočet příkladu.
-        /// Odchytávání vyjímek vzniklých při výpočtu. <br/>
+        /// Odchytávání výjimek vzniklých při výpočtu. <br/>
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném vypočítání příkladu.
         /// </summary>
         public void Vypocitej()
@@ -41,7 +42,7 @@ namespace Calculator.UI.ViewModels
             }
             catch (InputValidationException en)
             {
-                ZobrazHlasku(en.Message);
+                ZobrazHlasku(en.ChybovyKod, en.Message);
             }
         }
 
@@ -84,8 +85,7 @@ namespace Calculator.UI.ViewModels
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném vrácení příkladu z historie.
         /// <summary>
         public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
-
-
+        {
             SpocitanyPriklad spocitanyPriklad = (SpocitanyPriklad)e.Parameter;
             if (_counting.TryVratPriklad(spocitanyPriklad))
             {
@@ -93,16 +93,16 @@ namespace Calculator.UI.ViewModels
             }
             else
             {
-                ZobrazHlasku("Chyba v programu. Nelze načíst příklad z historie");
+                ZobrazHlasku(ChybovyKod.Neidentifikovano, "Chyba v programu. Nelze načíst příklad z historie");
             }
         }
 
         /// <summary>
         /// Zobrazení uživateli MessageBox s <paramref name="chyba"/>.
         /// </summary>
-        private void ZobrazHlasku(string chyba = "Neidentifikovatelná chyba")
+        private void ZobrazHlasku(ChybovyKod kod = ChybovyKod.Neidentifikovano, string chyba = "")
         {
-            MessageBox.Show(chyba, "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
+            MessageBox.Show($"Nastala chyba (Kod {(int)kod}:{kod}). {chyba}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
     }
 }

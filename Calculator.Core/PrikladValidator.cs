@@ -117,24 +117,6 @@ namespace Calculator.Core
             return _counting.HistoriePrikladu.Contains(spocitanyPriklad);
         }
 
-        /// <summary>
-        /// Zkontroluje, zda jsou v příkladu 
-        /// </summary>
-        /// <exception cref="InputValidationException"></exception>
-        public void ValidateVypocitej()
-        {
-            int pocet = GetPocetZavorek();
-
-            if (pocet > 0)
-            {
-                throw new InputValidationException("Neuzavřená závorka.");
-            }
-            else if (pocet < 0)
-            {
-                throw new InputValidationException("Chybí otevírací závorka závorka.");
-            }
-        }
-
         private int GetPocetZavorek()
         {
             int pocetOtevrenychZavorek = 0;

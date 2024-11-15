@@ -245,7 +245,7 @@ namespace Calculator.Core
                                 break;
 
                             default:
-                                throw new InputValidationException("Tato operace není ještě implementována");
+                                throw new InputValidationException(ChybovyKod.Neidentifikovano, "Tato operace není ještě implementována");
                         }
 
                         // Přepsání pole "tokeny" novými hodnoty. Přepsání mezipříkladu na mezivýsledek. 
@@ -288,12 +288,12 @@ namespace Calculator.Core
             }
             else
             {
-                throw new InputValidationException("Neúplný příklad.");
+                throw new InputValidationException(ChybovyKod.ChybejiciCislo);
             }
 
             if (!Zkontroluj(tokeny[indexCisla1], indexCisla2 == null ? "0" : tokeny[indexCisla2.Value]))
             {
-                throw new InputValidationException($"Operator: {pouzitaOperace.ZnakOperatoru} nemá číslo pro výpočet");
+                throw new InputValidationException(ChybovyKod.NeniCislo, $"Operator: {pouzitaOperace.ZnakOperatoru} nemá číslo pro výpočet");
             }
         }
 
@@ -346,7 +346,7 @@ namespace Calculator.Core
                 }
             }
 
-            throw new InputValidationException("Chybí otevírací závorka");
+            throw new InputValidationException(ChybovyKod.OteviraciZavorka);
         }
 
         /// <summary>
@@ -363,13 +363,13 @@ namespace Calculator.Core
                 {
                     if (i - startovaciId <= 1)
                     {
-                        throw new InputValidationException("Prázdná závorka");
+                        throw new InputValidationException(ChybovyKod.PrazdnaZavorka);
                     }
                     return i;
                 }
             }
 
-            throw new InputValidationException("Chybí zavírací závorka");
+            throw new InputValidationException(ChybovyKod.ZaviraciZavorka);
         }
     }
 }

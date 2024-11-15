@@ -13,7 +13,7 @@ namespace Calculator.Core.Strategies
         public override double Vypocitej(double cislo1)
         {
             if (cislo1 < 0)
-                throw new InputValidationException("Pod odmocninou nemůže být záporné číslo");
+                throw new InputValidationException(ChybovyKod.ChybaVeVypoctu, "Pod odmocninou nemůže být záporné číslo");
 
             return Math.Sqrt(cislo1);
         }
