@@ -16,7 +16,7 @@ namespace Calculator.Core.Strategies
             }
             else
             {
-                throw new InputValidationException(ChybovyKod.ChybaVeVypoctu, "Dělení nulou!");
+                throw new InputValidationException(ChybovyKod.DeleniNulou, "Dělení nulou!");
             }
         }
     }

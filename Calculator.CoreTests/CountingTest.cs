@@ -18,40 +18,27 @@ namespace Calculator.CoreTests
         public void VypocitejTest(string priklad, double ocekavanyVysledek)
         {
             Counting counting = GetCounting();
-            counting.TryPridejPriklad(priklad);
+            bool valid = counting.TryPridejPriklad(priklad);
             counting.Vypocitej();
 
             double skutecnyVysledek = double.Parse(counting.Priklad);
 
+            Assert.IsTrue(valid);
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek, delta);
         }
 
         [TestMethod]
-        [DataRow("1 +2", "")]
-        [DataRow("", "")]
-        public void Invalid_VypocitejTest(string priklad, string ocekavanyVysledek)
-        {
-            Counting counting = GetCounting();
-            counting.TryPridejPriklad(priklad);
-            counting.Vypocitej();
-
-            string skutecnyVysledek = counting.Priklad;
-
-            Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
-        }
-
-        [TestMethod]
-        [DataRow("(")]
-        [DataRow(")")]
+        [DataRow("1++")]
         [DataRow("()")]
-        [DataRow("1+")]
-        [DataRow("2++")]
-        public void InputValidationExceptionVypocitejTest(string priklad)
+        [DataRow("5!4")]
+        [DataRow("+2")]
+        public void TryPridejPrikladTest(string priklad)
         {
             Counting counting = GetCounting();
-            counting.TryPridejPriklad(priklad);
 
-            Assert.ThrowsException<InputValidationException>(() => counting.Vypocitej());
+            bool valid = counting.TryPridejPriklad(priklad);
+
+            Assert.IsFalse(valid);
         }
 
         private Counting GetCounting()

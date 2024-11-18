@@ -1,4 +1,6 @@
-﻿using Calculator.Core.Strategies;
+﻿using Calculator.Core;
+using Calculator.Core.Exceptions;
+using Calculator.Core.Strategies;
 
 namespace Calculator.CoreTests
 {
@@ -58,6 +60,17 @@ namespace Calculator.CoreTests
             double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
+        }
+
+        [TestMethod]
+        public void DivideStrategy_Nula_ChybovyKodDeleniNulou()
+        {
+            double cislo = 5;
+            DivideStrategy op = new DivideStrategy();
+
+            var exception = Assert.ThrowsException<InputValidationException>(() => op.Vypocitej(cislo, 0));
+
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DeleniNulou);
         }
     }
 }

@@ -3,11 +3,12 @@
     public enum ChybovyKod
     {
         PrazdnaZavorka,
-        OteviraciZavorka,
-        ZaviraciZavorka,
+        ChybiOteviraciZavorka,
+        ChybiZaviraciZavorka,
         ChybejiciCislo,
         NeniCislo,
         ChybaVeVypoctu,
+        DeleniNulou,
         Neidentifikovano
     }
 }

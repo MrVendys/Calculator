@@ -6,10 +6,10 @@ namespace Calculator.CoreTests
     public class PrikladValidatorTest
     {
         [TestMethod]
-        [DataRow('1',"")]
-        [DataRow('(',"1+")]
-        [DataRow(')',"1+(2+3")]
-        [DataRow('+',"2")]
+        [DataRow('1', "")]
+        [DataRow('(', "1+")]
+        [DataRow(')', "1+(2+3")]
+        [DataRow('+', "2")]
         //Test přidávání symbolu do rozpracovaného příkladu
         public void ValidateSymbol(char symbol, string priklad)
         {
@@ -17,7 +17,7 @@ namespace Calculator.CoreTests
             counting.TryPridejPriklad(priklad);
 
             bool valid = prikladValidator.ValidatePridejSymbol(symbol);
-            
+
             Assert.IsTrue(valid);
         }
 
@@ -49,11 +49,14 @@ namespace Calculator.CoreTests
 
         [TestMethod]
         [DataRow('+', "")]
-        [DataRow('√', "2")]
-        [DataRow('-', "2+")]
+        [DataRow('2', "!")]
+        [DataRow(')', "(")]
         [DataRow(')', "1+")]
         [DataRow('(', "1+(2+3")]
-        //Test nepřidávání symbolu do rozpracovaného příkladu
+        [DataRow('√', "2")]
+        [DataRow('-', "2+")]
+        [DataRow('!', "2!")]
+        //Test přidávání chybných symbolů do rozpracovaného příkladu
         public void Invalid_ValidateSymbol(char symbol, string priklad)
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);

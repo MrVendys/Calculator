@@ -69,11 +69,11 @@ namespace Calculator.Core
             return valid;
         }
 
-        public bool TryPridejPriklad(string priklad)
+        public bool TryPridejPriklad(string novyPriklad)
         {
-            bool valid = _prikladValidator.ValidatePridejPriklad(priklad);
+            bool valid = _prikladValidator.ValidatePridejPriklad(novyPriklad);
             if (valid)
-                Priklad = priklad;
+                Priklad = novyPriklad;
 
             return valid;
         }
@@ -346,7 +346,7 @@ namespace Calculator.Core
                 }
             }
 
-            throw new InputValidationException(ChybovyKod.OteviraciZavorka);
+            throw new InputValidationException(ChybovyKod.ChybiOteviraciZavorka);
         }
 
         /// <summary>
@@ -369,7 +369,7 @@ namespace Calculator.Core
                 }
             }
 
-            throw new InputValidationException(ChybovyKod.ZaviraciZavorka);
+            throw new InputValidationException(ChybovyKod.ChybiZaviraciZavorka);
         }
     }
 }

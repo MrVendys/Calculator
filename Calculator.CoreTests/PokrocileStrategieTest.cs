@@ -1,4 +1,6 @@
-﻿using Calculator.Core.Strategies;
+﻿using Calculator.Core.Exceptions;
+using Calculator.Core;
+using Calculator.Core.Strategies;
 
 namespace Calculator.CoreTests
 {
@@ -16,9 +18,9 @@ namespace Calculator.CoreTests
         [DataRow(3, -2, 0.11111111)]
         public void PowerStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            PowerStrategy op = new PowerStrategy();
+            PowerStrategy pow = new PowerStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = pow.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek, delta);
         }
@@ -30,9 +32,9 @@ namespace Calculator.CoreTests
         [DataRow(10, 3.16227766)]
         public void SquareRootStrategyTest(double cislo1, double ocekavanyVysledek)
         {
-            SquareRootStrategy op = new SquareRootStrategy();
+            SquareRootStrategy sqr = new SquareRootStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, ocekavanyVysledek);
+            double skutecnyVysledek = sqr.Vypocitej(cislo1, ocekavanyVysledek);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek, delta);
         }
@@ -42,11 +44,22 @@ namespace Calculator.CoreTests
         [DataRow(7, 5040)]
         public void FactorialStrategyTest(double cislo1, double ocekavanyVysledek)
         {
-            FactorialStrategy op = new FactorialStrategy();
+            FactorialStrategy fct = new FactorialStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1);
+            double skutecnyVysledek = fct.Vypocitej(cislo1);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
+        }
+
+        [TestMethod]
+        public void FactorialStrategy_DesetinneCislo_ChybovyKodChybaVeVypoctu()
+        {
+            double desetinneCislo = 1.1;
+            FactorialStrategy fct = new FactorialStrategy();
+
+            var exception = Assert.ThrowsException<InputValidationException>(() => fct.Vypocitej(desetinneCislo));
+
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.ChybaVeVypoctu);
         }
 
         [TestMethod]
@@ -56,11 +69,22 @@ namespace Calculator.CoreTests
         [DataRow(15, 5, 0)]
         public void ModuloStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            ModuloStrategy op = new ModuloStrategy();
+            ModuloStrategy mod = new ModuloStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = mod.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
+        }
+
+        [TestMethod]
+        public void ModuloStrategy_Nula_ChybovyKodDeleniNulou()
+        {
+            double cislo = 5;
+            ModuloStrategy mod = new ModuloStrategy();
+
+            var exception = Assert.ThrowsException<InputValidationException>(() => mod.Vypocitej(cislo, 0));
+
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DeleniNulou);
         }
     }
 }

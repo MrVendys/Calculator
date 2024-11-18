@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 
 namespace Calculator.Core
 {
@@ -66,13 +68,19 @@ namespace Calculator.Core
         /// <summary>
         /// Zkontroluje, jestli <paramref name="novyPriklad"/> obsahuje jen povolené znaky.
         /// </summary>
-        /// <returns>Vrací, jestli může být <paramref name="novyPriklad"/> zapsán</returns>
+        /// <returns>Vrací true, jestli může být <paramref name="novyPriklad"/> zapsán. False, pokud nastala v nějakém symbolu chyba.</returns>
         public bool ValidatePridejPriklad(string novyPriklad)
         {
-            foreach (char c in novyPriklad)
+            for (int i = 0; i < novyPriklad.Length; i++)
             {
-                if (!_symbolValidator.IsMatch(c.ToString()))
-                    return false;
+                if (_symbolValidator.IsMatch(novyPriklad[i].ToString()))
+                {
+                    if (!ValidateSymbol(novyPriklad[i], novyPriklad.Substring(0, i)))
+                    {
+                        return false;
+                    }
+                }
+
             }
 
             return true;
@@ -100,10 +108,10 @@ namespace Calculator.Core
             return _counting.HistoriePrikladu.Contains(spocitanyPriklad);
         }
 
-        private bool CheckZavorky()
+        private bool CheckZavorky(string priklad)
         {
             int pocetOtevrenychZavorek = 0;
-            foreach (char s in _counting.Priklad)
+            foreach (char s in priklad)
             {
                 if (s == '(')
                 {
@@ -121,9 +129,9 @@ namespace Calculator.Core
         /// <summary>
         /// Zkontroluje, zda lze <paramref name="symbol"/> zapsat do aktuálního <see cref="Counting.Priklad"/>.
         /// </summary>
-        private bool ValidateSymbol(char symbol)
+        private bool ValidateSymbol(char symbol, string? novyPriklad = null)
         {
-            string priklad = _counting.Priklad;
+            string priklad = novyPriklad ?? _counting.Priklad;
             char oddelovac = _counting.DesetinnyOddelovac.First();
             IEnumerable<char> operace = _counting.ZnakyOperaci;
             MatchCollection matches = Regex.Matches(priklad, @$"\d+(\{oddelovac}\d+)?");
@@ -155,7 +163,7 @@ namespace Calculator.Core
             // Přidání symbolu do prázdného příkladu 
             if (string.IsNullOrEmpty(priklad))
             {
-                if (symbol == '(' || symbol == '√')
+                if (symbol == '(' || symbol == '√' || symbol == '-')
                 {
                     return true;
                 }
@@ -166,9 +174,9 @@ namespace Calculator.Core
             // Přidání závorek
             if (symbol == ')')
             {
-                if (posledniSymbol != '(' && !operace.Contains(posledniSymbol))
+                if ((posledniSymbol != '(' && !operace.Contains(posledniSymbol)) || posledniSymbol == '!')
                 {
-                    return CheckZavorky();
+                    return CheckZavorky(priklad);
                 }
 
                 return false;
@@ -182,6 +190,12 @@ namespace Calculator.Core
                 }
 
                 return false;
+            }
+
+            // Přidávání stejného operátoru
+            if (symbol != posledniSymbol)
+            {
+                return true;
             }
 
             // Přidání operátoru
@@ -198,7 +212,7 @@ namespace Calculator.Core
             // Přidání operátoru
             if (operace.Contains(symbol))
             {
-                if (!operace.Contains(posledniSymbol) && posledniSymbol != '(' && symbol != oddelovac)
+                if ((posledniSymbol != '(' && symbol != oddelovac) || posledniSymbol == '!')
                 {
                     return true;
                 }
