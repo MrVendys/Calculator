@@ -33,7 +33,7 @@ namespace Calculator.CoreTests
         [TestMethod]
         [DataRow("1 +2", "")]
         [DataRow("", "")]
-        public void InvalidVypocitejTest(string priklad, string ocekavanyVysledek)
+        public void Invalid_VypocitejTest(string priklad, string ocekavanyVysledek)
         {
             _counting.TryPridejPriklad(priklad);
             _counting.Vypocitej();
