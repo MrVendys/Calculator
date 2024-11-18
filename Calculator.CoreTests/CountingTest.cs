@@ -6,12 +6,7 @@ namespace Calculator.CoreTests
     [TestClass]
     public class CountingTest
     {
-        private Counting _counting;
-        private readonly double delta = 0.00000001;
-        public CountingTest()
-        {
-            _counting = new Counting();
-        }
+        private const double delta = 0.00000001;
 
         [TestMethod]
         [DataRow("1+2", 3)]
@@ -22,10 +17,11 @@ namespace Calculator.CoreTests
         [DataRow("(3+5*2-(√9)+7^2/4!*(2^3))+((8/4)+√16)*5-(3!)", 50.33333333)]
         public void VypocitejTest(string priklad, double ocekavanyVysledek)
         {
-            _counting.TryPridejPriklad(priklad);
-            _counting.Vypocitej();
+            Counting counting = GetCounting();
+            counting.TryPridejPriklad(priklad);
+            counting.Vypocitej();
 
-            double skutecnyVysledek = double.Parse(_counting.Priklad);
+            double skutecnyVysledek = double.Parse(counting.Priklad);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek, delta);
         }
@@ -35,10 +31,11 @@ namespace Calculator.CoreTests
         [DataRow("", "")]
         public void Invalid_VypocitejTest(string priklad, string ocekavanyVysledek)
         {
-            _counting.TryPridejPriklad(priklad);
-            _counting.Vypocitej();
+            Counting counting = GetCounting();
+            counting.TryPridejPriklad(priklad);
+            counting.Vypocitej();
 
-            string skutecnyVysledek = _counting.Priklad;
+            string skutecnyVysledek = counting.Priklad;
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -51,9 +48,15 @@ namespace Calculator.CoreTests
         [DataRow("2++")]
         public void InputValidationExceptionVypocitejTest(string priklad)
         {
-            _counting.TryPridejPriklad(priklad);
+            Counting counting = GetCounting();
+            counting.TryPridejPriklad(priklad);
 
-            Assert.ThrowsException<InputValidationException>(() => _counting.Vypocitej());
+            Assert.ThrowsException<InputValidationException>(() => counting.Vypocitej());
+        }
+
+        private Counting GetCounting()
+        {
+            return new Counting();
         }
     }
 }

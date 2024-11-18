@@ -64,7 +64,7 @@ namespace Calculator.Core
         }
 
         /// <summary>
-        /// Zkontroluje, jestli <paramref name="novyPriklad"/> obsahuje jen povolené znaky
+        /// Zkontroluje, jestli <paramref name="novyPriklad"/> obsahuje jen povolené znaky.
         /// </summary>
         /// <returns>Vrací, jestli může být <paramref name="novyPriklad"/> zapsán</returns>
         public bool ValidatePridejPriklad(string novyPriklad)
@@ -126,54 +126,85 @@ namespace Calculator.Core
             string priklad = _counting.Priklad;
             char oddelovac = _counting.DesetinnyOddelovac.First();
             IEnumerable<char> operace = _counting.ZnakyOperaci;
-            MatchCollection matches = Regex.Matches(priklad, @"\d+(\.\d+)?");
+            MatchCollection matches = Regex.Matches(priklad, @$"\d+(\{oddelovac}\d+)?");
             string posledniCislo = matches.Count == 0 ? "" : matches.Last().Value;
             char posledniSymbol = string.IsNullOrEmpty(priklad) ? ' ' : priklad.Last();
 
+            // Přidání čísla
             if (char.IsDigit(symbol))
             {
-                if (posledniSymbol == ')' || posledniSymbol == '!')
+                if (posledniSymbol != ')' && posledniSymbol != '!')
                 {
-                    return false;
+                    return true;
                 }
+
+                return false;
             }
-            else if (string.IsNullOrEmpty(priklad))
+
+            // Přidání desetinné čárky/tečky
+            if (symbol == oddelovac)
             {
-                if (symbol != '(' || symbol != '√')
+                if (posledniCislo != "" && !posledniCislo.Contains(oddelovac))
                 {
-                    return false;
+                    return true;
                 }
+
+                return false;
             }
-            else if (symbol == ')')
+
+            // Přidání symbolu do prázdného příkladu 
+            if (string.IsNullOrEmpty(priklad))
+            {
+                if (symbol == '(' || symbol == '√')
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Přidání závorek
+            if (symbol == ')')
             {
                 if (posledniSymbol != '(' && !operace.Contains(posledniSymbol))
                 {
                     return CheckZavorky();
                 }
+
                 return false;
             }
-            else if (symbol == oddelovac)
+
+            if (symbol == '(')
             {
-                if (posledniCislo == "" || posledniCislo.Contains(oddelovac))
+                if (!char.IsDigit(posledniSymbol) && posledniSymbol != ')')
                 {
-                    return false;
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Přidání operátoru
+            if (symbol == '√')
+            {
+                if (!char.IsDigit(posledniSymbol) && posledniSymbol != ')')
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Přidání operátoru
+            if (operace.Contains(symbol))
+            {
+                if (!operace.Contains(posledniSymbol) && posledniSymbol != '(' && symbol != oddelovac)
+                {
+                    return true;
                 }
             }
-            else if (symbol == '√' || symbol == '(')
-            {
-                if (char.IsDigit(posledniSymbol) || posledniSymbol == ')')
-                {
-                    return false;
-                }
-            }
-            else if (operace.Contains(symbol))
-            {
-                if (operace.Contains(posledniSymbol) || posledniSymbol == '(' || symbol == oddelovac)
-                {
-                    return false;
-                }
-            }
-            return true;
+
+            return false;
         }
     }
 }

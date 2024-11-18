@@ -5,15 +5,6 @@ namespace Calculator.CoreTests
     [TestClass]
     public class PrikladValidatorTest
     {
-        private Counting _counting;
-        private PrikladValidator _validator;
-
-        public PrikladValidatorTest()
-        {
-            _counting = new Counting();
-            _validator = new PrikladValidator(_counting);
-        }
-
         [TestMethod]
         [DataRow('1',"")]
         [DataRow('(',"1+")]
@@ -22,10 +13,11 @@ namespace Calculator.CoreTests
         //Test přidávání symbolu do rozpracovaného příkladu
         public void ValidateSymbol(char symbol, string priklad)
         {
-            _counting.TryPridejPriklad(priklad);
+            PrikladValidator prikladValidator = GetValidator(out Counting counting);
+            counting.TryPridejPriklad(priklad);
 
-            bool valid = _validator.ValidatePridejSymbol(symbol);
-
+            bool valid = prikladValidator.ValidatePridejSymbol(symbol);
+            
             Assert.IsTrue(valid);
         }
 
@@ -35,7 +27,9 @@ namespace Calculator.CoreTests
         [DataRow("4!*5+√4")]
         public void ValidatePriklad(string priklad)
         {
-            bool valid = _validator.ValidatePridejPriklad(priklad);
+            PrikladValidator prikladValidator = GetValidator(out Counting counting);
+
+            bool valid = prikladValidator.ValidatePridejPriklad(priklad);
 
             Assert.IsTrue(valid);
         }
@@ -46,7 +40,9 @@ namespace Calculator.CoreTests
         //Test nepovolenych znaku
         public void Invalid_ValidatePridejSymbol(char symbol)
         {
-            bool valid = _validator.ValidatePridejSymbol(symbol);
+            PrikladValidator prikladValidator = GetValidator(out Counting counting);
+
+            bool valid = prikladValidator.ValidatePridejSymbol(symbol);
 
             Assert.IsFalse(valid);
         }
@@ -60,11 +56,18 @@ namespace Calculator.CoreTests
         //Test nepřidávání symbolu do rozpracovaného příkladu
         public void Invalid_ValidateSymbol(char symbol, string priklad)
         {
-            _counting.TryPridejPriklad(priklad);
+            PrikladValidator prikladValidator = GetValidator(out Counting counting);
+            counting.TryPridejPriklad(priklad);
 
-            bool valid = _validator.ValidatePridejSymbol(symbol);
+            bool valid = prikladValidator.ValidatePridejSymbol(symbol);
 
             Assert.IsFalse(valid);
+        }
+
+        private PrikladValidator GetValidator(out Counting counting)
+        {
+            counting = new Counting();
+            return new PrikladValidator(counting);
         }
     }
 }
