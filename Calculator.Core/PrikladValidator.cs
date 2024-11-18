@@ -29,7 +29,7 @@ namespace Calculator.Core
 
         private Regex InitializeRegex()
         {
-            string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            string separator = _counting.DesetinnyOddelovac;
             string pattern = "[-0-9()" + Regex.Escape(separator);
 
             foreach (char znak in _counting.ZnakyOperaci)
@@ -52,19 +52,13 @@ namespace Calculator.Core
 
         /// <summary>
         /// Zkontroluje, jestli je symbol povolený v <see cref="_symbolValidator"/>. <br/>
-        /// Zároveň zkontroluje, zda lze symbol logicky zapsat do <see cref="Counting.Priklad"/>. (Víc desetinných čárek za sebou, zavírací závorka dřív, jak otevírací)
+        /// Zároveň zkusí zjistit, zda lze symbol logicky zapsat do <see cref="Counting.Priklad"/>. (Víc desetinných čárek za sebou, zavírací závorka dřív, jak otevírací)
         /// </summary>
         /// <returns>Vrací, jestli může být <paramref name="symbol"/> zapsán</returns>
         public bool ValidatePridejSymbol(char symbol)
         {
             if (_symbolValidator.IsMatch(symbol.ToString()))
-            {
-                if (int.TryParse(symbol.ToString(), out _))
-                {
-                    return true;
-                }
                 return ValidateSymbol(symbol);
-            }
 
             return false;
         }
@@ -99,14 +93,14 @@ namespace Calculator.Core
         }
 
         /// <summary>
-        /// Zkontroluje, zda se <paramref name="spocitanyPriklad"/> nachází v historii
+        /// Zkontroluje, zda se <paramref name="spocitanyPriklad"/> nachází v historii.
         /// </summary>
         public bool ValidateVratPriklad(SpocitanyPriklad spocitanyPriklad)
         {
             return _counting.HistoriePrikladu.Contains(spocitanyPriklad);
         }
 
-        private int GetPocetZavorek()
+        private bool CheckZavorky()
         {
             int pocetOtevrenychZavorek = 0;
             foreach (char s in _counting.Priklad)
@@ -121,9 +115,12 @@ namespace Calculator.Core
                 }
             }
 
-            return pocetOtevrenychZavorek;
+            return pocetOtevrenychZavorek > 0;
         }
 
+        /// <summary>
+        /// Zkontroluje, zda lze <paramref name="symbol"/> zapsat do aktuálního <see cref="Counting.Priklad"/>.
+        /// </summary>
         private bool ValidateSymbol(char symbol)
         {
             string priklad = _counting.Priklad;
@@ -131,23 +128,29 @@ namespace Calculator.Core
             IEnumerable<char> operace = _counting.ZnakyOperaci;
             MatchCollection matches = Regex.Matches(priklad, @"\d+(\.\d+)?");
             string posledniCislo = matches.Count == 0 ? "" : matches.Last().Value;
+            char posledniSymbol = string.IsNullOrEmpty(priklad) ? ' ' : priklad.Last();
 
-            if (priklad == "" && (operace.Contains(symbol) || symbol == oddelovac))
+            if (char.IsDigit(symbol))
             {
-                if (symbol == '√')
-                {
-                    return true;
-                }
-                return false;
-            }
-
-            if (symbol == ')')
-            {
-                int pocet = GetPocetZavorek();
-                if (pocet <= 0)
+                if (posledniSymbol == ')' || posledniSymbol == '!')
                 {
                     return false;
                 }
+            }
+            else if (string.IsNullOrEmpty(priklad))
+            {
+                if (symbol != '(' || symbol != '√')
+                {
+                    return false;
+                }
+            }
+            else if (symbol == ')')
+            {
+                if (posledniSymbol != '(' && !operace.Contains(posledniSymbol))
+                {
+                    return CheckZavorky();
+                }
+                return false;
             }
             else if (symbol == oddelovac)
             {
@@ -156,9 +159,16 @@ namespace Calculator.Core
                     return false;
                 }
             }
+            else if (symbol == '√' || symbol == '(')
+            {
+                if (char.IsDigit(posledniSymbol) || posledniSymbol == ')')
+                {
+                    return false;
+                }
+            }
             else if (operace.Contains(symbol))
             {
-                if (operace.Contains(priklad.Last()) || priklad.Last() == '(' || symbol == oddelovac)
+                if (operace.Contains(posledniSymbol) || posledniSymbol == '(' || symbol == oddelovac)
                 {
                     return false;
                 }
