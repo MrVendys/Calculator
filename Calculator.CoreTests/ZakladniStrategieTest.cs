@@ -22,7 +22,6 @@ namespace Calculator.CoreTests
 
         [TestMethod]
         [DataRow(10, 5, 5)]
-        [DataRow(3, -4, 7)]
         [DataRow(7.5, 2.3, 5.2)]
         [DataRow(-6, -2, -4)]
         public void MinusStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)

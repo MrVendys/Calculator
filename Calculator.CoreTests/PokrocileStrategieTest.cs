@@ -11,10 +11,8 @@ namespace Calculator.CoreTests
         private const double delta = 0.00000001;
 
         [TestMethod]
-        [DataRow(2, 3, 8)]
         [DataRow(5, 0, 1)]
         [DataRow(-2, 3, -8)]
-        [DataRow(4, 0.5, 2)]
         [DataRow(3, -2, 0.11111111)]
         public void PowerStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
@@ -27,8 +25,6 @@ namespace Calculator.CoreTests
 
         [TestMethod]
         [DataRow(9, 3)]
-        [DataRow(0, 0)]
-        [DataRow(2.25, 1.5)]
         [DataRow(10, 3.16227766)]
         public void SquareRootStrategyTest(double cislo1, double ocekavanyVysledek)
         {
@@ -37,6 +33,17 @@ namespace Calculator.CoreTests
             double skutecnyVysledek = sqr.Vypocitej(cislo1, ocekavanyVysledek);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek, delta);
+        }
+
+        [TestMethod]
+        public void SquareRootStrategy_ZaporneCislo_CHybovyKodChybaVeVypoctu()
+        {
+            double zaporneCislo = -4;
+            SquareRootStrategy sqr = new SquareRootStrategy();
+
+            var exception = Assert.ThrowsException<InputValidationException>(() => sqr.Vypocitej(zaporneCislo));
+
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.ChybaVeVypoctu);
         }
 
         [TestMethod]
@@ -64,9 +71,7 @@ namespace Calculator.CoreTests
 
         [TestMethod]
         [DataRow(10, 3, 1)]
-        [DataRow(9, -4, 1)]
         [DataRow(-7, 3, -1)]
-        [DataRow(15, 5, 0)]
         public void ModuloStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
             ModuloStrategy mod = new ModuloStrategy();

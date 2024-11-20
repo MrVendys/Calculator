@@ -1,5 +1,4 @@
 ﻿using Calculator.Core;
-using Calculator.Core.Exceptions;
 
 namespace Calculator.CoreTests
 {
@@ -28,11 +27,23 @@ namespace Calculator.CoreTests
         }
 
         [TestMethod]
+        public void PrazdnyPrikladHandledTest()
+        {
+            Counting counting = GetCounting();
+            //Příklad je při inicializaci ""
+
+            //Test, jestli je tento případ ošetřený a aplikace nespadne
+            counting.Vypocitej();
+
+            Assert.AreEqual("", counting.Priklad);
+        }
+
+        [TestMethod]
         [DataRow("1++")]
         [DataRow("()")]
         [DataRow("5!4")]
         [DataRow("+2")]
-        public void TryPridejPrikladTest(string priklad)
+        public void Invalid_TryPridejPrikladTest(string priklad)
         {
             Counting counting = GetCounting();
 
