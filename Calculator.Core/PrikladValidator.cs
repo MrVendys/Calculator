@@ -193,9 +193,9 @@ namespace Calculator.Core
             }
 
             // Přidávání stejného operátoru
-            if (symbol != posledniSymbol)
+            if (symbol == posledniSymbol)
             {
-                return true;
+                return false;
             }
 
             // Přidání operátoru
@@ -212,7 +212,7 @@ namespace Calculator.Core
             // Přidání operátoru
             if (operace.Contains(symbol))
             {
-                if ((posledniSymbol != '(' && symbol != oddelovac) || posledniSymbol == '!')
+                if ((!operace.Contains(posledniSymbol) && posledniSymbol != '(' && symbol != oddelovac) || posledniSymbol == '!')
                 {
                     return true;
                 }

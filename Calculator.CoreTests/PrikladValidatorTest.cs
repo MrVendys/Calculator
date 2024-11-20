@@ -49,7 +49,7 @@ namespace Calculator.CoreTests
 
         [TestMethod]
         [DataRow('+', "")]
-        [DataRow('2', "!")]
+        [DataRow('2', "3!")]
         [DataRow(')', "(")]
         [DataRow(')', "1+")]
         [DataRow('(', "1+(2+3")]
