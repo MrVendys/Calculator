@@ -13,9 +13,9 @@ namespace Calculator.CoreTests
         [DataRow(2.51233058, 3.20591493, 5.71824551)]
         public void PlusStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            PlusStrategy op = new PlusStrategy();
+            PlusStrategy pls = new PlusStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = pls.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -26,9 +26,9 @@ namespace Calculator.CoreTests
         [DataRow(-6, -2, -4)]
         public void MinusStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            MinusStrategy op = new MinusStrategy();
+            MinusStrategy min = new MinusStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = min.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -40,9 +40,9 @@ namespace Calculator.CoreTests
         [DataRow(-2, -4, 8)]
         public void MultiplyStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            MultiplyStrategy op = new MultiplyStrategy();
+            MultiplyStrategy mul = new MultiplyStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = mul.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -54,9 +54,9 @@ namespace Calculator.CoreTests
         [DataRow(-6, -2, 3)]
         public void DivideStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            DivideStrategy op = new DivideStrategy();
+            DivideStrategy div = new DivideStrategy();
 
-            double skutecnyVysledek = op.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = div.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -65,9 +65,10 @@ namespace Calculator.CoreTests
         public void DivideStrategy_Nula_ChybovyKodDeleniNulou()
         {
             double cislo = 5;
-            DivideStrategy op = new DivideStrategy();
+            double nula = 0;
+            DivideStrategy div = new DivideStrategy();
 
-            var exception = Assert.ThrowsException<InputValidationException>(() => op.Vypocitej(cislo, 0));
+            var exception = Assert.ThrowsException<InputValidationException>(() => div.Vypocitej(cislo, nula));
 
             Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DeleniNulou);
         }

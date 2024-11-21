@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace Calculator.Core
 {
     /// <summary>
-    /// Validace úpravy příkladu. Přidání, odebrání symbolu, vrácení příkladu z historie
+    /// Validace úprav příkladu. Přidání, odebrání symbolu, vrácení příkladu z historie
     /// </summary>
     internal class PrikladValidator
     {
@@ -108,7 +108,7 @@ namespace Calculator.Core
             return _counting.HistoriePrikladu.Contains(spocitanyPriklad);
         }
 
-        private bool CheckZavorky(string priklad)
+        private bool GetPocetOtevrenychZavorek(string priklad)
         {
             int pocetOtevrenychZavorek = 0;
             foreach (char s in priklad)
@@ -176,7 +176,7 @@ namespace Calculator.Core
             {
                 if ((posledniSymbol != '(' && !operace.Contains(posledniSymbol)) || posledniSymbol == '!')
                 {
-                    return CheckZavorky(priklad);
+                    return GetPocetOtevrenychZavorek(priklad);
                 }
 
                 return false;

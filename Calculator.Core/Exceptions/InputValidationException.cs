@@ -6,7 +6,7 @@
     /// </summary>
     public class InputValidationException : Exception
     {
-        private static Dictionary<ChybovyKod, string> _chyboveHlasky = new Dictionary<ChybovyKod, string>()
+        private static readonly Dictionary<ChybovyKod, string> _chyboveHlasky = new Dictionary<ChybovyKod, string>()
         {
             { ChybovyKod.NeniCislo, "Operátor nemá číslo pro výpočet." },
             { ChybovyKod.ChybejiciCislo, "Znak vedle operátoru není číslo." },
