@@ -1,6 +1,7 @@
 ﻿using Calculator.Core.Exceptions;
 using Calculator.Core.Strategies;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace Calculator.Core
 {

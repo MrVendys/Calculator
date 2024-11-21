@@ -1,4 +1,6 @@
 ﻿using Calculator.Core;
+using Calculator.Core.Strategies;
+using System.ComponentModel;
 
 namespace Calculator.CoreTests
 {
@@ -51,9 +53,36 @@ namespace Calculator.CoreTests
             Assert.IsFalse(valid);
         }
 
+        [TestMethod]
+        public void AddOperatorTest()
+        {
+            Counting counting = GetCounting();
+            char novaOperace = '@';
+            counting.AddOperace(new NahradStrategy());
+            bool valid = counting.TryPridejPriklad($"1{novaOperace}2");
+
+            counting.Vypocitej();
+            double skutecnyVysledek = double.Parse(counting.Priklad);
+
+            Assert.AreEqual(novaOperace, counting.ZnakyOperaci.Last());
+            Assert.IsTrue(valid);
+            Assert.AreEqual(2,skutecnyVysledek);
+        }
+
         private Counting GetCounting()
         {
             return new Counting();
+        }
+
+        public class NahradStrategy : OperationStrategyBase
+        {
+            public override char ZnakOperatoru => '@';
+
+            public PoziceCisla poziceCisla = PoziceCisla.VlevoIVpravo;
+            public override double Vypocitej(double cislo1, double cislo2)
+            {
+                return cislo2;
+            }
         }
     }
 }
