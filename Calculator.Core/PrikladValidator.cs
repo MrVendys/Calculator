@@ -198,7 +198,7 @@ namespace Calculator.Core
                 return false;
             }
 
-            // Přidání operátoru
+            // Přidání operátoru √
             if (symbol == '√')
             {
                 if (!char.IsDigit(posledniSymbol) && posledniSymbol != ')')
@@ -216,6 +216,13 @@ namespace Calculator.Core
                 {
                     return true;
                 }
+
+                if (posledniSymbol == '(' && symbol == '-')
+                {
+                    return true;
+                }
+
+                return false;
             }
 
             return false;
