@@ -1,6 +1,8 @@
 ﻿using Calculator.Core.Exceptions;
 using Calculator.Core.Strategies;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Calculator.Core
 {
@@ -15,12 +17,15 @@ namespace Calculator.Core
 
         private readonly PrikladValidator _prikladValidator;
 
+        private readonly Regex skupinaCisel;
+
         #region Nastavení proměnných
 
         public Counting()
         {
             InitializeOperace();
             _prikladValidator = new PrikladValidator(this);
+            skupinaCisel = new Regex(@$"\G\d+(\{DesetinnyOddelovac}\d+)?", RegexOptions.Compiled);
         }
 
         private void InitializeOperace()
@@ -149,25 +154,26 @@ namespace Calculator.Core
             for (int index = 0; index < priklad.Length; index++)
             {
                 char token = priklad[index];
-                if (char.IsNumber(token)
-                    || token == DesetinnyOddelovac[0]
-                    || (token == '-' && !char.IsNumber(priklad[index - 1 < 0 ? 0 : index - 1])))
+                if (token == '-' && !char.IsNumber(priklad[index - 1 < 0 ? 0 : index - 1]))
                 {
-                    cislo += token;
-
+                    cislo = "-";
                     continue;
                 }
-                if (cislo != "")
-                {
-                    tokeny.Add(cislo);
-                    cislo = "";
-                }
-                tokeny.Add(token.ToString());
-            }
 
-            if (cislo != "")
-            {
-                tokeny.Add(cislo);
+                if (char.IsNumber(token))
+                {
+                    Match match = skupinaCisel.Match(priklad, index);
+                    if (match.Success)
+                    {
+                        cislo += match.Value;
+                        tokeny.Add(cislo);
+                        cislo = "";
+                        index += match.Length - 1;
+                        continue;
+                    }
+                }
+
+                tokeny.Add(token.ToString());
             }
 
             return tokeny.ToArray();
@@ -321,7 +327,7 @@ namespace Calculator.Core
             {
                 if (!int.TryParse(tokeny[i], out _))
                 {
-                    if (_operace.TryGetValue(tokeny[i][0], out var operace))
+                    if (_operace.TryGetValue(tokeny[i].Last(), out var operace))
                     {
                         pouziteOperace.Add(operace);
                     }
