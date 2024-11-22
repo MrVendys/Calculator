@@ -24,7 +24,7 @@ namespace Calculator.Core
         /// </summary>
         public void Refresh()
         {
-            InitializeRegex();
+            _ = InitializeRegex();
         }
 
         private Regex InitializeRegex()
@@ -43,6 +43,7 @@ namespace Calculator.Core
                     pattern += Regex.Escape(znak.ToString());
                 }
             }
+
             pattern += "]";
 
             return new Regex(pattern);
@@ -115,6 +116,7 @@ namespace Calculator.Core
                 {
                     pocetOtevrenychZavorek++;
                 }
+
                 if (s == ')')
                 {
                     pocetOtevrenychZavorek--;

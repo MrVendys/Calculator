@@ -28,7 +28,6 @@ namespace Calculator.UI
             return true;
         }
 
-
         private void ZmenFontSize()
         {
             double textActualWidth = GetTextActualWidth();

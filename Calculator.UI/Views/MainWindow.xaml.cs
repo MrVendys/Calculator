@@ -30,11 +30,11 @@ namespace Calculator.UI.Views
                 (s, e) => _viewModel.PridejSymbol((string)e.Parameter),
                 (s, e) => e.CanExecute = PridejSymbolCanExecute((string)e.Parameter));
 
-            this.CommandBindings.Add(vypocitejHandler);
-            this.CommandBindings.Add(smazHandler);
-            this.CommandBindings.Add(smazAllHandler);
-            this.CommandBindings.Add(pridejHandler);
-            this.CommandBindings.Add(historyPrikladClickHandler);
+            _ = CommandBindings.Add(vypocitejHandler);
+            _ = CommandBindings.Add(smazHandler);
+            _ = CommandBindings.Add(smazAllHandler);
+            _ = CommandBindings.Add(pridejHandler);
+            _ = CommandBindings.Add(historyPrikladClickHandler);
         }
 
         private void Window_PreviewTextInput(object sender, TextCompositionEventArgs e)

@@ -13,7 +13,7 @@ namespace Calculator.CoreTests
         public void ValidatePridejSymbol(char symbol, string priklad)
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);
-            counting.TryPridejPriklad(priklad);
+            _ = counting.TryPridejPriklad(priklad);
 
             bool valid = prikladValidator.ValidatePridejSymbol(symbol);
 
@@ -44,7 +44,7 @@ namespace Calculator.CoreTests
         public void ValidatePridejSymbol_LogickyNespravnySymbol_False(char symbol, string priklad)
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);
-            counting.TryPridejPriklad(priklad);
+            _ = counting.TryPridejPriklad(priklad);
 
             bool valid = prikladValidator.ValidatePridejSymbol(symbol);
 

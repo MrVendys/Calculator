@@ -11,7 +11,7 @@ namespace Calculator.Core
         /// Key: char, znak operátoru. <br/>
         /// Value: OperationStrategy, instance OperationStrategy odpovídajícího znaku.
         /// </summary>
-        private readonly Dictionary<char, OperationStrategyBase> _operace = new Dictionary<char, OperationStrategyBase>();
+        private readonly Dictionary<char, OperationStrategyBase> _operace = [];
 
         private readonly PrikladValidator _prikladValidator;
 
@@ -43,7 +43,7 @@ namespace Calculator.Core
 
         #endregion
 
-        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; } = new ObservableCollection<SpocitanyPriklad>();
+        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; } = [];
 
         public string DesetinnyOddelovac => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 
@@ -59,7 +59,7 @@ namespace Calculator.Core
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
         public bool TryPridejSymbol(string symbol)
         {
-            if (symbol.ToLower() == "mod")
+            if (symbol.Equals("mod", StringComparison.CurrentCultureIgnoreCase))
                 symbol = "%";
 
             bool valid = _prikladValidator.ValidatePridejSymbol(symbol.First());
@@ -157,11 +157,13 @@ namespace Calculator.Core
 
                     continue;
                 }
+
                 if (cislo != "")
                 {
                     tokeny.Add(cislo);
                     cislo = "";
                 }
+
                 tokeny.Add(token.ToString());
             }
 
@@ -257,6 +259,7 @@ namespace Calculator.Core
                         index = -1;
                     }
                 }
+
                 index++;
             }
 
@@ -365,6 +368,7 @@ namespace Calculator.Core
                     {
                         throw new InputValidationException(ChybovyKod.PrazdnaZavorka);
                     }
+
                     return i;
                 }
             }

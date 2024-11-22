@@ -21,13 +21,13 @@
         public InputValidationException(ChybovyKod kod, string message = "") : base(message)
         {
             ChybovyKod = kod;
-            message = message == "" ? "" : _chyboveHlasky[kod];
+            _ = message == "" ? "" : _chyboveHlasky[kod];
         }
 
         public InputValidationException(Exception innerException, ChybovyKod kod, string message = "") : base(message, innerException)
         {
             ChybovyKod = kod;
-            message = message == "" ? "" : _chyboveHlasky[kod];
+            _ = message == "" ? "" : _chyboveHlasky[kod];
         }
 
         public ChybovyKod ChybovyKod { get; }
