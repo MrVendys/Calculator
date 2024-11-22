@@ -18,14 +18,16 @@
             { ChybovyKod.Neidentifikovano, "Nastala výjimka. Neznámá softwarová výjimka." },
         };
 
-        public InputValidationException(ChybovyKod kod, string? message = null) : base(message ?? _chyboveHlasky[kod])
+        public InputValidationException(ChybovyKod kod, string message = "") : base(message)
         {
             ChybovyKod = kod;
+            _ = message == "" ? "" : _chyboveHlasky[kod];
         }
 
-        public InputValidationException(Exception innerException, ChybovyKod kod, string? message = null) : base(message ?? _chyboveHlasky[kod], innerException)
+        public InputValidationException(Exception innerException, ChybovyKod kod, string message = "") : base(message, innerException)
         {
             ChybovyKod = kod;
+            _ = message == "" ? "" : _chyboveHlasky[kod];
         }
 
         public ChybovyKod ChybovyKod { get; }

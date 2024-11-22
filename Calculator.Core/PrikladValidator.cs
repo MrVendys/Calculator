@@ -10,7 +10,7 @@ namespace Calculator.Core
         private readonly Regex _symbolValidator;
         private readonly Counting _counting;
 
-        #region Inicializace
+        #region Nastavení proměnných
 
         public PrikladValidator(Counting counting)
         {
@@ -74,15 +74,15 @@ namespace Calculator.Core
             {
                 if (_symbolValidator.IsMatch(novyPriklad[i].ToString()))
                 {
-                    if (ValidateSymbol(novyPriklad[i], novyPriklad.Substring(0, i)))
+                    if (!ValidateSymbol(novyPriklad[i], novyPriklad.Substring(0, i)))
                     {
-                        return true;
+                        return false;
                     }
                 }
 
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
