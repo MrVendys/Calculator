@@ -36,7 +36,7 @@ namespace Calculator.CoreTests
         }
 
         [TestMethod]
-        public void SquareRootStrategy_ZaporneCislo_CHybovyKodChybaVeVypoctu()
+        public void SquareRootStrategy_ZaporneCislo_ChybovyKodChybaVeVypoctu()
         {
             double zaporneCislo = -4;
             SquareRootStrategy sqr = new SquareRootStrategy();

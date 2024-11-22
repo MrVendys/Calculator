@@ -1,6 +1,5 @@
 ﻿using Calculator.Core;
 using Calculator.Core.Strategies;
-using System.ComponentModel;
 
 namespace Calculator.CoreTests
 {
@@ -31,7 +30,7 @@ namespace Calculator.CoreTests
         public void PrazdnyPrikladHandledTest()
         {
             Counting counting = GetCounting();
-            //Příklad je při inicializaci ""
+            //Counting.Priklad je při inicializaci ""
 
             //Test, jestli je tento případ ošetřený a aplikace nespadne
             counting.Vypocitej();
@@ -54,7 +53,7 @@ namespace Calculator.CoreTests
         }
 
         [TestMethod]
-        public void AddOperatorTest()
+        public void AddOperaceTest()
         {
             Counting counting = GetCounting();
             char novaOperace = '@';
@@ -66,13 +65,17 @@ namespace Calculator.CoreTests
 
             Assert.AreEqual(novaOperace, counting.ZnakyOperaci.Last());
             Assert.IsTrue(valid);
-            Assert.AreEqual(2,skutecnyVysledek);
+            Assert.AreEqual(2, skutecnyVysledek);
         }
+
+        #region Helpers
 
         private Counting GetCounting()
         {
             return new Counting();
         }
+
+        #endregion
 
         public class NahradStrategy : OperationStrategyBase
         {
