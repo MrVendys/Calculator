@@ -56,14 +56,13 @@ namespace Calculator.CoreTests
         public void AddOperaceTest()
         {
             Counting counting = GetCounting();
-            char novaOperace = '@';
             counting.AddOperace(new NahradStrategy());
-            bool valid = counting.TryPridejPriklad($"1{novaOperace}2");
+            bool valid = counting.TryPridejPriklad("1@2");
 
             counting.Vypocitej();
             double skutecnyVysledek = double.Parse(counting.Priklad);
 
-            Assert.AreEqual(novaOperace, counting.ZnakyOperaci.Last());
+            Assert.AreEqual('@', counting.ZnakyOperaci.Last());
             Assert.IsTrue(valid);
             Assert.AreEqual(2, skutecnyVysledek);
         }
@@ -77,11 +76,10 @@ namespace Calculator.CoreTests
 
         #endregion
 
-        public class NahradStrategy : OperationStrategyBase
+        private class NahradStrategy : OperationStrategyBase
         {
             public override char ZnakOperatoru => '@';
 
-            public PoziceCisla poziceCisla = PoziceCisla.VlevoIVpravo;
             public override double Vypocitej(double cislo1, double cislo2)
             {
                 return cislo2;
