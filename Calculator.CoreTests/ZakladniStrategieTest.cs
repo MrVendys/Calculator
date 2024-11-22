@@ -11,11 +11,11 @@ namespace Calculator.CoreTests
         [DataRow(5, 3, 8)]
         [DataRow(-2, 4, 2)]
         [DataRow(2.51233058, 3.20591493, 5.71824551)]
-        public void PlusStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
+        public void OperaceScitaniTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            PlusStrategy pls = new PlusStrategy();
+            OperaceScitani sct = new OperaceScitani();
 
-            double skutecnyVysledek = pls.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = sct.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -24,11 +24,11 @@ namespace Calculator.CoreTests
         [DataRow(10, 5, 5)]
         [DataRow(7.5, 2.3, 5.2)]
         [DataRow(-6, -2, -4)]
-        public void MinusStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
+        public void OperaceOdcitaniTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            MinusStrategy min = new MinusStrategy();
+            OperaceOdcitani odt = new OperaceOdcitani();
 
-            double skutecnyVysledek = min.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = odt.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -38,11 +38,11 @@ namespace Calculator.CoreTests
         [DataRow(0, 6, 0)]
         [DataRow(1.5, 2.5, 3.75)]
         [DataRow(-2, -4, 8)]
-        public void MultiplyStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
+        public void OperaceNasobeniTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            MultiplyStrategy mul = new MultiplyStrategy();
+            OperaceNasobeni nas = new OperaceNasobeni();
 
-            double skutecnyVysledek = mul.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = nas.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
@@ -52,23 +52,23 @@ namespace Calculator.CoreTests
         [DataRow(0, 5, 0)]
         [DataRow(7.5, 2.5, 3)]
         [DataRow(-6, -2, 3)]
-        public void DivideStrategyTest(double cislo1, double cislo2, double ocekavanyVysledek)
+        public void OperaceDeleniTest(double cislo1, double cislo2, double ocekavanyVysledek)
         {
-            DivideStrategy div = new DivideStrategy();
+            OperaceDeleni del = new OperaceDeleni();
 
-            double skutecnyVysledek = div.Vypocitej(cislo1, cislo2);
+            double skutecnyVysledek = del.Vypocitej(cislo1, cislo2);
 
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek);
         }
 
         [TestMethod]
-        public void DivideStrategy_Nula_ChybovyKodDeleniNulou()
+        public void OperaceDeleni_Nula_ChybovyKodDeleniNulou()
         {
             double cislo = 5;
             double nula = 0;
-            DivideStrategy div = new DivideStrategy();
+            OperaceDeleni del = new OperaceDeleni();
 
-            var exception = Assert.ThrowsException<InputValidationException>(() => div.Vypocitej(cislo, nula));
+            var exception = Assert.ThrowsException<InputValidationException>(() => del.Vypocitej(cislo, nula));
 
             Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DeleniNulou);
         }

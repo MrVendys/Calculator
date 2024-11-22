@@ -11,11 +11,11 @@ namespace Calculator.Core
         /// Key: char, znak operátoru. <br/>
         /// Value: OperationStrategy, instance OperationStrategy odpovídajícího znaku.
         /// </summary>
-        private readonly Dictionary<char, OperationStrategyBase> _operace = [];
+        private readonly Dictionary<char, OperaceBase> _operace = new Dictionary<char, OperaceBase>();
 
         private readonly PrikladValidator _prikladValidator;
 
-        #region Nastavení proměnných
+        #region Inicializace
 
         public Counting()
         {
@@ -25,17 +25,17 @@ namespace Calculator.Core
 
         private void InitializeOperace()
         {
-            AddOperace(new PlusStrategy());
-            AddOperace(new MinusStrategy());
-            AddOperace(new MultiplyStrategy());
-            AddOperace(new DivideStrategy());
-            AddOperace(new PowerStrategy());
-            AddOperace(new SquareRootStrategy());
-            AddOperace(new FactorialStrategy());
-            AddOperace(new ModuloStrategy());
+            AddOperace(new OperaceScitani());
+            AddOperace(new OperaceOdcitani());
+            AddOperace(new OperaceNasobeni());
+            AddOperace(new OperaceDeleni());
+            AddOperace(new OperaceMocnina());
+            AddOperace(new OperaceOdmocnina());
+            AddOperace(new OperaceFaktorial());
+            AddOperace(new OperaceModulo());
         }
 
-        public void AddOperace(OperationStrategyBase operace)
+        public void AddOperace(OperaceBase operace)
         {
             _operace.Add(operace.ZnakOperatoru, operace);
             _prikladValidator?.Refresh();
@@ -43,7 +43,7 @@ namespace Calculator.Core
 
         #endregion
 
-        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; } = [];
+        public ObservableCollection<SpocitanyPriklad> HistoriePrikladu { get; } = new ObservableCollection<SpocitanyPriklad>();
 
         public string DesetinnyOddelovac => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 
@@ -204,7 +204,7 @@ namespace Calculator.Core
             //Rekurzí se postupně posílají závorky zpět pro výpočet.
             tokeny = VyresZavorky(tokeny);
 
-            List<OperationStrategyBase> pouziteOperace = NajdiOperatory(tokeny);
+            List<OperaceBase> pouziteOperace = NajdiOperatory(tokeny);
             int index = 0;
             while (tokeny.Length > 1 && pouziteOperace.Count > 0)
             {
@@ -212,7 +212,7 @@ namespace Calculator.Core
                 {
                     if (tokeny[index] == pouziteOperace[0].ZnakOperatoru.ToString())
                     {
-                        OperationStrategyBase pouzitaOperace = pouziteOperace[0];
+                        OperaceBase pouzitaOperace = pouziteOperace[0];
                         double meziVysl;
                         int takeIndex;
                         int skipIndex;
@@ -272,7 +272,7 @@ namespace Calculator.Core
         /// <param name="tokeny">Příklad, rozložený funkcí <see cref="DoTokenu(string)"/></param>
         /// <param name="index">Index řešeného operátoru v <paramref name="tokeny"/></param>
         /// <param name="pouzitaOperace">Řešený operátor jako objekt OperaceStrategy pro získání vlastnosti <see cref="PoziceCisla"/></param>
-        private void ZkontrolujCisla(string[] tokeny, int index, OperationStrategyBase pouzitaOperace)
+        private void ZkontrolujCisla(string[] tokeny, int index, OperaceBase pouzitaOperace)
         {
             int indexCisla1;
             int? indexCisla2 = null;
@@ -316,10 +316,10 @@ namespace Calculator.Core
         /// Nalezení použitých operátorů v příkladu.
         /// </summary>
         /// <param name="tokeny">Příklad, rozložený funkcí <see cref="DoTokenu(string)"/></param>
-        /// <returns>List nalezených operací. Uspořádaný sestupně podle vlastnosti <see cref="OperationStrategyBase.Priorita"/></returns>
-        private List<OperationStrategyBase> NajdiOperatory(string[] tokeny)
+        /// <returns>List nalezených operací. Uspořádaný sestupně podle vlastnosti <see cref="OperaceBase.Priorita"/></returns>
+        private List<OperaceBase> NajdiOperatory(string[] tokeny)
         {
-            List<OperationStrategyBase> pouziteOperace = new List<OperationStrategyBase>();
+            List<OperaceBase> pouziteOperace = new List<OperaceBase>();
             for (int i = 0; i < tokeny.Length; i++)
             {
                 if (!int.TryParse(tokeny[i], out _))

@@ -2,7 +2,7 @@
 
 namespace Calculator.Core.Strategies
 {
-    internal class DivideStrategy : OperationStrategyBase
+    internal class OperaceDeleni : OperaceBase
     {
         public override byte Priorita => 2;
 

@@ -1,6 +1,6 @@
 ﻿namespace Calculator.Core.Strategies
 {
-    public abstract class OperationStrategyBase
+    public abstract class OperaceBase
     {
         /// <summary>
         /// Priorita operatoru od 1 (default). <br/>

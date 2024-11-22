@@ -102,7 +102,7 @@ namespace Calculator.UI.ViewModels
         /// </summary>
         private void ZobrazHlasku(ChybovyKod kod = ChybovyKod.Neidentifikovano, string chyba = "")
         {
-            _ = MessageBox.Show($"Nastala chyba (Kod {(int)kod}:{kod}). {chyba}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
+            MessageBox.Show($"Nastala chyba (Kod {(int)kod}:{kod}). {chyba}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
     }
 }

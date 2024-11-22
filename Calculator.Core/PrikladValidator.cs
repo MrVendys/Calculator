@@ -7,10 +7,10 @@ namespace Calculator.Core
     /// </summary>
     internal class PrikladValidator
     {
-        private readonly Regex _symbolValidator;
+        private Regex _symbolValidator;
         private readonly Counting _counting;
 
-        #region Nastavení proměnných
+        #region Inicializace
 
         public PrikladValidator(Counting counting)
         {
@@ -24,7 +24,7 @@ namespace Calculator.Core
         /// </summary>
         public void Refresh()
         {
-            _ = InitializeRegex();
+            _symbolValidator = InitializeRegex();
         }
 
         private Regex InitializeRegex()
@@ -74,12 +74,13 @@ namespace Calculator.Core
             {
                 if (_symbolValidator.IsMatch(novyPriklad[i].ToString()))
                 {
-                    if (!ValidateSymbol(novyPriklad[i], novyPriklad.Substring(0, i)))
+                    if (ValidateSymbol(novyPriklad[i], novyPriklad.Substring(0, i)))
                     {
-                        return false;
+                        continue;
                     }
                 }
 
+                return false;
             }
 
             return true;

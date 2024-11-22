@@ -1,6 +1,6 @@
 ﻿namespace Calculator.Core.Strategies
 {
-    internal class MultiplyStrategy : OperationStrategyBase
+    internal class OperaceNasobeni : OperaceBase
     {
         public override byte Priorita => 2;
 
