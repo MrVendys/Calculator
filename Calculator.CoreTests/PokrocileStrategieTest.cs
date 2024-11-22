@@ -1,5 +1,5 @@
-﻿using Calculator.Core.Exceptions;
-using Calculator.Core;
+﻿using Calculator.Core;
+using Calculator.Core.Exceptions;
 using Calculator.Core.Strategies;
 
 namespace Calculator.CoreTests

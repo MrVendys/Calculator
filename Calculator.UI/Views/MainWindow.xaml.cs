@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using Calculator.UI.ViewModels;
+using System.Windows;
 using System.Windows.Input;
-using Calculator.UI.ViewModels;
 
 namespace Calculator.UI.Views
 {
@@ -26,7 +26,7 @@ namespace Calculator.UI.Views
             CommandBinding smazHandler = new CommandBinding(CalculatorCommands.SmazSymbolCommand, (s, e) => _viewModel.SmazSymbol());
             CommandBinding smazAllHandler = new CommandBinding(CalculatorCommands.SmazAllSymbolyCommand, (s, e) => _viewModel.SmazPriklad());
             CommandBinding historyPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
-            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand, 
+            CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand,
                 (s, e) => _viewModel.PridejSymbol((string)e.Parameter),
                 (s, e) => e.CanExecute = PridejSymbolCanExecute((string)e.Parameter));
 
