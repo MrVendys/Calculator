@@ -154,6 +154,17 @@ namespace Calculator.Core
                 return false;
             }
 
+            // Přednostní kontrola přidání znaku za oddělovač
+            if (posledniSymbol == oddelovac)
+            {
+                if (char.IsDigit(symbol))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
             // Přidání desetinné čárky/tečky
             if (symbol == oddelovac)
             {
@@ -217,7 +228,7 @@ namespace Calculator.Core
             // Přidání operátoru
             if (operace.Contains(symbol))
             {
-                if ((!operace.Contains(posledniSymbol) && posledniSymbol != '(' && symbol != oddelovac) || posledniSymbolPoziceCisla == PoziceCisla.Vlevo)
+                if ((!operace.Contains(posledniSymbol) && posledniSymbol != '(') || posledniSymbolPoziceCisla == PoziceCisla.Vlevo)
                 {
                     return true;
                 }
