@@ -134,15 +134,19 @@ namespace Calculator.Core
         {
             string priklad = novyPriklad ?? _counting.Priklad;
             char oddelovac = _counting.DesetinnyOddelovac.First();
-            IEnumerable<char> operace = _counting.ZnakyOperaci;
-            MatchCollection matches = Regex.Matches(priklad, @$"\d+(\{oddelovac}\d+)?");
-            string posledniCislo = matches.Count == 0 ? "" : matches.Last().Value;
             char posledniSymbol = string.IsNullOrEmpty(priklad) ? ' ' : priklad.Last();
+
+            MatchCollection celaCisla = Regex.Matches(priklad, @$"\d+(\{oddelovac}\d+)?");
+            string posledniCislo = celaCisla.Count == 0 ? "" : celaCisla.Last().Value;
+
+            IEnumerable<char> operace = _counting.ZnakyOperaci;
+            PoziceCisla? symbolPoziceCisla = GetPoziceCisla(symbol);
+            PoziceCisla? posledniSymbolPoziceCisla = GetPoziceCisla(posledniSymbol);
 
             // Přidání čísla
             if (char.IsDigit(symbol))
             {
-                if (posledniSymbol != ')' && posledniSymbol != '!')
+                if (posledniSymbol != ')' && posledniSymbolPoziceCisla != PoziceCisla.Vlevo)
                 {
                     return true;
                 }
@@ -164,7 +168,7 @@ namespace Calculator.Core
             // Přidání symbolu do prázdného příkladu 
             if (string.IsNullOrEmpty(priklad))
             {
-                if (symbol == '(' || symbol == '√' || symbol == '-')
+                if (symbol == '(' || posledniSymbolPoziceCisla == PoziceCisla.Vpravo || symbol == '-')
                 {
                     return true;
                 }
@@ -175,7 +179,7 @@ namespace Calculator.Core
             // Přidání závorek
             if (symbol == ')')
             {
-                if ((posledniSymbol != '(' && !operace.Contains(posledniSymbol)) || posledniSymbol == '!')
+                if (posledniSymbol != '(' || posledniSymbolPoziceCisla == PoziceCisla.Vlevo)
                 {
                     return GetPocetOtevrenychZavorek(priklad);
                 }
@@ -185,7 +189,7 @@ namespace Calculator.Core
 
             if (symbol == '(')
             {
-                if (!char.IsDigit(posledniSymbol) && posledniSymbol != ')')
+                if (!char.IsDigit(posledniSymbol) && posledniSymbol != ')' && posledniSymbolPoziceCisla != PoziceCisla.Vlevo)
                 {
                     return true;
                 }
@@ -199,8 +203,8 @@ namespace Calculator.Core
                 return false;
             }
 
-            // Přidání operátoru √
-            if (symbol == '√')
+            // Přidání operátoru typu √
+            if (symbolPoziceCisla == PoziceCisla.Vpravo)
             {
                 if (!char.IsDigit(posledniSymbol) && posledniSymbol != ')')
                 {
@@ -213,7 +217,7 @@ namespace Calculator.Core
             // Přidání operátoru
             if (operace.Contains(symbol))
             {
-                if ((!operace.Contains(posledniSymbol) && posledniSymbol != '(' && symbol != oddelovac) || posledniSymbol == '!')
+                if ((!operace.Contains(posledniSymbol) && posledniSymbol != '(' && symbol != oddelovac) || posledniSymbolPoziceCisla == PoziceCisla.Vlevo)
                 {
                     return true;
                 }
@@ -227,6 +231,13 @@ namespace Calculator.Core
             }
 
             return false;
+        }
+
+        private PoziceCisla? GetPoziceCisla(char symbol)
+        {
+            if (_counting._operace.TryGetValue(symbol, out var symbolOperace))
+                return symbolOperace.Pozice;
+            return null;
         }
     }
 }

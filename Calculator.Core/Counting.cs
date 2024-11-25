@@ -11,7 +11,7 @@ namespace Calculator.Core
         /// Key: char, znak operátoru. <br/>
         /// Value: OperationStrategy, instance OperationStrategy odpovídajícího znaku.
         /// </summary>
-        private readonly Dictionary<char, OperaceBase> _operace = new Dictionary<char, OperaceBase>();
+        internal readonly Dictionary<char, OperaceBase> _operace = new Dictionary<char, OperaceBase>();
 
         private readonly PrikladValidator _prikladValidator;
 
@@ -150,7 +150,7 @@ namespace Calculator.Core
             {
                 char token = priklad[index];
                 if (char.IsNumber(token)
-                    || token == DesetinnyOddelovac[0]
+                    || token == DesetinnyOddelovac.First()
                     || (token == '-' && !char.IsNumber(priklad[index - 1 < 0 ? 0 : index - 1])))
                 {
                     cislo += token;
