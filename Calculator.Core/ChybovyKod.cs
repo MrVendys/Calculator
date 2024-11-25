@@ -10,6 +10,7 @@
         ChybaVeVypoctu,
         DeleniNulou,
         DuplicitniOperace,
+        ChybiZnak,
         Neidentifikovano
     }
 }

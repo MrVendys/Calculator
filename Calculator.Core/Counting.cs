@@ -41,6 +41,9 @@ namespace Calculator.Core
                 throw new SpatnePouzitiException(ChybovyKod.DuplicitniOperace, "Operace s tímto znakem je již definována. \n" +
                     $"(Již použité znaky: {string.Join(',', _operace.Keys)}");
 
+            if (char.IsWhiteSpace(operace.ZnakOperatoru))
+                throw new SpatnePouzitiException(ChybovyKod.ChybiZnak, "Operace nemá přiřazený znak");
+
             _operace.Add(operace.ZnakOperatoru, operace);
             _prikladValidator?.Refresh();
         }

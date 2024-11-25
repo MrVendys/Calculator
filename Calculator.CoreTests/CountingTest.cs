@@ -85,6 +85,17 @@ namespace Calculator.CoreTests
             Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DuplicitniOperace);
         }
 
+        [TestMethod]
+        public void AddOperace_PrazdnySymbol_Exception()
+        {
+            Counting counting = GetCounting();
+            PrazdnaOperace prazdnaOp = new PrazdnaOperace();
+
+            var exception = Assert.ThrowsException<SpatnePouzitiException>(() => counting.AddOperace(prazdnaOp));
+
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.ChybiZnak);
+        }
+
         #region Helpers
 
         private Counting GetCounting()
@@ -108,5 +119,10 @@ namespace Calculator.CoreTests
         {
             public override char ZnakOperatoru => '+';
         }
+        private class PrazdnaOperace : OperaceBase
+        {
+            public override char ZnakOperatoru => ' ';
+        }
+
     }
 }
