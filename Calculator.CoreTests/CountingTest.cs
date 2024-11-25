@@ -1,4 +1,5 @@
 ﻿using Calculator.Core;
+using Calculator.Core.Exceptions;
 using Calculator.Core.Strategies;
 
 namespace Calculator.CoreTests
@@ -17,12 +18,14 @@ namespace Calculator.CoreTests
         public void VypocitejTest(string priklad, double ocekavanyVysledek)
         {
             Counting counting = GetCounting();
-            bool valid = counting.TryPridejPriklad(priklad);
-            counting.Vypocitej();
 
-            double skutecnyVysledek = double.Parse(counting.Priklad);
+            bool valid = counting.TryPridejPriklad(priklad);
 
             Assert.IsTrue(valid);
+
+            counting.Vypocitej();
+            double skutecnyVysledek = double.Parse(counting.Priklad);
+
             Assert.AreEqual(ocekavanyVysledek, skutecnyVysledek, delta);
         }
 
@@ -56,16 +59,30 @@ namespace Calculator.CoreTests
         public void AddOperaceTest()
         {
             Counting counting = GetCounting();
-            NahradStrategy nahrad = new NahradStrategy();
+            OperaceNahrad nahrad = new OperaceNahrad();
             counting.AddOperace(nahrad);
+
+            Assert.AreEqual(nahrad.ZnakOperatoru, counting.ZnakyOperaci.Last());
+
             bool valid = counting.TryPridejPriklad($"1{nahrad.ZnakOperatoru}2");
+
+            Assert.IsTrue(valid);
 
             counting.Vypocitej();
             double skutecnyVysledek = double.Parse(counting.Priklad);
 
-            Assert.AreEqual(nahrad.ZnakOperatoru, counting.ZnakyOperaci.Last());
-            Assert.IsTrue(valid);
             Assert.AreEqual(2, skutecnyVysledek);
+        }
+
+        [TestMethod]
+        public void AddOperace_Duplicitni_Exception()
+        {
+            Counting counting = GetCounting();
+            DuplicitniOperace duplicitniOp = new DuplicitniOperace();
+
+            var exception = Assert.ThrowsException<SpatnePouzitiException>(() => counting.AddOperace(duplicitniOp));
+
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DuplicitniOperace);
         }
 
         #region Helpers
@@ -77,7 +94,7 @@ namespace Calculator.CoreTests
 
         #endregion
 
-        private class NahradStrategy : OperaceBase
+        private class OperaceNahrad : OperaceBase
         {
             public override char ZnakOperatoru => '@';
 
@@ -85,6 +102,11 @@ namespace Calculator.CoreTests
             {
                 return cislo2;
             }
+        }
+
+        private class DuplicitniOperace : OperaceBase
+        {
+            public override char ZnakOperatoru => '+';
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Calculator.Core.Strategies
         public override double Vypocitej(double cislo1)
         {
             if (cislo1 % 1.0 != 0)
-                throw new InputValidationException(ChybovyKod.ChybaVeVypoctu, "Faktorial desetinného čísla není podporován");
+                throw new NeplatnyVstupException(ChybovyKod.ChybaVeVypoctu, "Faktorial desetinného čísla není podporován");
 
             double result = 1;
             for (int i = (int)cislo1; i > 1; i--)

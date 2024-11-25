@@ -9,6 +9,7 @@
         NeniCislo,
         ChybaVeVypoctu,
         DeleniNulou,
+        DuplicitniOperace,
         Neidentifikovano
     }
 }

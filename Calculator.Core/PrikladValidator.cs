@@ -168,7 +168,7 @@ namespace Calculator.Core
             // Přidání symbolu do prázdného příkladu 
             if (string.IsNullOrEmpty(priklad))
             {
-                if (symbol == '(' || posledniSymbolPoziceCisla == PoziceCisla.Vpravo || symbol == '-')
+                if (symbol == '(' || symbolPoziceCisla == PoziceCisla.Vpravo || symbol == '-')
                 {
                     return true;
                 }
@@ -222,7 +222,7 @@ namespace Calculator.Core
                     return true;
                 }
 
-                if (posledniSymbol == '(' && symbol == '-')
+                if (symbol == '-' && (posledniSymbol == '(' || posledniSymbolPoziceCisla == PoziceCisla.Vpravo))
                 {
                     return true;
                 }

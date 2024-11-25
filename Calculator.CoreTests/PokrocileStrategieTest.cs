@@ -41,7 +41,7 @@ namespace Calculator.CoreTests
             double zaporneCislo = -4;
             OperaceOdmocnina odm = new OperaceOdmocnina();
 
-            var exception = Assert.ThrowsException<InputValidationException>(() => odm.Vypocitej(zaporneCislo));
+            var exception = Assert.ThrowsException<NeplatnyVstupException>(() => odm.Vypocitej(zaporneCislo));
 
             Assert.AreEqual(exception.ChybovyKod, ChybovyKod.ChybaVeVypoctu);
         }
@@ -64,7 +64,7 @@ namespace Calculator.CoreTests
             double desetinneCislo = 1.1;
             OperaceFaktorial fkt = new OperaceFaktorial();
 
-            var exception = Assert.ThrowsException<InputValidationException>(() => fkt.Vypocitej(desetinneCislo));
+            var exception = Assert.ThrowsException<NeplatnyVstupException>(() => fkt.Vypocitej(desetinneCislo));
 
             Assert.AreEqual(exception.ChybovyKod, ChybovyKod.ChybaVeVypoctu);
         }
@@ -87,7 +87,7 @@ namespace Calculator.CoreTests
             double cislo = 5;
             OperaceModulo mod = new OperaceModulo();
 
-            var exception = Assert.ThrowsException<InputValidationException>(() => mod.Vypocitej(cislo, 0));
+            var exception = Assert.ThrowsException<NeplatnyVstupException>(() => mod.Vypocitej(cislo, 0));
 
             Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DeleniNulou);
         }

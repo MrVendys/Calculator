@@ -40,9 +40,13 @@ namespace Calculator.UI.ViewModels
                 _counting.Vypocitej();
                 OnPropertyChanged(nameof(Priklad));
             }
-            catch (InputValidationException en)
+            catch (NeplatnyVstupException e)
             {
-                ZobrazHlasku(en.ChybovyKod, en.Message);
+                ZobrazHlasku(e.ChybovyKod, e.Message);
+            }
+            catch (SpatnePouzitiException e)
+            {
+                ZobrazHlasku(e.ChybovyKod, e.Message);
             }
         }
 

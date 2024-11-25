@@ -68,7 +68,7 @@ namespace Calculator.CoreTests
             double nula = 0;
             OperaceDeleni del = new OperaceDeleni();
 
-            var exception = Assert.ThrowsException<InputValidationException>(() => del.Vypocitej(cislo, nula));
+            var exception = Assert.ThrowsException<NeplatnyVstupException>(() => del.Vypocitej(cislo, nula));
 
             Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DeleniNulou);
         }

@@ -4,7 +4,7 @@
     /// Výjimka pro špatně zadaný příklad.
     /// Např: Nekompletní závorka, chybějící číslo 
     /// </summary>
-    public class InputValidationException : Exception
+    public class NeplatnyVstupException : Exception
     {
         private static readonly Dictionary<ChybovyKod, string> _chyboveHlasky = new Dictionary<ChybovyKod, string>()
         {
@@ -15,15 +15,14 @@
             { ChybovyKod.ChybiZaviraciZavorka, "Chybí zavírací závorka." },
             { ChybovyKod.ChybaVeVypoctu, "Špatně zadaná čísla pro výpočet" },
             { ChybovyKod.DeleniNulou, "Dělení nulou." },
-            { ChybovyKod.Neidentifikovano, "Nastala výjimka. Neznámá softwarová výjimka." },
         };
 
-        public InputValidationException(ChybovyKod kod, string? message = null) : base(message ?? _chyboveHlasky[kod])
+        public NeplatnyVstupException(ChybovyKod kod, string? message = null) : base(message ?? _chyboveHlasky[kod])
         {
             ChybovyKod = kod;
         }
 
-        public InputValidationException(Exception innerException, ChybovyKod kod, string? message = null) : base(message ?? _chyboveHlasky[kod], innerException)
+        public NeplatnyVstupException(ChybovyKod kod, NeplatnyVstupException innerException, string? message = null) : base(message ?? _chyboveHlasky[kod], innerException)
         {
             ChybovyKod = kod;
         }
