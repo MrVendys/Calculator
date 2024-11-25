@@ -33,13 +33,20 @@ namespace Calculator.CoreTests
         }
 
         [TestMethod]
+        [DataRow('1', "(1+2)")]
+        [DataRow('1', "1!")]
         [DataRow('+', "")]
-        [DataRow('2', "3!")]
-        [DataRow(')', "(")]
+        [DataRow(')', "")]
         [DataRow(')', "1+")]
-        [DataRow('(', "1+(2+3")]
-        [DataRow('√', "2")]
-        [DataRow('-', "2+")]
+        [DataRow(')', "(")]
+        [DataRow('(', "1")]
+        [DataRow('(', "(1+2)")]
+        [DataRow('(', "5!")]
+        [DataRow('+', "1+")]
+        [DataRow('√', "1")]
+        [DataRow('√', "(1+2)")]
+        [DataRow('+', "(")]
+        [DataRow('+', "√")]
         //Test na přidávání symbolů, které nejdou přidat do rozpracovaného příkladu
         public void ValidatePridejSymbol_LogickyNespravnySymbol_False(char symbol, string priklad)
         {
@@ -47,6 +54,18 @@ namespace Calculator.CoreTests
             counting.TryPridejPriklad(priklad);
 
             bool valid = prikladValidator.ValidatePridejSymbol(symbol);
+
+            Assert.IsFalse(valid);
+        }
+
+        [DataRow("")]
+        [DataRow("12.34")]
+        public void ValidatePridejSymbol_DesetinnyOddelovac_False(string priklad)
+        {
+            PrikladValidator prikladValidator = GetValidator(out Counting counting);
+            counting.TryPridejPriklad(priklad);
+
+            bool valid = prikladValidator.ValidatePridejSymbol(counting.DesetinnyOddelovac.First());
 
             Assert.IsFalse(valid);
         }
