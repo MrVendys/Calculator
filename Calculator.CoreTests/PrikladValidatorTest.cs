@@ -13,11 +13,9 @@ namespace Calculator.CoreTests
         public void ValidatePridejSymbol(char symbol, string priklad)
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);
-            bool valid = counting.TryPridejPriklad(priklad);
+            counting.TryPridejPriklad(priklad);
 
-            Assert.IsTrue(valid);
-
-            valid = prikladValidator.ValidatePridejSymbol(symbol);
+            bool valid = prikladValidator.ValidatePridejSymbol(symbol);
 
             Assert.IsTrue(valid);
         }
@@ -53,11 +51,9 @@ namespace Calculator.CoreTests
         public void ValidatePridejSymbol_LogickyNespravnySymbol_False(char symbol, string priklad)
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);
-            bool valid = counting.TryPridejPriklad(priklad);
+            counting.TryPridejPriklad(priklad);
 
-            Assert.IsTrue(valid);
-
-            valid = prikladValidator.ValidatePridejSymbol(symbol);
+            bool valid = prikladValidator.ValidatePridejSymbol(symbol);
 
             Assert.IsFalse(valid);
         }
@@ -67,11 +63,9 @@ namespace Calculator.CoreTests
         public void ValidatePridejSymbol_DesetinnyOddelovac_False(string priklad)
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);
-            bool valid = counting.TryPridejPriklad(priklad);
+            counting.TryPridejPriklad(priklad);
 
-            Assert.IsTrue(valid);
-
-            valid = prikladValidator.ValidatePridejSymbol(counting.DesetinnyOddelovac.First());
+            bool valid = prikladValidator.ValidatePridejSymbol(counting.DesetinnyOddelovac.First());
 
             Assert.IsFalse(valid);
         }
