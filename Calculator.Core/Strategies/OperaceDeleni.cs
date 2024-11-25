@@ -16,7 +16,7 @@ namespace Calculator.Core.Strategies
             }
             else
             {
-                throw new NeplatnyVstupException(ChybovyKod.DeleniNulou, "Dělení nulou!");
+                throw new NeplatnyVstupException(ChybovyKodNeplatnyVstup.DeleniNulou, "Dělení nulou!");
             }
         }
     }

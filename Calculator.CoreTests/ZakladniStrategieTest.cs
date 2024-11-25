@@ -1,5 +1,4 @@
-﻿using Calculator.Core;
-using Calculator.Core.Exceptions;
+﻿using Calculator.Core.Exceptions;
 using Calculator.Core.Strategies;
 
 namespace Calculator.CoreTests
@@ -70,7 +69,7 @@ namespace Calculator.CoreTests
 
             var exception = Assert.ThrowsException<NeplatnyVstupException>(() => del.Vypocitej(cislo, nula));
 
-            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DeleniNulou);
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKodNeplatnyVstup.DeleniNulou);
         }
     }
 }

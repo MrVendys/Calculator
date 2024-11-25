@@ -42,11 +42,11 @@ namespace Calculator.UI.ViewModels
             }
             catch (NeplatnyVstupException e)
             {
-                ZobrazHlasku(e.ChybovyKod, e.Message);
+                ZobrazHlasku(e.Message);
             }
             catch (SpatnePouzitiException e)
             {
-                ZobrazHlasku(e.ChybovyKod, e.Message);
+                ZobrazHlasku(e.Message);
             }
         }
 
@@ -97,16 +97,16 @@ namespace Calculator.UI.ViewModels
             }
             else
             {
-                ZobrazHlasku(ChybovyKod.Neidentifikovano, "Chyba v programu. Nelze načíst příklad z historie");
+                ZobrazHlasku("Chyba v programu. Nelze načíst příklad z historie");
             }
         }
 
         /// <summary>
         /// Zobrazení uživateli MessageBox s <paramref name="chyba"/>.
         /// </summary>
-        private void ZobrazHlasku(ChybovyKod kod = ChybovyKod.Neidentifikovano, string chyba = "")
+        private void ZobrazHlasku(string chyba = "")
         {
-            MessageBox.Show($"Nastala chyba (Kod {(int)kod}:{kod}). {chyba}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
+            MessageBox.Show($"Nastala chyba. {chyba}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }
     }
 }

@@ -133,7 +133,7 @@ namespace Calculator.Core
         private bool ValidateSymbol(char symbol, string? novyPriklad = null)
         {
             string priklad = novyPriklad ?? _counting.Priklad;
-            char oddelovac = _counting.DesetinnyOddelovac.First();
+            char oddelovac = _counting.DesetinnyOddelovac[0];
             char posledniSymbol = string.IsNullOrEmpty(priklad) ? ' ' : priklad.Last();
 
             MatchCollection celaCisla = Regex.Matches(priklad, @$"\d+(\{oddelovac}\d+)?");

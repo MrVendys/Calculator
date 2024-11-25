@@ -38,11 +38,14 @@ namespace Calculator.Core
         public void AddOperace(OperaceBase operace)
         {
             if (_operace.TryGetValue(operace.ZnakOperatoru, out _))
-                throw new SpatnePouzitiException(ChybovyKod.DuplicitniOperace, "Operace s tímto znakem je již definována. \n" +
-                    $"(Již použité znaky: {string.Join(',', _operace.Keys)}");
+                throw new SpatnePouzitiException(
+                    ChybovyKodSpatnePouziti.DuplicitniOperace,
+                    $"Operace se znakem: {operace.ZnakOperatoru} je již definována. \n" +
+                    $"(Již použité znaky: {string.Join(',', _operace.Keys)})"
+                    );
 
             if (char.IsWhiteSpace(operace.ZnakOperatoru))
-                throw new SpatnePouzitiException(ChybovyKod.ChybiZnak, "Operace nemá přiřazený znak");
+                throw new SpatnePouzitiException(ChybovyKodSpatnePouziti.ChybiZnak);
 
             _operace.Add(operace.ZnakOperatoru, operace);
             _prikladValidator?.Refresh();
@@ -157,7 +160,7 @@ namespace Calculator.Core
             {
                 char token = priklad[index];
                 if (char.IsNumber(token)
-                    || token == DesetinnyOddelovac.First()
+                    || token == DesetinnyOddelovac[0]
                     || (token == '-' && !char.IsNumber(priklad[index - 1 < 0 ? 0 : index - 1])))
                 {
                     cislo += token;
@@ -254,7 +257,7 @@ namespace Calculator.Core
                                 break;
 
                             default:
-                                throw new SpatnePouzitiException(ChybovyKod.Neidentifikovano, "Tato operace není ještě implementována");
+                                throw new NotImplementedException("Tato operace není implementovaná");
                         }
 
                         // Přepsání pole "tokeny" novými hodnoty. Přepsání mezipříkladu na mezivýsledek. 
@@ -298,12 +301,12 @@ namespace Calculator.Core
             }
             else
             {
-                throw new NeplatnyVstupException(ChybovyKod.ChybejiciCislo);
+                throw new NeplatnyVstupException(ChybovyKodNeplatnyVstup.ChybejiciCislo); ;
             }
 
             if (!Zkontroluj(tokeny[indexCisla1], indexCisla2 == null ? "0" : tokeny[indexCisla2.Value]))
             {
-                throw new NeplatnyVstupException(ChybovyKod.NeniCislo, $"Operator: {pouzitaOperace.ZnakOperatoru} nemá číslo pro výpočet");
+                throw new NeplatnyVstupException(ChybovyKodNeplatnyVstup.NeniCislo, $"Operator: {pouzitaOperace.ZnakOperatoru} nemá číslo pro výpočet");
             }
         }
 
@@ -356,7 +359,7 @@ namespace Calculator.Core
                 }
             }
 
-            throw new NeplatnyVstupException(ChybovyKod.ChybiOteviraciZavorka);
+            throw new NeplatnyVstupException(ChybovyKodNeplatnyVstup.ChybiOteviraciZavorka);
         }
 
         /// <summary>
@@ -373,14 +376,14 @@ namespace Calculator.Core
                 {
                     if (i - startovaciId <= 1)
                     {
-                        throw new NeplatnyVstupException(ChybovyKod.PrazdnaZavorka);
+                        throw new NeplatnyVstupException(ChybovyKodNeplatnyVstup.PrazdnaZavorka);
                     }
 
                     return i;
                 }
             }
 
-            throw new NeplatnyVstupException(ChybovyKod.ChybiZaviraciZavorka);
+            throw new NeplatnyVstupException(ChybovyKodNeplatnyVstup.ChybiZaviraciZavorka);
         }
     }
 }

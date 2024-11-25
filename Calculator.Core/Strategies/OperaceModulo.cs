@@ -11,10 +11,10 @@ namespace Calculator.Core.Strategies
         public override double Vypocitej(double cislo1, double cislo2)
         {
             if (cislo2 == 0)
-                throw new NeplatnyVstupException(ChybovyKod.DeleniNulou, "Dělení nulou!");
+                throw new NeplatnyVstupException(ChybovyKodNeplatnyVstup.DeleniNulou, "Dělení nulou!");
 
             if (cislo1 % 1.0 != 0 || cislo2 % 1.0 != 0)
-                throw new NeplatnyVstupException(ChybovyKod.ChybaVeVypoctu, "Modulo s desetinným číslem");
+                throw new NeplatnyVstupException(ChybovyKodNeplatnyVstup.ChybaVeVypoctu, "Modulo s desetinným číslem");
 
             return cislo1 % cislo2;
         }

@@ -13,13 +13,13 @@ namespace Calculator.CoreTests
         public void ValidatePridejSymbol(string priklad, char symbol)
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);
-            bool valid = counting.TryPridejPriklad(priklad);
+            bool prikladValid = counting.TryPridejPriklad(priklad);
 
-            Assert.IsTrue(valid);
+            Assert.IsTrue(prikladValid);
 
-            valid = prikladValidator.ValidatePridejSymbol(symbol);
+            bool symbolValid = prikladValidator.ValidatePridejSymbol(symbol);
 
-            Assert.IsTrue(valid);
+            Assert.IsTrue(symbolValid);
         }
 
         [TestMethod]
@@ -53,34 +53,42 @@ namespace Calculator.CoreTests
         public void ValidatePridejSymbol_LogickyNespravnySymbol_False(string priklad, char symbol)
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);
-            bool valid = counting.TryPridejPriklad(priklad);
+            bool prikladValid = counting.TryPridejPriklad(priklad);
 
-            Assert.IsTrue(valid);
+            Assert.IsTrue(prikladValid);
 
-            valid = prikladValidator.ValidatePridejSymbol(symbol);
+            bool symbolValid = prikladValidator.ValidatePridejSymbol(symbol);
 
-            Assert.IsFalse(valid);
+            Assert.IsFalse(symbolValid);
         }
 
         [TestMethod]
-        [DataRow("")]
-        [DataRow("12.34")]
-        public void ValidatePridejSymbol_DesetinnyOddelovac_False(string priklad)
+        public void ValidatePridejSymbol_DesetinnyOddelovac_PrazdnyPriklad_False()
         {
             PrikladValidator prikladValidator = GetValidator(out Counting counting);
-            bool valid = counting.TryPridejPriklad(priklad);
 
-            Assert.IsTrue(valid);
+            bool symbolValid = prikladValidator.ValidatePridejSymbol(counting.DesetinnyOddelovac[0]);
 
-            valid = prikladValidator.ValidatePridejSymbol(counting.DesetinnyOddelovac.First());
+            Assert.IsFalse(symbolValid);
+        }
 
-            Assert.IsFalse(valid);
+        [TestMethod]
+        public void ValidatePridejSymbol_DesetinnyOddelovac_Duplicitni_False()
+        {
+            PrikladValidator prikladValidator = GetValidator(out Counting counting);
+            bool prikladValid = counting.TryPridejPriklad($"12{counting.DesetinnyOddelovac[0]}34");
+
+            Assert.IsTrue(prikladValid);
+
+            bool symbolValid = prikladValidator.ValidatePridejSymbol(counting.DesetinnyOddelovac[0]);
+
+            Assert.IsFalse(symbolValid);
         }
 
         [TestMethod]
         [DataRow("3/(5+2)")]
         [DataRow("4!*5+√4")]
-        public void ValidatePriklad(string priklad)
+        public void ValidatePridejPriklad(string priklad)
         {
             PrikladValidator prikladValidator = GetValidator(out _);
 
@@ -98,6 +106,5 @@ namespace Calculator.CoreTests
         }
 
         #endregion
-
     }
 }

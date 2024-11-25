@@ -1,5 +1,4 @@
-﻿using Calculator.Core;
-using Calculator.Core.Exceptions;
+﻿using Calculator.Core.Exceptions;
 using Calculator.Core.Strategies;
 
 namespace Calculator.CoreTests
@@ -43,7 +42,7 @@ namespace Calculator.CoreTests
 
             var exception = Assert.ThrowsException<NeplatnyVstupException>(() => odm.Vypocitej(zaporneCislo));
 
-            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.ChybaVeVypoctu);
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKodNeplatnyVstup.ChybaVeVypoctu);
         }
 
         [TestMethod]
@@ -66,7 +65,7 @@ namespace Calculator.CoreTests
 
             var exception = Assert.ThrowsException<NeplatnyVstupException>(() => fkt.Vypocitej(desetinneCislo));
 
-            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.ChybaVeVypoctu);
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKodNeplatnyVstup.ChybaVeVypoctu);
         }
 
         [TestMethod]
@@ -89,7 +88,7 @@ namespace Calculator.CoreTests
 
             var exception = Assert.ThrowsException<NeplatnyVstupException>(() => mod.Vypocitej(cislo, 0));
 
-            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DeleniNulou);
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKodNeplatnyVstup.DeleniNulou);
         }
     }
 }

@@ -62,7 +62,15 @@ namespace Calculator.CoreTests
             OperaceNahrad nahrad = new OperaceNahrad();
             counting.AddOperace(nahrad);
 
-            Assert.AreEqual(nahrad.ZnakOperatoru, counting.ZnakyOperaci.Last());
+            Assert.IsTrue(counting.ZnakyOperaci.Contains(nahrad.ZnakOperatoru));
+        }
+
+        [TestMethod]
+        public void VypocetNoveOperaceTest()
+        {
+            Counting counting = GetCounting();
+            OperaceNahrad nahrad = new OperaceNahrad();
+            counting.AddOperace(nahrad);
 
             bool valid = counting.TryPridejPriklad($"1{nahrad.ZnakOperatoru}2");
 
@@ -82,7 +90,7 @@ namespace Calculator.CoreTests
 
             var exception = Assert.ThrowsException<SpatnePouzitiException>(() => counting.AddOperace(duplicitniOp));
 
-            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.DuplicitniOperace);
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKodSpatnePouziti.DuplicitniOperace);
         }
 
         [TestMethod]
@@ -93,7 +101,7 @@ namespace Calculator.CoreTests
 
             var exception = Assert.ThrowsException<SpatnePouzitiException>(() => counting.AddOperace(prazdnaOp));
 
-            Assert.AreEqual(exception.ChybovyKod, ChybovyKod.ChybiZnak);
+            Assert.AreEqual(exception.ChybovyKod, ChybovyKodSpatnePouziti.ChybiZnak);
         }
 
         #region Helpers
@@ -104,6 +112,8 @@ namespace Calculator.CoreTests
         }
 
         #endregion
+
+        #region Helper Classes
 
         private class OperaceNahrad : OperaceBase
         {
@@ -119,10 +129,12 @@ namespace Calculator.CoreTests
         {
             public override char ZnakOperatoru => '+';
         }
+
         private class PrazdnaOperace : OperaceBase
         {
             public override char ZnakOperatoru => ' ';
         }
 
+        #endregion
     }
 }
