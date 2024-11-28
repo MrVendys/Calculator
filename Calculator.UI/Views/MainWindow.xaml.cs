@@ -27,18 +27,46 @@ namespace Calculator.UI.Views
             CommandBinding smazAllHandler = new CommandBinding(CalculatorCommands.SmazAllSymbolyCommand, (s, e) => _viewModel.SmazPriklad());
             CommandBinding historyPrikladClickHandler = new CommandBinding(CalculatorCommands.OnHistoryPrikladClickCommand, _viewModel.VratPriklad);
             CommandBinding pridejHandler = new CommandBinding(CalculatorCommands.PridejSymbolCommand,
-                (s, e) => _viewModel.PridejSymbol((string)e.Parameter),
-                (s, e) => e.CanExecute = PridejSymbolCanExecute((string)e.Parameter));
+                (s, e) => 
+                {
+                    if (PridejSymbolCanExecute((string)e.Parameter))
+                        _viewModel.PridejSymbol((string)e.Parameter);
+                });
+            CommandBinding zkopiruj = new CommandBinding(CalculatorCommands.ClipboardCopy, (s, e) => Kopiruj());
+            CommandBinding vloz = new CommandBinding(CalculatorCommands.ClipboardPaste, (s, e) => Vloz());
 
             CommandBindings.Add(vypocitejHandler);
             CommandBindings.Add(smazHandler);
             CommandBindings.Add(smazAllHandler);
             CommandBindings.Add(pridejHandler);
             CommandBindings.Add(historyPrikladClickHandler);
+            CommandBindings.Add(zkopiruj);
+            CommandBindings.Add(vloz);
+        }
+
+        private void Kopiruj()
+        {
+            Clipboard.SetText(InputTextBox.Text);
+        }
+
+        private void Vloz()
+        {
+            var text = Clipboard.GetText();
+            if (PridejSymbolCanExecute(text))
+            {
+                _viewModel.PridejPriklad(text);
+            }
+            else
+            {
+                _viewModel.ZobrazHlasku("Text je moc dlouhý na vložení.");
+            }
         }
 
         private void Window_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
+            if (string.IsNullOrEmpty(e.Text))
+                return;
+
             if (_carkaHandled)
             {
                 _carkaHandled = false;

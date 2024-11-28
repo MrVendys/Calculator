@@ -86,6 +86,15 @@ namespace Calculator.UI.ViewModels
             }
         }
 
+        public void PridejPriklad(string priklad)
+        {
+            if (_counting.TryPridejPriklad(priklad))
+            {
+                OnPropertyChanged(nameof(Priklad));
+            }
+        }
+
+        /// <summary>
         /// Aktualizování vlastnosti <see cref="Priklad"/> při úspěšném vrácení příkladu z historie.
         /// <summary>
         public void VratPriklad(object sender, ExecutedRoutedEventArgs e)
@@ -104,7 +113,7 @@ namespace Calculator.UI.ViewModels
         /// <summary>
         /// Zobrazení uživateli MessageBox s <paramref name="chyba"/>.
         /// </summary>
-        private void ZobrazHlasku(string chyba = "")
+        internal void ZobrazHlasku(string chyba = "")
         {
             MessageBox.Show($"Nastala chyba. {chyba}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.OK);
         }

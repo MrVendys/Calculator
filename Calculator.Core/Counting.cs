@@ -69,10 +69,13 @@ namespace Calculator.Core
         /// <returns>Vrací bool, jestli byl příklad změněn</returns>
         public bool TryPridejSymbol(string symbol)
         {
+            if (string.IsNullOrEmpty(symbol)) 
+                return false;
+
             if (symbol.Equals("mod", StringComparison.CurrentCultureIgnoreCase))
                 symbol = "%";
 
-            bool valid = _prikladValidator.ValidatePridejSymbol(symbol.First());
+            bool valid = _prikladValidator.ValidatePridejSymbol(symbol[0]);
             if (valid)
                 Priklad += symbol;
 
@@ -83,7 +86,7 @@ namespace Calculator.Core
         {
             bool valid = _prikladValidator.ValidatePridejPriklad(novyPriklad);
             if (valid)
-                Priklad = novyPriklad;
+                Priklad += novyPriklad;
 
             return valid;
         }

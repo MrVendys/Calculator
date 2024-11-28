@@ -13,20 +13,41 @@ namespace Calculator.UI
 
         public FontSizeScalingTextBox()
         {
-            this.SizeChanged += (s, e) => ZmenFontSize();
-            this.TextChanged += (s, e) => ZmenFontSize();
+            SizeChanged += (s, e) => ZmenFontSize();
+            TextChanged += (s, e) => ZmenFontSize();
         }
 
-        public bool TryZmenFontSize(string symbol)
+        #region Validace
+
+        public bool TryZmenFontSize(string priklad)
         {
-            double textActualWidth = GetTextActualWidth(symbol);
+            double textActualWidth = GetTextActualWidth(priklad);
             int textBoxActualWidth = GetTextBoxActualWidth();
 
-            if (FontSize <= _MINFONTSIZE && textActualWidth > textBoxActualWidth)
-                return false;
+            bool valid = TryZmensujFontSize(FontSize, textActualWidth, textBoxActualWidth, priklad);
+            return valid;
+        }
 
+        private bool TryZmensujFontSize(double fontSize, double textActualWidth, double textBoxActualWidth, string priklad)
+        {
+            while (textActualWidth > textBoxActualWidth)
+            {
+                fontSize--;
+                if (fontSize < _MINFONTSIZE)
+                {
+                    _formattedText = null;
+                    return false;
+                }
+
+                _formattedText!.SetFontSize(fontSize);
+                textActualWidth = GetTextActualWidth(priklad);
+            }
+
+            _formattedText = null;
             return true;
         }
+
+        #endregion Validace
 
         private void ZmenFontSize()
         {
@@ -52,7 +73,7 @@ namespace Calculator.UI
         {
             while (textActualWidth > textBoxActualWidth)
             {
-                if (fontSize <= _MINFONTSIZE)
+                if (fontSize < _MINFONTSIZE)
                 {
                     return fontSize;
                 }
@@ -117,6 +138,5 @@ namespace Calculator.UI
         }
 
         #endregion
-
     }
 }
